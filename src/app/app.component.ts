@@ -10,7 +10,7 @@ import { AuthService } from './auth/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Web with Angular';
+  title = 'CDMS';
   //toast!: toastPayload;
   //isLogIn:boolean = false;
   //userName:string = '';
