@@ -61,22 +61,80 @@ export class CompanyComponent {
 
   search(){}
 
-  add():void{
-    if(!this.validateForm()){
-      this.showMessage('error', 'company name is required.');
+  // add():void{
+  //   if(!this.validateForm()){
+  //     this.showMessage('error', 'company name is required.');
+  //     return;
+  //   }    
+  //   const oHttpHeaders = new HttpHeaders(
+  //   {
+  //       'Token':this.authService.UserInfo.Token
+  //   });
+  //   //this.Company.CreateBy = this.authService.UserInfo.UserID;
+  //   this.httpClient.post(this.authService.baseURL + '/api/Companies', this.Company,{headers: oHttpHeaders}).subscribe((res) => {
+  //     this.isList = true;
+  //     this.get();
+  //     this.showMessage('success', 'data added.');
+  //   });
+  // }
+
+//   add():void {
+//     if (!this.validateForm()) {
+//         this.showMessage('error', 'company name is required.');
+//         return;
+//     }
+//     const oHttpHeaders = new HttpHeaders({
+//         'Token': this.authService.UserInfo.Token
+//     });
+//     const payload = {
+//         companyName: this.Company.companyName,
+//         createBy: this.authService.UserInfo.UserID,
+//         createDate: new Date()
+//     };
+//     this.httpClient.post(this.authService.baseURL + '/api/Companies', payload, { headers: oHttpHeaders })
+//         .subscribe(
+//             (res) => {
+//                 this.isList = true;
+//                 this.get();
+//                 this.showMessage('success', 'Data added.');
+//             },
+//             (err) => {
+//                 this.showMessage('error', 'Failed to add data. ' + err.message);
+//             }
+//         );
+// }
+
+add(): void {
+  if (!this.validateForm()) {
+      this.showMessage('error', 'Company name is required.');
       return;
-    }    
-    const oHttpHeaders = new HttpHeaders(
-    {
-        'Token':this.authService.UserInfo.Token
-    });
-    //this.Company.CreateBy = this.authService.UserInfo.UserID;
-    this.httpClient.post(this.authService.baseURL + '/api/Companies', this.Company,{headers: oHttpHeaders}).subscribe((res) => {
-      this.isList = true;
-      this.get();
-      this.showMessage('success', 'data added.');
-    });
   }
+
+  const oHttpHeaders = new HttpHeaders({
+      'Token': this.authService.UserInfo.Token // নিশ্চিত করুন টোকেন সঠিক
+  });
+
+  // ডাটা পে-লোড প্রস্তুত করুন
+  const payload = {
+      companyName: this.Company.companyName, // শুধু CompanyName পাঠানোর চেষ্টা করুন
+      createBy: this.authService.UserInfo.UserID || 'System', // ডিফল্ট হিসেবে 'System' ব্যবহার করুন
+      createDate: new Date().toISOString() // বর্তমান তারিখ পাঠান
+  };
+
+  // POST রিকোয়েস্ট
+  this.httpClient.post(this.authService.baseURL + '/api/Companies', payload, { headers: oHttpHeaders })
+      .subscribe(
+          (res) => {
+              this.isList = true;
+              this.get(); // ডাটা রিফ্রেশ করুন
+              this.showMessage('success', 'Data added successfully.');
+          },
+          (err) => {
+              this.showMessage('error', `Failed to add data: ${err.message}`);
+          }
+      );
+}
+
 
   update():void{
     if(!this.validateForm()){
