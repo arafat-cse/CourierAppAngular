@@ -14,6 +14,7 @@ import { BranchComponent } from './security/branch/branch.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { DatePipe } from '@angular/common';
     CompanyComponent,
     BranchComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+   
   ],
   imports: [
     BrowserModule,
@@ -29,7 +31,8 @@ import { DatePipe } from '@angular/common';
     AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule, // required animations module
-    ToastrModule.forRoot()//,
+    ToastrModule.forRoot(),//,
+    CommonModule 
     //NgChartsModule
   ],
   providers: [DatePipe],

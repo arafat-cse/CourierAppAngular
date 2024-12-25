@@ -41,7 +41,9 @@
         <div class="col-md-12 mt-5">
             <!-- <button type="button" class="btn btn-success" *ngIf="Company.CompanyId>0 && authService.UserInfo.Menu.CanEdit" (click)="update();">update</button> -->
             <button type="button" class="btn btn-secondary" *ngIf="Company.companyId>0" (click)="update();">Update</button>
-            <button type="button" class="btn btn-primary" *ngIf="Company.companyId==0" (click)="add();">Add</button>
+           <!-- <button type="button" class="btn btn-primary" *ngIf="Company.companyId==0" (click)="add();">Add</button> -->
+           <button type="button" class="btn btn-primary" *ngIf="Company.companyId==0" (click)="add()">Add</button>
+
         </div>
     </div>
 </div>
