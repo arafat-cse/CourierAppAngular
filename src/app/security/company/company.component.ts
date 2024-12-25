@@ -111,22 +111,22 @@ add(): void {
   }
 
   const oHttpHeaders = new HttpHeaders({
-      'Token': this.authService.UserInfo.Token // নিশ্চিত করুন টোকেন সঠিক
+      'Token': this.authService.UserInfo.Token // Token 
   });
 
-  // ডাটা পে-লোড প্রস্তুত করুন
+  // Data payload
   const payload = {
-      companyName: this.Company.companyName, // শুধু CompanyName পাঠানোর চেষ্টা করুন
-      createBy: this.authService.UserInfo.UserID || 'System', // ডিফল্ট হিসেবে 'System' ব্যবহার করুন
-      createDate: new Date().toISOString() // বর্তমান তারিখ পাঠান
+      companyName: this.Company.companyName, // database compnay Name
+      createBy: this.authService.UserInfo.UserID || 'System', // Defaile values system
+      createDate: new Date().toISOString() // present date
   };
 
-  // POST রিকোয়েস্ট
+  // POST requerst
   this.httpClient.post(this.authService.baseURL + '/api/Companies', payload, { headers: oHttpHeaders })
       .subscribe(
           (res) => {
               this.isList = true;
-              this.get(); // ডাটা রিফ্রেশ করুন
+              this.get(); // data reference
               this.showMessage('success', 'Data added successfully.');
           },
           (err) => {
@@ -134,6 +134,7 @@ add(): void {
           }
       );
 }
+
 
 
   update():void{
