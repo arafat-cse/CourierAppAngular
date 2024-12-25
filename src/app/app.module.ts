@@ -13,6 +13,8 @@ import { CompanyComponent } from './security/company/company.component';
 import { BranchComponent } from './security/branch/branch.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ParcelTypeComponent } from './security/parcel-type/parcel-type.component';
+
 import { DatePipe } from '@angular/common';
 import { CommonModule } from '@angular/common';
 
@@ -23,6 +25,8 @@ import { CommonModule } from '@angular/common';
     BranchComponent,
     LoginComponent,
     DashboardComponent,
+    ParcelTypeComponent,
+
    
   ],
   imports: [
@@ -32,8 +36,9 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(),//,
-    CommonModule 
+    CommonModule
     //NgChartsModule
+    
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

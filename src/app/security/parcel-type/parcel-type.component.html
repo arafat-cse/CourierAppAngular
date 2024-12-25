@@ -1,1 +1,81 @@
-<p>parcel-type works!</p>
+<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true;reset()">List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;add();">New</a>
+
+<div *ngIf="isList">
+    <div class="row">
+        <div class="col-lg-4">
+            Show
+            <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
+                <option *ngFor="let item of listPageSize" [value]="item">
+                    {{item}}
+                </option>
+            </select>
+            records
+        </div>
+        <div class="col-lg-4">
+            <h4 class="text-center">Parcel Type Information</h4>
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <thead class="table-secondary">
+            <tr>
+                <th>Parcel Type Name</th>
+                <th>Is Active</th>
+                <th>#</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of parcelTypes">
+                <td>{{item.parcelTypeName}}</td>
+                <td>
+                    <span class="badge" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
+                        {{item.isActive ? 'Active' : 'Inactive'}}
+                    </span>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button>
+                    <button class="btn btn-sm btn-outline-danger" (click)="delete(item)" data-bs-toggle="modal" data-bs-target="#confirmModal">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="!isList">
+    <h4 class="text-center">Parcel Type Entry Form</h4>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label for="parcelTypeName" class="form-label">Parcel Type Name:</label>
+            <input type="text" id="parcelTypeName" [(ngModel)]="parcelType.parcelTypeName" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label for="isActive" class="form-label">Is Active:</label>
+            <select id="isActive" [(ngModel)]="parcelType.isActive" class="form-select">
+                <option [value]="true">Active</option>
+                <option [value]="false">Inactive</option>
+            </select>
+        </div>
+        <div class="col-md-12 mt-5">
+            <button type="button" class="btn btn-secondary" *ngIf="parcelType.parcelTypeId > 0" (click)="reset()">Update</button>
+            <button type="button" class="btn btn-primary" *ngIf="parcelType.parcelTypeId === 0" (click)="add()">Add</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary">Are you sure to remove?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-danger">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset()">No</button>
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="delete(parcelType)">Yes</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
