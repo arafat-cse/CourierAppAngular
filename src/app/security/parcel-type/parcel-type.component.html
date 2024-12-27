@@ -1,7 +1,7 @@
 <!-- <a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true;reset()">List</a>
 <a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;add();">New</a> -->
 <a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()" class="btn-list">List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;get()" class="btn-new">New</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;reset();get()" class="btn-new">New</a>
 
 <div *ngIf="isList">
     <div class="row">
@@ -23,6 +23,7 @@
             <tr>
                 <th>Parcel Type Name</th>
                 <th>Created By</th>
+                <th>Action</th>
                 <th>#</th>
             </tr>
         </thead>
@@ -31,9 +32,12 @@
                 <td>{{item.parcelTypeName}}</td>
                 <td>
                     {{item.createBy}}
-                    <!-- <span class="badge" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
+                   
+                </td>
+                <td>
+                    <span class="badge" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
                         {{item.isActive ? 'Active' : 'Inactive'}}
-                    </span> -->
+                    </span>
                 </td>
                 <td>
                     <button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button>
@@ -54,9 +58,10 @@
         <div class="col-md-6">
             <label for="isActive" class="form-label">Is Active:</label>
             <select id="isActive" [(ngModel)]="parcelType.isActive" class="form-select">
-                <option [value]="true">Active</option>
-                <option [value]="false">Inactive</option>
-            </select>
+                <option [ngValue]="true">Active</option>
+                <option [ngValue]="false">Inactive</option>
+              </select>
+              
         </div>
         <div class="col-md-12 mt-5">
             <button type="button" class="btn btn-secondary" *ngIf="parcelType.parcelTypeId > 0" (click)="update()">Update</button>
