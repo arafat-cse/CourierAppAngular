@@ -1,12 +1,14 @@
-<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true;reset()">List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;add();">New</a>
+<!-- <a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true;reset()">List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;add();">New</a> -->
+<a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()" class="btn-list">List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;get()" class="btn-new">New</a>
 
 <div *ngIf="isList">
     <div class="row">
         <div class="col-lg-4">
             Show
             <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
-                <option *ngFor="let item of listPageSize" [value]="item">
+                <option *ngFor="let item of listPageSize" value={{item}}>
                     {{item}}
                 </option>
             </select>
@@ -16,25 +18,26 @@
             <h4 class="text-center">Parcel Type Information</h4>
         </div>
     </div>
-    <table class="table table-bordered">
-        <thead class="table-secondary">
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-primary">
             <tr>
                 <th>Parcel Type Name</th>
-                <th>Is Active</th>
+                <th>Created By</th>
                 <th>#</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let item of parcelTypes">
+            <tr *ngFor="let item of listParcelType">
                 <td>{{item.parcelTypeName}}</td>
                 <td>
-                    <span class="badge" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
+                    {{item.createBy}}
+                    <!-- <span class="badge" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
                         {{item.isActive ? 'Active' : 'Inactive'}}
-                    </span>
+                    </span> -->
                 </td>
                 <td>
                     <button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button>
-                    <button class="btn btn-sm btn-outline-danger" (click)="delete(item)" data-bs-toggle="modal" data-bs-target="#confirmModal">Delete</button>
+                    <button class="btn btn-sm btn-outline-danger" (click)="removeConfirm(item)" data-bs-toggle="modal" data-bs-target="#confirmModal">Delete</button>
                 </td>
             </tr>
         </tbody>
@@ -56,7 +59,7 @@
             </select>
         </div>
         <div class="col-md-12 mt-5">
-            <button type="button" class="btn btn-secondary" *ngIf="parcelType.parcelTypeId > 0" (click)="reset()">Update</button>
+            <button type="button" class="btn btn-secondary" *ngIf="parcelType.parcelTypeId > 0" (click)="update()">Update</button>
             <button type="button" class="btn btn-primary" *ngIf="parcelType.parcelTypeId === 0" (click)="add()">Add</button>
         </div>
     </div>
@@ -71,7 +74,7 @@
             </div>
             <div class="modal-body text-danger">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset()">No</button>
-                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="delete(parcelType)">Yes</button>
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="remove(parcelType)">Yes</button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
