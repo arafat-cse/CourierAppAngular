@@ -1,199 +1,189 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IndividualConfig } from 'ngx-toastr';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
+
+interface Company {
+  companyId: number;
+  companyName: string;
+  createBy?: string;
+  createDate?: Date;
+}
 
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.css']
 })
-export class CompanyComponent {
-  isList:boolean=true;
-  isNew:boolean = true;
-  phone:string = '';  
+export class CompanyComponent implements OnInit {
+  // Display control
+  isList: boolean = true;
+  isNew: boolean = true;
+
+  // Toast notification
   toast!: toastPayload;
 
-  constructor(private cs:CommonService,
+  // Company data
+  listCompany: Company[] = [];
+  Company: Company = {
+    companyId: 0,
+    companyName: ""
+  };
+
+  // Pagination
+  pageIndex: number = 0;
+  pageSize: number = 10;
+  rowCount: number = 0;
+  listPageSize: number[] = [5, 10, 20];
+  pageStart: number = 0;
+  pageEnd: number = 0;
+  totalRowsInList: number = 0;
+  pagedItems: any[] = [];
+  pager: {
+    pages: number[];
+    totalPages: number;
+  } = {
+    pages: [],
+    totalPages: 0
+  };
+
+  constructor(
+    private cs: CommonService,
     private httpClient: HttpClient,
-    public authService:AuthService) { 
+    public authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
     this.get();
   }
 
-  get():void{
-    const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
-    this.httpClient.get(this.authService.baseURL + '/api/Companies',{headers:oHttpHeaders}).subscribe((res)=>{
-        if(res) {
-          this.listCompany = res;
+  get(): void {
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo.Token
+    });
+
+    this.httpClient.get<Company[]>(`${this.authService.baseURL}/api/Companies`,{ headers }).subscribe({next: (response) => {
+        if (response) {
+          this.listCompany = response;
+          this.applyPaging();
         } else {
-          this.showMessage('warning', 'Session expired, please login.');
+          this.showMessage('warning', 'No companies found or session expired');
         }
+      },
+      error: (error) => {
+        this.showMessage('error', 'Failed to fetch companies');
+      }
     });
   }
 
-  edit(item: any):void {
-    this.Company = { 
+  edit(item: Company): void {
+    this.Company = {
       companyId: item.companyId,
       companyName: item.companyName
     };
     this.isList = false;
   }
 
-  validateForm():boolean{
-    var isValid:boolean=true;
-    if(this.Company.companyName==undefined||this.Company.companyName==null||this.Company.companyName==''){
-      isValid = false;
-      this.showMessage('warning', 'Company name is required.');
+  add(): void {
+    if (!this.validateForm()) {
+      return;
     }
-    return isValid
-  }
 
-  reset(){
-    this.Company={
-        companyId:0,
-        companyName:""
-      };
-  }
-
-  search(){}
-
-  // add():void{
-  //   if(!this.validateForm()){
-  //     this.showMessage('error', 'company name is required.');
-  //     return;
-  //   }    
-  //   const oHttpHeaders = new HttpHeaders(
-  //   {
-  //       'Token':this.authService.UserInfo.Token
-  //   });
-  //   //this.Company.CreateBy = this.authService.UserInfo.UserID;
-  //   this.httpClient.post(this.authService.baseURL + '/api/Companies', this.Company,{headers: oHttpHeaders}).subscribe((res) => {
-  //     this.isList = true;
-  //     this.get();
-  //     this.showMessage('success', 'data added.');
-  //   });
-  // }
-
-//   add():void {
-//     if (!this.validateForm()) {
-//         this.showMessage('error', 'company name is required.');
-//         return;
-//     }
-//     const oHttpHeaders = new HttpHeaders({
-//         'Token': this.authService.UserInfo.Token
-//     });
-//     const payload = {
-//         companyName: this.Company.companyName,
-//         createBy: this.authService.UserInfo.UserID,
-//         createDate: new Date()
-//     };
-//     this.httpClient.post(this.authService.baseURL + '/api/Companies', payload, { headers: oHttpHeaders })
-//         .subscribe(
-//             (res) => {
-//                 this.isList = true;
-//                 this.get();
-//                 this.showMessage('success', 'Data added.');
-//             },
-//             (err) => {
-//                 this.showMessage('error', 'Failed to add data. ' + err.message);
-//             }
-//         );
-// }
-
-add(): void {
-  if (!this.validateForm()) {
-      this.showMessage('error', 'Company name is required.');
-      return;
-  }
-
-  const oHttpHeaders = new HttpHeaders({
-      'Token': this.authService.UserInfo.Token // Token 
-  });
-
-  // Data payload
-  const payload = {
-      companyName: this.Company.companyName, // database compnay Name
-      createBy: this.authService.UserInfo.UserID || 'System', // Defaile values system
-      createDate: new Date().toISOString() // present date
-  };
-
-  // POST requerst
-  this.httpClient.post(this.authService.baseURL + '/api/Companies', payload, { headers: oHttpHeaders })
-      .subscribe(
-          (res) => {
-              this.isList = true;
-              this.get(); // data reference
-              this.showMessage('success', 'Data added successfully.');
-          },
-          (err) => {
-              this.showMessage('error', `Failed to add data: ${err.message}`);
-          }
-      );
-}
-
-
-
-  update():void{
-    if(!this.validateForm()){
-      return;
-    }    
-    const oHttpHeaders = new HttpHeaders(
-    {
-        'Token':this.authService.UserInfo.Token
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo.Token,
+      'Content-Type': 'application/json'
     });
-    //this.Company.CreateBy = this.authService.UserInfo.UserID;
-    this.httpClient.put(this.authService.baseURL + '/api/Companies/'+this.Company.companyId, this.Company,{headers: oHttpHeaders}).subscribe((res) => {
-      this.isList = true;
-      this.get();
-      this.showMessage('success', 'data updated.');
-    });
-  }
 
-  removeConfirm(company:{
-    companyId:number,
-    companyName:string
-  }){
-    this.Company.companyId=company.companyId;
-    this.Company.companyName=company.companyName;
-  }
-
-  remove(Company:{
-    companyId:number,
-    companyName:string
-  }){   
-    const oHttpHeaders = new HttpHeaders(
-    {
-        'Token':this.authService.UserInfo.Token
-    });
-    //this.Company.CreateBy = this.authService.UserInfo.UserID;
-    this.httpClient.delete(this.authService.baseURL + '/api/Companies/'+Company.companyId,{headers: oHttpHeaders}).subscribe((res) => {
-      this.isList = true;
-      this.reset();
-      this.get();
-      this.showMessage('success', 'data updated.');
-    });
-  }
-
-
-  listCompany:any=[];
-
-  Company:{
-    companyId:number,
-    companyName:string
-  }={
-      companyId:0,
-      companyName:""
+    const payload = {
+      companyName: this.Company.companyName,
+    
     };
 
-    //type: 'success', 'error', 'warning', 'info'
-  //message: '<span>Action in '+type+'</span>',
-  showMessage(type: string, message:string) {
+    this.httpClient.post(
+      `${this.authService.baseURL}/api/Companies`,
+      payload,
+      { headers }
+    ).subscribe({
+      next: (response) => {
+        this.isList = true;
+        this.reset();
+        this.get();
+        this.showMessage('success', 'Company added successfully');
+      },
+      error: (error) => {
+        this.showMessage('error', error.error || 'Failed to add company');
+      }
+    });
+  }
+
+  update(): void {
+    if (!this.validateForm()) {
+      return;
+    }
+
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo.Token
+    });
+
+    this.httpClient.put(
+      `${this.authService.baseURL}/api/Companies/${this.Company.companyId}`,
+      this.Company,
+      { headers }
+    ).subscribe({
+      next: () => {
+        this.isList = true;
+        this.get();
+        this.showMessage('success', 'Company updated successfully');
+      },
+      error: (error) => {
+        this.showMessage('error', 'Failed to update company');
+      }
+    });
+  }
+
+  removeConfirm(company: Company): void {
+    this.Company = { ...company };
+  }
+
+  remove(company: Company): void {
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo.Token
+    });
+
+    this.httpClient.delete(
+      `${this.authService.baseURL}/api/Companies/${company.companyId}`,
+      { headers }
+    ).subscribe({
+      next: () => {
+        this.reset();
+        this.get();
+        this.showMessage('success', 'Company deleted successfully');
+      },
+      error: (error) => {
+        this.showMessage('error', 'Failed to delete company');
+      }
+    });
+  }
+
+  reset(): void {
+    this.Company = {
+      companyId: 0,
+      companyName: ""
+    };
+  }
+
+  validateForm(): boolean {
+    if (!this.Company.companyName?.trim()) {
+      this.showMessage('warning', 'Company name is required.');
+      return false;
+    }
+    return true;
+  }
+
+  showMessage(type: string, message: string): void {
     this.toast = {
-      message:message,
+      message: message,
       title: type.toUpperCase(),
       type: type,
       ic: {
@@ -204,33 +194,31 @@ add(): void {
     this.cs.showToast(this.toast);
   }
 
+  // Pagination methods
+  applyPaging(): void {
+    const start = this.pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    this.pagedItems = this.listCompany.slice(start, end);
+    this.totalRowsInList = this.listCompany.length;
+    this.calculatePages();
+  }
 
-  //#region paging varible
-  pageIndex: number = 0;
-  pageSize:number = 10;
-  rowCount:number = 0;
-  listPageSize:any = [5,10,20];
-  pageStart:number = 0;
-  pageEnd:number = 0;
-  totalRowsInList:number=0;
-  pagedItems:any = [];
-  pager:{
-    pages:any,
-    totalPages:number
-  } = {
-    pages:[],
-    totalPages:0
-  };  
+  calculatePages(): void {
+    this.pager.totalPages = Math.ceil(this.totalRowsInList / this.pageSize);
+    this.pager.pages = Array.from(Array(this.pager.totalPages).keys());
+  }
 
-  changePageSize(){
+  changePageSize(): void {
     this.pageIndex = 0;
-    this.get();
+    this.applyPaging();
   }
 
-  changePageNumber(pageIndex:number){
+  changePageNumber(pageIndex: number): void {
     this.pageIndex = pageIndex;
-    this.get();
+    this.applyPaging();
   }
-  //#endregion
-}
 
+  search(): void {
+    this.applyPaging();
+  }
+}
