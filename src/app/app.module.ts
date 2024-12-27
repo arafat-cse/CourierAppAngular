@@ -17,7 +17,9 @@ import { ParcelTypeComponent } from './security/parcel-type/parcel-type.componen
 
 import { DatePipe } from '@angular/common';
 import { CommonModule } from '@angular/common';
-
+//Metarial Css
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { DeliveryChargeComponent } from './security/delivery-charge/delivery-charge.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +28,7 @@ import { CommonModule } from '@angular/common';
     LoginComponent,
     DashboardComponent,
     ParcelTypeComponent,
-
+    DeliveryChargeComponent,
    
   ],
   imports: [
@@ -36,8 +38,9 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(),//,
-    CommonModule
+    CommonModule,
     //NgChartsModule
+    MatSlideToggleModule
     
   ],
   providers: [DatePipe],
