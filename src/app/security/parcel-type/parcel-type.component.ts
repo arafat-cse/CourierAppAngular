@@ -122,34 +122,33 @@ edit(item: ParcelType): void {
       },
     });
   }
-  
+
   update(): void {
     if (!this.validateForm()) {
       return;
     }
   
     const headers = new HttpHeaders({
-      'Token': this.authService.UserInfo?.Token
-      //'Content-Type': 'application/json',
+      'Token': this.authService.UserInfo?.Token,
     });
+
+    console.log(this.parcelType)
   
     const payload = {
-      // ...this.parcelType
-      "parcelTypeId": this.parcelType.parcelTypeId,
-      "parcelTypeName": this.parcelType.parcelTypeName,
-      "isActive": Boolean(this.parcelType.isActive),
-       
+      parcelTypeId: this.parcelType.parcelTypeId,
+      parcelTypeName: this.parcelType.parcelTypeName,
+      isActive: this.parcelType.isActive, // No conversion needed
     };
+  
     console.log(payload);
   
     this.httpClient.put(
       `${this.authService.baseURL}/api/ParcelTypes/${this.parcelType.parcelTypeId}`,
-    payload,
+      payload,
       { headers }
     ).subscribe({
       next: () => {
-        //this.reset();
-        this.isList=true;
+        this.isList = true;
         this.get();
         this.showMessage('success', 'Parcel type updated successfully');
       },
@@ -158,6 +157,44 @@ edit(item: ParcelType): void {
       },
     });
   }
+  
+  
+  
+  // update(): void {
+  //   if (!this.validateForm()) {
+  //     return;
+  //   }
+  
+  //   const headers = new HttpHeaders({
+  //     'Token': this.authService.UserInfo?.Token
+  //     //'Content-Type': 'application/json',
+  //   });
+  
+  //   const payload = {
+  //     // ...this.parcelType
+  //     "parcelTypeId": this.parcelType.parcelTypeId,
+  //     "parcelTypeName": this.parcelType.parcelTypeName,
+  //     "isActive":  this.parcelType.isActive === 'true' || this.parcelType.isActive === true,
+       
+  //   };
+  //   console.log(payload);
+  
+  //   this.httpClient.put(
+  //     `${this.authService.baseURL}/api/ParcelTypes/${this.parcelType.parcelTypeId}`,
+  //   payload,
+  //     { headers }
+  //   ).subscribe({
+  //     next: () => {
+  //       //this.reset();
+  //       this.isList=true;
+  //       this.get();
+  //       this.showMessage('success', 'Parcel type updated successfully');
+  //     },
+  //     error: (error) => {
+  //       this.showMessage('error', error.error || 'Failed to update parcel type');
+  //     },
+  //   });
+  // }
   
   removeConfirm(parcel: ParcelType): void {
     this.parcelType = { ...parcel };
