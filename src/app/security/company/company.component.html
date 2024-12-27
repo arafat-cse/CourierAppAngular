@@ -1,50 +1,6 @@
-<!-- <a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()">List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;reset();get()">New</a> -->
-<!-- <div *ngIf="isList">
-    <div class="row">
-        <div class="col-lg-4">
-            Show
-            <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
-                <option *ngFor="let item of listPageSize" value={{item}}>
-                    {{item}}
-                </option>
-            </select>
-            records
-        </div>
-        <div class="col-lg-4">
-            <h4 class="text-center">Company Information</h4>
-        </div>
-    </div>
-    <table class="table table-bordered">
-        <tr class="table-secondary">
-            <th>Company Name</th>
-            <th>Created By</th> 
-            <th>#</th>
-        </tr>
-        <tr *ngFor="let item of listCompany">
-            <td>{{item.companyName}}</td>
-            <td>{{item.createBy}}</td>
-            <td>
-                <button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button>
-                <button class="btn btn-sm btn-outline-primary" (click)="removeConfirm(item)" data-bs-toggle="modal" data-bs-target="#confirmModal">Delete</button>
-            </td>
-        </tr>
-    </table>
-</div> -->
-<a 
-    href="javascript:void(0)" 
-    *ngIf="!isList;" 
-    (click)="isList=true;reset()" 
-    class="btn-list">
-    List
-</a>
-<a 
-    href="javascript:void(0)" 
-    *ngIf="isList" 
-    (click)="isList=false;reset();get()" 
-    class="btn-new">
-    New
-</a>
+
+<a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()" class="btn-list"> List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;reset();get()" class="btn-new">New</a>
 
 <div *ngIf="isList">
     <div class="row">

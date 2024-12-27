@@ -63,7 +63,9 @@ export class CompanyComponent implements OnInit {
       'Token': this.authService.UserInfo.Token
     });
 
-    this.httpClient.get<Company[]>(`${this.authService.baseURL}/api/Companies`,{ headers }).subscribe({next: (response) => {
+    this.httpClient.get<Company[]>(`${this.authService.baseURL}/api/Companies`,{ headers })
+    .subscribe({
+      next: (response) => {
         if (response) {
           this.listCompany = response;
           this.applyPaging();
