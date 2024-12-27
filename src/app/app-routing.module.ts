@@ -8,6 +8,7 @@ import { authGuard } from './auth/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ParcelTypeComponent } from './security/parcel-type/parcel-type.component';
+import { DeliveryChargeComponent } from './security/delivery-charge/delivery-charge.component'
 /*import { TestComponent } from '@angular/core/testing';*/
 
 const routes: Routes = [
@@ -19,7 +20,8 @@ const routes: Routes = [
   { path: 'company', component: CompanyComponent, canActivate:[authGuard] },
   { path: 'branch', component: BranchComponent, canActivate: [authGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate:[authGuard] },
-  { path: 'parcel-type', component: ParcelTypeComponent, canActivate: [authGuard] }
+  { path: 'parcel-type', component: ParcelTypeComponent, canActivate: [authGuard] },
+  { path: 'delivery-charge', component: DeliveryChargeComponent, canActivate: [authGuard] }
 
 ];
 
