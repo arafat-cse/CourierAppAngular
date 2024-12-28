@@ -20,6 +20,15 @@ import { CommonModule } from '@angular/common';
 //Metarial Css
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DeliveryChargeComponent } from './security/delivery-charge/delivery-charge.component';
+import { DesignationComponent } from './security/designation/designation.component';
+import { BankComponent } from './security/bank/bank.component';
+import { CustomerComponent } from './security/customer/customer.component';
+import { PaymentMethodComponent } from './security/payment-method/payment-method.component';
+import { ReceiverComponent } from './security/receiver/receiver.component';
+import { StaffComponent } from './security/staff/staff.component';
+import { VanComponent } from './security/van/van.component';
+import { ParcelComponent } from './security/parcel/parcel.component';
+import { InvoiceComponent } from './security/invoice/invoice.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +38,15 @@ import { DeliveryChargeComponent } from './security/delivery-charge/delivery-cha
     DashboardComponent,
     ParcelTypeComponent,
     DeliveryChargeComponent,
+    DesignationComponent,
+    BankComponent,
+    CustomerComponent,
+    PaymentMethodComponent,
+    ReceiverComponent,
+    StaffComponent,
+    VanComponent,
+    ParcelComponent,
+    InvoiceComponent,
    
   ],
   imports: [
