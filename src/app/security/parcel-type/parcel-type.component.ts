@@ -4,6 +4,7 @@ import { IndividualConfig } from 'ngx-toastr';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
 
+
 interface ParcelType {
   parcelTypeId: number;
   parcelTypeName: string;
@@ -26,7 +27,6 @@ export class ParcelTypeComponent implements OnInit {
 
   // Toast notification
   toast!: toastPayload;
-
   // Parcel Type data
   listParcelType: ParcelType[] = [];
   parcelType: ParcelType = {

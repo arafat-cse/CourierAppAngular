@@ -1,7 +1,7 @@
 <!-- <a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true;reset()">List</a>
 <a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;add();">New</a> -->
-<a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()" class="btn-list">List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;reset();get()" class="btn-new">New</a>
+<a  href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()" class="btn-list btn btn-primary" >List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;reset();get()" class="btn-new btn btn-warning mb-4 px-5">New</a>
 
 <div *ngIf="isList">
     <div class="row">
@@ -21,27 +21,30 @@
     <table class="table table-bordered table-striped table-hover">
         <thead class="table-primary">
             <tr>
+                <th>sl</th>
                 <th>Parcel Type Name</th>
-                <th>Created By</th>
-                <th>Action</th>
-                <th>#</th>
+                <th class="text-center">Created By</th>
+                <th class="text-center">Active / Inactive</th>
+                <th class="text-center">Action</th>
             </tr>
         </thead>
-        <tbody>
-            <tr *ngFor="let item of listParcelType">
+        <tbody> 
+            
+            <tr *ngFor="let item of listParcelType let i = index">
+                <td>{{i+1}}</td>
                 <td>{{item.parcelTypeName}}</td>
-                <td>
+                <td class="text-center">
                     {{item.createBy}}
                    
                 </td>
-                <td>
-                    <span class="badge" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
+                <td class="text-center">
+                    <span class="badge px-3 py-2 w-50" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
                         {{item.isActive ? 'Active' : 'Inactive'}}
                     </span>
                 </td>
-                <td>
-                    <button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button>
-                    <button class="btn btn-sm btn-outline-danger" (click)="removeConfirm(item)" data-bs-toggle="modal" data-bs-target="#confirmModal">Delete</button>
+                <td class="w-25 text-center">
+                    <button class="btn btn-sm btn-outline-warning text-primary me-2 px-3" (click)="edit(item)">Edit</button>
+                    <button class="btn btn-sm btn-outline-danger px-3" (click)="removeConfirm(item)" data-bs-toggle="modal" data-bs-target="#confirmModal">Delete</button>
                 </td>
             </tr>
         </tbody>
@@ -78,7 +81,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-danger">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset()">No</button>
+                <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal" (click)="reset()">No</button>
                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="remove(parcelType)">Yes</button>
             </div>
             <div class="modal-footer">
