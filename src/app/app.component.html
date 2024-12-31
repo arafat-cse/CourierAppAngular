@@ -50,7 +50,7 @@
           <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/dashboard"><i class="fa fa-home"></i> Home</a>
         </li>
         <li class="nav-item">
-          <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/dashboard"><i class="fa fa-plus"></i> Add Parcel</a>
+          <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/parcel"><i class="fa fa-plus"></i> Add Parcel</a>
         </li>
         <li class="nav-item dropdown" *ngIf="authService.UserInfo.IsLogIn">
           <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -63,9 +63,11 @@
             <li>
               <a class="dropdown-item" routerLink="/branch"><i class="fa fa-briefcase" aria-hidden="true"></i> Branch</a>
             </li>
-            <a class="dropdown-item" routerLink="/parcel-type"> <i class="fa fa-briefcase" aria-hidden="true"></i> Parcel</a>
+            <a class="dropdown-item" routerLink="/parcel-type"> <i class="fa fa-briefcase" aria-hidden="true"></i> Parcel Type</a>
             <a class="dropdown-item" routerLink="/designation"> <i class="fa fa-briefcase" aria-hidden="true"></i> Designation</a>
-            <a class="dropdown-item" routerLink="/bank"> <i class="fa fa-briefcase" aria-hidden="true"></i> Bank</a>
+            <!-- <a class="dropdown-item" routerLink="/bank"> <i class="fa fa-briefcase" aria-hidden="true"></i> Bank</a> -->
+            <a class="dropdown-item" routerLink="/parcel"> <i class="fa fa-briefcase" aria-hidden="true"></i> Parcel</a>
+
             
            </ul>
         </li>
@@ -104,11 +106,11 @@
   <div>
    <div class="dropdown">
      <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-       <i class="fa fa-box"></i> Parcel
+       <i class="fa fa-box"></i> Parcel Type
      </a>
      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
        <li><a class="dropdown-item" routerLink="/parcel-type"><i class="fa fa-plus"></i> Parcel Type</a></li>
-       <li><a class="dropdown-item" routerLink="/add-parcel"><i class="fa fa-plus"></i> Add Parcel</a></li>
+       <li><a class="dropdown-item" routerLink="/Parcel"><i class="fa fa-plus"></i> Add Parcel</a></li>
        <li><a class="dropdown-item" routerLink="/delivery-charge"><i class="fa fa-plus"></i> Add delivery-charge</a></li>
        <li><a class="dropdown-item" routerLink="/parcel-list"><i class="fa fa-list"></i> Parcel List</a></li>
        <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-briefcase"></i> Branch</a></li>
@@ -125,7 +127,15 @@
          <li><a class="dropdown-item" routerLink="/parcel-list"><i class="fa fa-list"></i> Parcel List</a></li>
          <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-plus"></i> Branch</a></li>
        </ul>
-     </div>
+  </div>
+  <div class="dropdown">
+    <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="fa fa-box"></i> Parcel
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <li><a class="dropdown-item" routerLink="/parcel"><i class="fa fa-plus"></i> Add Parcel</a></li>
+    </ul>
+</div>
    <a routerLink="/report"><i class="fa fa-file-alt"></i> Report</a>
    <a routerLink="/grid"><i class="fa fa-th"></i> Grid</a>
   </div>
@@ -159,6 +169,8 @@
 
  <div class="content">
   <router-outlet></router-outlet>
+  
+
 </div>
 
 

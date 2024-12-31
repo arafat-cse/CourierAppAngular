@@ -1,0 +1,44 @@
+.section-title {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .icon-box {
+    text-align: center;
+  }
+  .icon-box img {
+    max-width: 80px;
+    margin-bottom: 15px;
+  }
+  .working-process .icon-box {
+    margin-bottom: 20px;
+  }
+  .recent-activities img {
+    max-width: 100%;
+    height: auto;
+  }
+  .working-process .icon-box {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+    text-align: center;
+    background-color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .working-process .icon-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .working-process .icon-box img {
+    max-width: 80px;
+    margin-bottom: 15px;
+  }
+
+  .working-process .icon-box h5 {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #051a3a;
+    font-weight: 600;
+  }

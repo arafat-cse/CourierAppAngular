@@ -44,14 +44,14 @@ export class DeliveryChargeComponent implements OnInit {
   }
 
   // Calculate price based on selected weight and parcel type
-  calculatePrice(): void {
-    if (this.selectedParcelTypeId && this.selectedWeight) {
-      // Logic to calculate price (example)
-      this.calculatedPrice = this.selectedWeight * 50; // 50 is an example rate per KG
-    } else {
-      this.calculatedPrice = 0;
-    }
-  }
+  // calculatePrice(): void {
+  //   if (this.selectedParcelTypeId && this.selectedWeight) {
+  //     // Logic to calculate price (example)
+  //     this.calculatedPrice = this.selectedWeight * 50; // 50 is an example rate per KG
+  //   } else {
+  //     this.calculatedPrice = 0;
+  //   }
+  // }
 
   // Save delivery charge data
   saveDeliveryCharge(): void {
@@ -88,6 +88,18 @@ export class DeliveryChargeComponent implements OnInit {
     this.selectedParcelTypeId = 0;
     this.selectedWeight = 0;
     this.calculatedPrice = 0;
+  }
+  
+
+  calculatePrice(): void {
+    const basePrice = 50; // Base delivery charge
+    const pricePerKg = 20; // Price per KG
+  
+    if (this.selectedWeight && this.selectedWeight > 0) {
+      this.calculatedPrice = basePrice + this.selectedWeight * pricePerKg;
+    } else {
+      this.calculatedPrice = basePrice; // Default delivery charge if no weight selected
+    }
   }
   
 }

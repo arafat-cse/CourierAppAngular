@@ -29,6 +29,7 @@ import { StaffComponent } from './security/staff/staff.component';
 import { VanComponent } from './security/van/van.component';
 import { ParcelComponent } from './security/parcel/parcel.component';
 import { InvoiceComponent } from './security/invoice/invoice.component';
+import { HomeComponent } from "./home/home.component";
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,12 +56,12 @@ import { InvoiceComponent } from './security/invoice/invoice.component';
     AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule, // required animations module
-    ToastrModule.forRoot(),//,
+    ToastrModule.forRoot(), //,
     CommonModule,
     //NgChartsModule
-    MatSlideToggleModule
-    
-  ],
+    MatSlideToggleModule,
+    HomeComponent
+],
   providers: [DatePipe],
   bootstrap: [AppComponent]
 })
