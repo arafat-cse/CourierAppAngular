@@ -23,7 +23,7 @@ import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent },
+  { path: '', component: HomeComponent },
   { path: '', redirectTo: '/login', pathMatch:'full' },
   //comment chilo
   //{ path: '**', redirectTo: '/login' },
