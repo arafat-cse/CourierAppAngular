@@ -1,177 +1,197 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IndividualConfig } from 'ngx-toastr';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
 
+interface Branch {
+  BranchId: number;
+  BranchName: string;
+  ParentId: number;
+  isActive: boolean;
+  createBy?: string;
+  createDate?: Date | null;
+  updateBy?: string;
+  updateDate?: Date | null;
+}
+
 @Component({
   selector: 'app-branch',
   templateUrl: './branch.component.html',
-  styleUrls: ['./branch.component.css']
+  styleUrls: ['./branch.component.css'],
 })
-export class BranchComponent {
+export class BranchComponent implements OnInit {
+  // Display control
   isList: boolean = true;
-  isNew: boolean = true;
-  phone: string = '';
+
+  // Toast notification
   toast!: toastPayload;
 
-  //constructor(private cs:CommonService,
-  //  private httpClient: HttpClient,
-  //  public authService:AuthService) { 
-  //  this.get();
-  //}
+  // Branch data
+  listBranchs: Branch[] = [];
+  branchs: Branch = {
+    BranchId: 0,
+    BranchName: '',
+    ParentId: 0,
+    isActive: true,
+  };
 
-  //get():void{
-  //  const oHttpHeaders = new HttpHeaders(
-  //    {
-  //        'Token':this.authService.UserInfo.Token
-  //    });
-  //  this.httpClient.get(this.authService.baseURL + '/api/Companies',{headers:oHttpHeaders}).subscribe((res)=>{
-  //      if(res) {
-  //        this.listCompany = res;
-  //      } else {
-  //        this.showMessage('warning', 'Session expired, please login.');
-  //      }
-  //  });
-  //}
+  // Pagination
+  pageIndex: number = 0;
+  pageSize: number = 5;
+  pagedItems: Branch[] = [];
+  rowCount: number = 0;
 
-  //  edit(item: any):void {
-  //    this.Branch = { 
-  //      companyId: item.companyId,
-  //      companyName: item.companyName
-  //    };
-  //    this.isList = false;
-  //  }
+  constructor(
+    private cs: CommonService,
+    private httpClient: HttpClient,
+    public authService: AuthService
+  ) {}
 
-  //  validateForm():boolean{
-  //    var isValid:boolean=true;
-  //    if(this.Company.companyName==undefined||this.Company.companyName==null||this.Company.companyName==''){
-  //      isValid = false;
-  //      this.showMessage('warning', 'Company name is required.');
-  //    }
-  //    return isValid
-  //  }
+  ngOnInit(): void {
+    this.getBranches();
+  }
 
-  //  reset(){
-  //    this.Company={
-  //        companyId:0,
-  //        companyName:""
-  //      };
-  //  }
+  // Fetch branches from API
+  getBranches(): void {
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo?.Token || '',
+    });
 
-  //  search(){}
+    this.httpClient.get<Branch[]>(`${this.authService.baseURL}/api/Branches`, { headers })
+      .subscribe({
+        next: (response) => {
+          this.listBranchs = response;
+          this.rowCount = response.length;
+          this.paginate();
+        },
+       
+        error: () => {
+          this.showMessage('error', 'Failed to load branches');
+        },
+      });
+      console.log(this.getBranches)
+  }
 
-  //  add():void{
-  //    if(!this.validateForm()){
-  //      this.showMessage('error', 'company name is required.');
-  //      return;
-  //    }    
-  //    const oHttpHeaders = new HttpHeaders(
-  //    {
-  //        'Token':this.authService.UserInfo.Token
-  //    });
-  //    //this.Company.CreateBy = this.authService.UserInfo.UserID;
-  //    this.httpClient.post(this.authService.baseURL + '/api/Companies', this.Company,{headers: oHttpHeaders}).subscribe((res) => {
-  //      this.isList = true;
-  //      this.get();
-  //      this.showMessage('success', 'data added.');
-  //    });
-  //  }
+  // Add a new branch
+  add(): void {
+    if (!this.validateForm()) return;
 
-  //  update():void{
-  //    if(!this.validateForm()){
-  //      return;
-  //    }    
-  //    const oHttpHeaders = new HttpHeaders(
-  //    {
-  //        'Token':this.authService.UserInfo.Token
-  //    });
-  //    //this.Company.CreateBy = this.authService.UserInfo.UserID;
-  //    this.httpClient.put(this.authService.baseURL + '/api/Companies/'+this.Company.companyId, this.Company,{headers: oHttpHeaders}).subscribe((res) => {
-  //      this.isList = true;
-  //      this.get();
-  //      this.showMessage('success', 'data updated.');
-  //    });
-  //  }
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+      'Content-Type': 'application/json',
+    });
 
-  //  removeConfirm(company:{
-  //    companyId:number,
-  //    companyName:string
-  //  }){
-  //    this.Company.companyId=company.companyId;
-  //    this.Company.companyName=company.companyName;
-  //  }
+    const payload = { ...this.branchs };
 
-  //  remove(Company:{
-  //    companyId:number,
-  //    companyName:string
-  //  }){   
-  //    const oHttpHeaders = new HttpHeaders(
-  //    {
-  //        'Token':this.authService.UserInfo.Token
-  //    });
-  //    //this.Company.CreateBy = this.authService.UserInfo.UserID;
-  //    this.httpClient.delete(this.authService.baseURL + '/api/Companies/'+Company.companyId,{headers: oHttpHeaders}).subscribe((res) => {
-  //      this.isList = true;
-  //      this.reset();
-  //      this.get();
-  //      this.showMessage('success', 'data updated.');
-  //    });
-  //  }
+    this.httpClient.post(`${this.authService.baseURL}/api/Branches`, payload, { headers })
+      .subscribe({
+        next: () => {
+          this.getBranches();
+          this.showMessage('success', 'Branch added successfully');
+          this.reset();
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to add branch');
+        },
+      });
+  }
 
+  // Update an existing branch
+  update(): void {
+    if (!this.validateForm()) return;
 
-  //  listCompany:any=[];
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+    });
 
-  //  Company:{
-  //    companyId:number,
-  //    companyName:string
-  //  }={
-  //      companyId:0,
-  //      companyName:""
-  //    };
+    const payload = { ...this.branchs };
 
-  //    //type: 'success', 'error', 'warning', 'info'
-  //  //message: '<span>Action in '+type+'</span>',
-  //  showMessage(type: string, message:string) {
-  //    this.toast = {
-  //      message:message,
-  //      title: type.toUpperCase(),
-  //      type: type,
-  //      ic: {
-  //        timeOut: 2500,
-  //        closeButton: true,
-  //      } as IndividualConfig,
-  //    };
-  //    this.cs.showToast(this.toast);
-  //  }
+    this.httpClient.put(`${this.authService.baseURL}/api/Branches/${this.branchs.BranchId}`, payload, { headers })
+      .subscribe({
+        next: () => {
+          this.getBranches();
+          this.showMessage('success', 'Branch updated successfully');
+          this.reset();
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to update branch');
+        },
+      });
+  }
 
+  // Delete a branch
+  remove(branchId: Branch): void {
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+    });
 
-  //  //#region paging varible
-  //  pageIndex: number = 0;
-  //  pageSize:number = 10;
-  //  rowCount:number = 0;
-  //  listPageSize:any = [5,10,20];
-  //  pageStart:number = 0;
-  //  pageEnd:number = 0;
-  //  totalRowsInList:number=0;
-  //  pagedItems:any = [];
-  //  pager:{
-  //    pages:any,
-  //    totalPages:number
-  //  } = {
-  //    pages:[],
-  //    totalPages:0
-  //  };  
+    this.httpClient.delete(`${this.authService.baseURL}/api/Branches/${branchId}`, { headers })
+      .subscribe({
+        next: () => {
+          this.getBranches();
+          this.showMessage('success', 'Branch deleted successfully');
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to delete branch');
+        },
+      });
+  }
 
-  //  changePageSize(){
-  //    this.pageIndex = 0;
-  //    this.get();
-  //  }
+  // Reset form
+  reset(): void {
+    this.branchs = {
+      BranchId: 0,
+      BranchName: '',
+      ParentId: 0,
+      isActive: true,
+    };
+    this.isList = true;
+  }
 
-  //  changePageNumber(pageIndex:number){
-  //    this.pageIndex = pageIndex;
-  //    this.get();
-  //  }
-  //  //#endregion
-  //}
+  // Populate form for editing
+  edit(branch: Branch): void {
+    this.branchs = { ...branch };
+    this.isList = false;
+  }
+
+  // Validate form inputs
+  validateForm(): boolean {
+    if (!this.branchs.BranchName.trim()) {
+      this.showMessage('warning', 'Branch name is required');
+      return false;
+    }
+    return true;
+  }
+
+  // Display a toast message
+  showMessage(type: string, message: string): void {
+    this.toast = {
+      message,
+      title: type.toUpperCase(),
+      type,
+      ic: { timeOut: 2500, closeButton: true } as IndividualConfig,
+    };
+    this.cs.showToast(this.toast);
+  }
+
+  // Pagination logic
+  paginate(): void {
+    const start = this.pageIndex * this.pageSize;
+    this.pagedItems = this.listBranchs.slice(start, start + this.pageSize);
+  }
+
+  nextPage(): void {
+    if ((this.pageIndex + 1) * this.pageSize < this.listBranchs.length) {
+      this.pageIndex++;
+      this.paginate();
+    }
+  }
+
+  prevPage(): void {
+    if (this.pageIndex > 0) {
+      this.pageIndex--;
+      this.paginate();
+    }
+  }
 }
