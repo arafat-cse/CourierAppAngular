@@ -56,3 +56,8 @@
     color: #ffffff;
     background-color: #343a40;
   }
+  .img-fluid {
+    width: 30px; 
+    height: 30px; 
+  }
+  
