@@ -25,7 +25,7 @@ interface Company {
 @Component({
   selector: 'app-bank',
   templateUrl: './bank.component.html',
-  styleUrls: ['./bank.component.css']
+  styleUrl: './bank.component.css'
 })
 export class BankComponent implements OnInit {
 
