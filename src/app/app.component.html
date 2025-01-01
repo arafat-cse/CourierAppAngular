@@ -49,27 +49,26 @@
         <li class="nav-item">
           <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/dashboard"><i class="fa fa-home"></i> Home</a>
         </li>
-        <li class="nav-item">
+
+
+ <li class="nav-item">
           <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/parcel"><i class="fa fa-plus"></i> Add Parcel</a>
         </li>
-        <li class="nav-item dropdown" *ngIf="authService.UserInfo.IsLogIn">
-          <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-gear" aria-hidden="true"></i> Configuration
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li>
-              <a class="dropdown-item" routerLink="/company"><i class="fa fa-briefcase" aria-hidden="true"></i> Company</a>
-            </li>
-            <li>
-              <a class="dropdown-item" routerLink="/branch"><i class="fa fa-briefcase" aria-hidden="true"></i> Branch</a>
-            </li>
-            <a class="dropdown-item" routerLink="/parcel-type"> <i class="fa fa-briefcase" aria-hidden="true"></i> Parcel Type</a>
-            <a class="dropdown-item" routerLink="/designation"> <i class="fa fa-briefcase" aria-hidden="true"></i> Designation</a>
-            <!-- <a class="dropdown-item" routerLink="/bank"> <i class="fa fa-briefcase" aria-hidden="true"></i> Bank</a> -->
-            <a class="dropdown-item" routerLink="/parcel"> <i class="fa fa-briefcase" aria-hidden="true"></i> Parcel</a>
-            <a class="dropdown-item" routerLink="/receiver"> <i class="fa fa-briefcase" aria-hidden="true"></i> Receiver</a>
-           </ul>
-        </li>
+<li class="nav-item dropdown" *ngIf="authService.UserInfo.IsLogIn">
+  <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="fa fa-gear" aria-hidden="true"></i> Configuration
+  </a>
+  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <li><a class="dropdown-item" routerLink="/company"><i class="fa fa-briefcase" aria-hidden="true"></i> Company</a></li>
+    <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-briefcase" aria-hidden="true"></i> Branch</a></li>
+    <li><a class="dropdown-item" routerLink="/parcel-type"><i class="fa fa-briefcase" aria-hidden="true"></i> Parcel Type</a></li>
+    <li><a class="dropdown-item" routerLink="/designation"><i class="fa fa-briefcase" aria-hidden="true"></i> Designation</a></li>
+    <li><a class="dropdown-item" routerLink="/parcel"><i class="fa fa-briefcase" aria-hidden="true"></i> Parcel</a></li>
+    <li><a class="dropdown-item" routerLink="/receiver"><i class="fa fa-briefcase" aria-hidden="true"></i> Receiver</a></li>
+  </ul>
+</li>
+        
+
         <!-- <li class="nav-item dropdown" *ngFor="let item of authService.UserInfo.ModuleMenus">
     <a *ngIf="item.ModuleName" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="{{item.ModuleIcon}}" aria-hidden="true"></i> {{item.ModuleName}}
