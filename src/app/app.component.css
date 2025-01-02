@@ -13,7 +13,7 @@
     background-color: #f5f7fb;
 }
 .top-navigation{
-    position: absolute;
+    position: fixed;
     right: 0;
     left: 0;
 }

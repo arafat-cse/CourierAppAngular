@@ -216,9 +216,14 @@
     font-size: 2rem;
     color: #007bff;
 }
-.all-boxes{
-  
+.courier-title {
+  font-size: 2.5rem; /* Makes the text larger */
+  font-weight: bold; /* Makes the text bold */
+  color: #007bff; /* You can customize the color */
+  text-align: center; /* Centers the text */
+  margin-top: 20px; /* Adds some spacing from the top */
 }
+
 /* .chart-container {
     background-color: #fff;
     padding: 20px;
