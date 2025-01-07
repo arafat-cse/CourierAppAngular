@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\security",
+    "\\src\\app\\security\\parcel",
+    "\\src\\app\\security\\parcel-type",
+    "\\src\\app\\security\\payment-method",
+    "\\src\\app\\security\\receiver",
+    "\\src\\app\\security\\staff",
+    "\\src\\app\\security\\van"
+  ],
+  "PreviewInSolutionExplorer": false
+}

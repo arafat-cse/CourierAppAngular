@@ -1,0 +1,38 @@
+
+
+<div class="container">
+    <h1>Designation</h1>
+    <form (submit)="createDesignation(); $event.preventDefault()">
+      <div>
+        <label for="designation">Designation</label>
+        <input
+          id="designation"
+          type="text"
+          [(ngModel)]="designation"
+          placeholder="Designation"
+          name="designation"
+        />
+      </div>
+      <div>
+        <label for="status">Status</label>
+        <select id="status" [(ngModel)]="status" name="status">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
+      </div>
+      <button type="submit" class="create-button">
+        {{ editIndex !== null ? 'Update' : 'Create' }}
+      </button>
+    </form>
+  
+    <ul *ngIf="designations.length">
+      <li *ngFor="let item of designations; index as i">
+        <span>{{ item.name }} ({{ item.status }})</span>
+        <button (click)="editDesignation(i)">Edit</button>
+        <button (click)="deleteDesignation(i)">Delete</button>
+        <button (click)="toggleStatus(i)">
+          {{ item.status === 'Active' ? 'Deactivate' : 'Activate' }}
+        </button>
+      </li>
+    </ul>
+  </div>
