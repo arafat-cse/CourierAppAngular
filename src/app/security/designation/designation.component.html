@@ -1,38 +1,78 @@
-
-
-<div class="container">
-    <h1>Designation</h1>
-    <form (submit)="createDesignation(); $event.preventDefault()">
-      <div>
-        <label for="designation">Designation</label>
+<div class="container mt-4">
+  <!-- Add or Update Designation Form -->
+  <div *ngIf="!showList">
+    <h1 class="text-center mb-4">Add / Update Designation</h1>
+    <form (submit)="createDesignation(); $event.preventDefault()" class="p-4 border rounded shadow-sm bg-light">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
         <input
-          id="designation"
+          id="title"
           type="text"
-          [(ngModel)]="designation"
-          placeholder="Designation"
-          name="designation"
+          [(ngModel)]="designation.title"
+          placeholder="Enter designation title"
+          name="title"
+          class="form-control"
         />
       </div>
-      <div>
-        <label for="status">Status</label>
-        <select id="status" [(ngModel)]="status" name="status">
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
+      <div class="mb-3">
+        <label for="salaryRange" class="form-label">Salary Range</label>
+        <input
+          id="salaryRange"
+          type="text"
+          [(ngModel)]="designation.salaryRange"
+          placeholder="Enter salary range"
+          name="salaryRange"
+          class="form-control"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="createBy" class="form-label">Created By</label>
+        <input
+          id="createBy"
+          type="text"
+          [(ngModel)]="designation.createBy"
+          placeholder="Enter creator's name"
+          name="createBy"
+          class="form-control"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="isActive" class="form-label">Status</label>
+        <select id="isActive" [(ngModel)]="designation.isActive" name="isActive" class="form-select">
+          <option [value]="true">Active</option>
+          <option [value]="false">Inactive</option>
         </select>
       </div>
-      <button type="submit" class="create-button">
+      <button type="submit" class="btn btn-primary w-100">
         {{ editIndex !== null ? 'Update' : 'Create' }}
       </button>
     </form>
-  
-    <ul *ngIf="designations.length">
-      <li *ngFor="let item of designations; index as i">
-        <span>{{ item.name }} ({{ item.status }})</span>
-        <button (click)="editDesignation(i)">Edit</button>
-        <button (click)="deleteDesignation(i)">Delete</button>
-        <button (click)="toggleStatus(i)">
-          {{ item.status === 'Active' ? 'Deactivate' : 'Activate' }}
-        </button>
+    <button class="btn btn-link mt-3 w-100 text-center" (click)="toggleView()">View Designation List</button>
+  </div>
+
+  <!-- Designation List -->
+  <div *ngIf="showList">
+    <h1 class="text-center mb-4">Designation List</h1>
+    <ul class="list-group">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+        *ngFor="let item of designations; index as i"
+      >
+        <span>
+          <strong>{{ item.title }}</strong>
+          <br />
+          <small>{{ item.salaryRange }}</small>
+          <br />
+          <small>Created By: {{ item.createBy }}</small>
+          <br />
+          <span>Status: {{ item.isActive ? 'Active' : 'Inactive' }}</span>
+        </span>
+        <div>
+          <button class="btn btn-sm btn-outline-secondary" (click)="editDesignation(i)">Edit</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="deleteDesignation(i)">Delete</button>
+        </div>
       </li>
     </ul>
+    <button class="btn btn-link mt-3 w-100 text-center" (click)="toggleView()">Go Back</button>
   </div>
+</div>

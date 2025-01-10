@@ -1,61 +1,75 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-designation',
-//   templateUrl: './designation.component.html',
-//   styleUrl: './designation.component.css'
-// })
-// export class DesignationComponent {
-
-// }
 import { Component, OnInit } from '@angular/core';
-
+interface Designation {
+  designationId?: number;
+  title: string;
+  salaryRange?: string;
+  isActive: boolean;
+  createBy: string;
+  createDate: Date;
+  updateBy?: string;
+  updateDate?: Date;
+}
 @Component({
   selector: 'app-designation',
   templateUrl: './designation.component.html',
-  styleUrls: ['./designation.component.css']
+  styleUrls: ['./designation.component.css'],
 })
 export class DesignationComponent implements OnInit {
-  designations: { name: string; status: string }[] = []; // Array to store designations with status
-  designation: string = ''; // Model for input field
-  status: string = 'Active'; // Default status
-  editIndex: number | null = null; // Index for edit functionality
+  designations: Designation[] = []; // Array to store designations
+  designation: Designation = this.resetDesignation(); // Current designation model
+  editIndex: number | null = null; // Index for editing
+  showList: boolean = false; // Toggle between list and form view
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  // Create or update a designation
+  // Toggle between Designation Form and List
+  toggleView(): void {
+    this.showList = !this.showList;
+  }
+
+  // Create or Update a Designation
   createDesignation(): void {
-    if (this.designation.trim()) {
+    if (this.designation.title.trim() && this.designation.createBy.trim()) {
       if (this.editIndex !== null) {
         // Update existing designation
-        this.designations[this.editIndex] = { name: this.designation.trim(), status: this.status };
+        this.designations[this.editIndex] = {
+          ...this.designation,
+          updateDate: new Date(), // Set update date
+        };
         this.editIndex = null; // Reset edit index
       } else {
         // Add new designation
-        this.designations.push({ name: this.designation.trim(), status: this.status });
+        this.designations.push({
+          ...this.designation,
+          createDate: new Date(), // Set create date
+        });
       }
-      this.designation = ''; // Clear input field
-      this.status = 'Active'; // Reset status
+      this.designation = this.resetDesignation(); // Reset form
     }
   }
 
-  // Edit a designation
+  // Edit a Designation
   editDesignation(index: number): void {
-    this.designation = this.designations[index].name; // Populate input field
-    this.status = this.designations[index].status; // Populate status dropdown
-    this.editIndex = index; // Set index for editing
+    this.designation = { ...this.designations[index] }; // Populate form with existing values
+    this.editIndex = index; // Set edit index
+    this.showList = false; // Show form
   }
 
-  // Delete a designation
+  // Delete a Designation
   deleteDesignation(index: number): void {
     this.designations.splice(index, 1); // Remove designation
   }
 
-  // Toggle status between Active and Inactive
-  toggleStatus(index: number): void {
-    this.designations[index].status =
-      this.designations[index].status === 'Active' ? 'Inactive' : 'Active';
+  // Reset Designation Model
+  resetDesignation(): Designation {
+    return {
+      title: '',
+      salaryRange: '',
+      isActive: true,
+      createBy: '',
+      createDate: new Date(),
+    };
   }
 }
