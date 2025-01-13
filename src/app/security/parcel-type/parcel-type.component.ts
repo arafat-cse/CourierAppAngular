@@ -8,6 +8,7 @@ import { CommonService, toastPayload } from 'src/app/services/common.service';
 interface ParcelType {
   parcelTypeId: number;
   parcelTypeName: string;
+  defaultPrice:number;
   createBy?: string;
   createDate?: Date | null;
   updateBy?: string;
@@ -32,6 +33,7 @@ export class ParcelTypeComponent implements OnInit {
   parcelType: ParcelType = {
     parcelTypeId: 0,
     parcelTypeName: '',
+    defaultPrice:0,
     createBy: '',
     createDate: null,
     updateBy: '',
@@ -88,6 +90,7 @@ edit(item: ParcelType): void {
   this.parcelType = {
     parcelTypeId: item.parcelTypeId,
     parcelTypeName: item.parcelTypeName,
+    defaultPrice:item.defaultPrice,
     isActive: item.isActive
   };
   this.isList = false;
@@ -223,6 +226,7 @@ edit(item: ParcelType): void {
     this.parcelType = {
       parcelTypeId: 0,
       parcelTypeName: '',
+      defaultPrice:0,
       // createBy: '',
       // createDate: null,
       // updateBy: '',

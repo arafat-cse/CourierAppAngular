@@ -1,5 +1,5 @@
 <a  href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()" class="btn-list btn btn-primary" >List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;reset();get()" class="btn-new btn btn-warning mb-4 px-5">New</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;reset();getParcel()" class="btn-new btn btn-warning mb-4 px-5">New</a>
 
 <div *ngIf="isList">
   <div class="row">
@@ -45,7 +45,7 @@
               <td class="text-center">{{item.receiverBranchId}}</td>
               <td class="text-center">{{item.createdBy}}</td>
               <td class="text-center">
-                  <span class="badge px-3 py-2 w-50" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
+                  <span class="badge px-3 py-2" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
                       {{item.isActive ? 'Active' : 'Inactive'}}
                   </span>
               </td>
@@ -66,18 +66,46 @@
           <label for="trackingCode" class="form-label"> TrackingCode:</label>
           <input type="text" id="trackingCode" [(ngModel)]="parcels.trackingCode" class="form-control" />
       </div>
-      <div class="col-md-6">
+      <!-- <div class="col-md-6">
         <label for="parcelTypeId" class="form-label"> parcelType Name:</label>
         <input type="text" id="parcelTypeId" [(ngModel)]="parcels.parcelTypeId" class="form-control" />
+      </div> -->
+      <!-- <div class="col-md-6">
+        <label for="parcelType" class="form-label">Parcel Type:</label>
+        <select id="parcelType" [(ngModel)]="parcels.parcelTypeId" class="form-select">
+          <option *ngFor="let pt of parcelType" *ngIf="pt.isActive" >
+            <span >
+              {{ pt.parcelTypeName }}
+
+            </span>
+          
+          
+          </option>
+        </select>
+      </div> -->
+  
+      <div class="col-md-6">
+        <label for="parcelType" class="form-label">Parcel Type:</label>
+        <select  id="parcelType" [(ngModel)]="parcels.parcelTypeId" (change)="updatePrice()"  class="form-select">
+          <ng-container *ngFor="let pt of parcelType">
+            <option  *ngIf="pt.isActive" [ngValue]="pt.parcelTypeId">
+              {{ pt.parcelTypeName }}
+            </option>
+          </ng-container>
+        </select>
       </div>
       <!-- <div class="col-md-6">
-        <label for="parcelType" class="form-label">ParcelType:</label>
-        <select id="parcelType" [(ngModel)]="parcels.parcelTypeId" class="form-select">
-            <option [ngValue]="true">Document</option>
-            <option [ngValue]="false">Non Document</option>
-            <option [ngValue]="false">Others</option>
-          </select>
-    </div> -->
+        <label for="parcelType" class="form-label">Parcel Type:</label>
+        <select id="parcelType" [(ngModel)]="parcels.parcelTypeId" class="form-select" (change)="updatePrice()">
+          <option *ngFor="let pt of parcelType" [ngValue]="pt.parcelTypeId" >
+            {{ pt.parcelTypeName }}
+          </option>
+        </select>
+      </div> -->
+      
+      
+      <!-- {{ parcels.parcelTypeId }} -->
+      
       <!-- Sender  -->
       <div class="col-md-3">
         <label for="senderName" class="form-label"> Sender Name:</label>
@@ -87,15 +115,45 @@
         <label for="senderPhone" class="form-label"> Sender Phone:</label>
         <input type="text" id="senderPhone" [(ngModel)]="parcels.senderPhone" class="form-control" />
       </div>
-      <div class="col-md-3">
-        <label for="senderBranchId" class="form-label"> Sender Branch Phone:</label>
+      <!-- <div class="col-md-3">
+        <label for="senderBranchId" class="form-label"> Sender Zone:</label>
         <input type="text" id="senderBranchId" [(ngModel)]="parcels.senderBranchId" class="form-control" />
-      </div>
-      <div class="col-md-3">
-        <label for="senderBranchId" class="form-label"> Sender Branch Phone:</label>
-        <input type="text" id="senderBranchId" [(ngModel)]="parcels.senderBranchId" class="form-control" />
+      </div> -->
+      <!-- <div class="col-md-3">
+        <label for="parcelType" class="form-label">Sender Zone</label>
+        <select id="parcelType" [(ngModel)]="parcels.senderBranchId" class="form-select">
+          <option *ngFor="let pt of listBranchs ">{{ pt.branchName }}</option>
+        </select>
       </div>
 
+       <div class="col-md-3">
+        <label for="parcelType" class="form-label">Sender Chils</label>
+        <select id="parcelType" [(ngModel)]="parcels.senderBranchId" class="form-select">
+          <option *ngFor="let pt of listBranchs[5].childBranches ">{{ pt.childBranches }}</option>
+        </select>
+      </div> -->
+      <div class="col-md-3">
+        <label for="senderZone" class="form-label">Sender Zone</label>
+        <select 
+          id="senderZone" 
+          [(ngModel)]="selectedParentBranch" 
+          (change)="onParentBranchChange()" 
+          class="form-select">
+          <option *ngFor="let branch of listBranchs" [ngValue]="branch">
+            {{ branch.branchName }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="col-md-3">
+        <label for="senderChild" class="form-label">Sender Child</label>
+        <select id="senderChild" [(ngModel)]="parcels.senderBranchId" class="form-select">
+          <option *ngFor="let child of filteredChildBranches" [ngValue]="child.branchId">
+            {{ child.branchName }}
+          </option>
+        </select>
+      </div>
+      
       <!-- recevar  -->
       <div class="col-md-3">
         <label for="receiverName" class="form-label"> Recevar Name:</label>
@@ -105,28 +163,73 @@
         <label for="receiverPhone" class="form-label"> Recevar Phone:</label>
         <input type="text" id="receiverPhone" [(ngModel)]="parcels.receiverPhone" class="form-control" />
       </div>
-      <div class="col-md-3">
+      <!-- <div class="col-md-3">
         <label for="receiverBranchId" class="form-label"> receiver Branch Phone:</label>
         <input type="text" id="receiverBranchId" [(ngModel)]="parcels.receiverBranchId" class="form-control" />
       </div>
       <div class="col-md-3">
         <label for="receiverBranchId" class="form-label"> receiver Branch Phone:</label>
         <input type="text" id="receiverBranchId" [(ngModel)]="parcels.receiverBranchId" class="form-control" />
+      </div> -->
+      <div class="col-md-3">
+        <label for="senderZone" class="form-label">Recevar Zone</label>
+        <select 
+          id="senderZone" 
+          [(ngModel)]="recevarSelectedParentBranch" 
+          (change)="recevarParentBranchChange()" 
+          class="form-select">
+          <option *ngFor="let branch of listBranchs" [ngValue]="branch">
+            {{ branch.branchName }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="col-md-3">
+        <label for="senderChild" class="form-label">Recevar Child</label>
+        <select id="senderChild" [(ngModel)]="parcels.receiverBranchId" class="form-select">
+          <option *ngFor="let child of recevarFilteredChildBranches" [ngValue]="child.branchId">
+            {{ child.branchName }}
+          </option>
+        </select>
       </div>
       <!-- Others  -->
-      <div class="col-md-2">
+      <!-- <div class="col-md-2">
         <label for="weight" class="form-label"> weight:</label>
-        <input type="text" id="weight" [(ngModel)]="parcels.weight" class="form-control" />
-      </div>
-      <div class="col-md-2">
+        <input type="text" id="weight" [(ngModel)]="parcels.weight" [defaultValue]="1" class="form-control" />
+      </div> -->
+      <!-- {{parcels.weight}} -->
+      <!-- <div class="col-md-2">
         <label for="price" class="form-label"> price:</label>
-        <input type="text" id="price" [(ngModel)]="parcels.price" class="form-control" />
+        <input readonly type="text" id="price" placeholder="{{(parcels.parcelTypeId == 1)? 40 : (parcels.parcelTypeId == 4)? 
+        '80':(parcels.parcelTypeId == 7)? '120': (parcels.parcelTypeId == 18)? '160': (parcels.parcelTypeId == 19)? '200': 0}}" class="form-control" />
+      </div> -->
+      
+      
+      <div class="col-md-2">
+        <label for="weight" class="form-label">Weight:</label>
+        <input 
+          type="number" 
+          id="weight" 
+          [(ngModel)]="parcels.weight" 
+          class="form-control" 
+          (input)="updatePrice()" />
       </div>
+      
+      <div class="col-md-2">
+        <label for="price" class="form-label">Price:</label>
+        <input 
+          readonly 
+          type="text" 
+          id="price" 
+          [value]="price" 
+          class="form-control" />
+      </div>
+      
       <div class="col-md-2">
         <label for="isPaid" class="form-label">isPaid:</label>
         <select id="isPaid" [(ngModel)]="parcels.isPaid" class="form-select">
             <option [ngValue]="true">Yes</option>
-            <option [ngValue]="false">No</option>
+            <option [ngValue]="false" selected="true">No</option>
           </select>
     </div>
       <div class="col-md-2">
@@ -172,3 +275,5 @@
       </div>
   </div>
 </div>
+
+<!-- {{listBranchs | json}} -->

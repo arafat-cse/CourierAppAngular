@@ -56,7 +56,7 @@
 //         trackingCode: 'TRK123',
 //         senderCustomerName: 'John Doe',
 //         receiverCustomerName: 'Jane Smith',
-     
+
 //         price: 200,
 //       },
 //       // Add more mock data here
@@ -121,7 +121,7 @@
 //   }
 // }
 
-// Demo 
+// Demo
 // import { Component, OnInit } from '@angular/core';
 
 // @Component({
@@ -255,45 +255,45 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { IndividualConfig } from 'ngx-toastr';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
+import { ParcelType } from '../interface/ParcelType';
+import { Branch } from '../interface/listBranchs';
 interface Parcel {
-  parcelId: number;                     // Primary Key
-  trackingCode: string;                 // Tracking Code (nvarchar)
-  senderName: string | null;            // Sender Name (varchar)
-  senderPhone: number | null;           // Sender Phone (int, nullable)
-  senderAddress: string | null;         // Sender Address (varchar, nullable)
+  parcelId: number; // Primary Key
+  trackingCode: string; // Tracking Code (nvarchar)
+  senderName: string | null; // Sender Name (varchar)
+  senderPhone: number | null; // Sender Phone (int, nullable)
+  senderAddress: string | null; // Sender Address (varchar, nullable)
   senderAlternativetoAddress: string | null; // Sender Alternative Address (varchar, nullable)
-  receiverName: string | null;          // Receiver Name (varchar, nullable)
-  receiverPhone: number | null;         // Receiver Phone (int, nullable)
-  receiverEmail: string | null;         // Receiver Email (varchar, nullable)
-  receiverAddress: string | null;       // Receiver Address (varchar, nullable)
+  receiverName: string | null; // Receiver Name (varchar, nullable)
+  receiverPhone: number | null; // Receiver Phone (int, nullable)
+  receiverEmail: string | null; // Receiver Email (varchar, nullable)
+  receiverAddress: string | null; // Receiver Address (varchar, nullable)
   receiverAlternativetoAddress: string | null; // Receiver Alternative Address (varchar, nullable)
-  senderCustomerId: number | null;      // Sender Customer ID (int, nullable)
-  sendTime: Date | null;                // Parcel Send Time (datetime, nullable)
-  receiverCustomerId: number | null;    // Receiver Customer ID (int, nullable)
-  receiveTime: Date | null;             // Parcel Receive Time (datetime, nullable)
-  senderBranchId: number | null;        // Sender Branch ID (int, nullable)
-  receiverBranchId: number | null;      // Receiver Branch ID (int, nullable)
-  estimatedReceiveTime: Date | null;    // Estimated Receive Time (datetime, nullable)
-  isPaid: boolean | null;               // Payment Status (bit, nullable)
-  price: number | null;                 // Parcel Price (decimal, nullable)
-  weight: number | null;                // Parcel Weight (float, nullable)
-  createdBy: string | null;             // Created By (nvarchar, nullable)
-  createDate: Date | null;              // Create Date (datetime, nullable)
-  updatedBy: string | null;             // Updated By (nvarchar, nullable)
-  updateDate: Date | null;              // Update Date (datetime, nullable)
-  sendingBranch: boolean | null;        // Sending Branch Status (bit, nullable)
+  senderCustomerId: number | null; // Sender Customer ID (int, nullable)
+  sendTime: Date | null; // Parcel Send Time (datetime, nullable)
+  receiverCustomerId: number | null; // Receiver Customer ID (int, nullable)
+  receiveTime: Date | null; // Parcel Receive Time (datetime, nullable)
+  senderBranchId: number | null; // Sender Branch ID (int, nullable)
+  receiverBranchId: number | null; // Receiver Branch ID (int, nullable)
+  estimatedReceiveTime: Date | null; // Estimated Receive Time (datetime, nullable)
+  isPaid: boolean | false; // Payment Status (bit, nullable)
+  price: number | null; // Parcel Price (decimal, nullable)
+  weight: number | null; // Parcel Weight (float, nullable)
+  createdBy: string | null; // Created By (nvarchar, nullable)
+  createDate: Date | null; // Create Date (datetime, nullable)
+  updatedBy: string | null; // Updated By (nvarchar, nullable)
+  updateDate: Date | null; // Update Date (datetime, nullable)
+  sendingBranch: boolean | null; // Sending Branch Status (bit, nullable)
   percelSendingDestribution: boolean | null; // Distribution Status during Sending (bit, nullable)
-  recebingDistributin: boolean | null;  // Distribution Status during Receiving (bit, nullable)
-  recebingBranch: boolean | null;       // Receiving Branch Status (bit, nullable)
-  recebingReceber: boolean | null;      // Receiving Receiver Status (bit, nullable)
-  isActive: boolean | null;             // Active Status (bit, nullable)
-  vanId: number | null;                 // Van ID (int, nullable)
-  driverId: number | null;              // Driver ID (int, nullable)
-  deliveryChargeId: number | null;      // Delivery Charge ID (int, nullable)
-  parcelTypeId: number | null;          // Parcel Type ID (int, nullable)
- 
+  recebingDistributin: boolean | null; // Distribution Status during Receiving (bit, nullable)
+  recebingBranch: boolean | null; // Receiving Branch Status (bit, nullable)
+  recebingReceber: boolean | null; // Receiving Receiver Status (bit, nullable)
+  isActive: boolean | null; // Active Status (bit, nullable)
+  vanId: number | null; // Van ID (int, nullable)
+  driverId: number | null; // Driver ID (int, nullable)
+  deliveryChargeId: number | null; // Delivery Charge ID (int, nullable)
+  parcelTypeId: number | null; // Parcel Type ID (int, nullable)
 }
-
 
 @Component({
   selector: 'app-parcel',
@@ -304,306 +304,439 @@ export class ParcelComponent implements OnInit {
   isList: boolean = true;
   isNew: boolean = true;
   // Toast notification
-    toast!: toastPayload;
-    // Parcel Type data
-    Listparcels: Parcel[] = [];
+  toast!: toastPayload;
+  // Parcel Type data
+  Listparcels: Parcel[] = [];
+  parcelType: ParcelType[] = [];
+  listBranchs: Branch[] = [];
 
-    parcels: Parcel = {
-      parcelId: 0,
-      trackingCode: '',
-      senderName: '',            
-      senderPhone: null,                     // Sender Phone (number | null)
-      senderAddress: null,                   // Sender Address (string | null)
-      senderAlternativetoAddress: null,      // Sender Alternative Address (string | null)
-      receiverName: null,                    // Receiver Name (string | null)
-      receiverPhone: null,                   // Receiver Phone (number | null)
-      receiverEmail: null,                   // Receiver Email (string | null)
-      receiverAddress: null,                 // Receiver Address (string | null)
-      receiverAlternativetoAddress: null,    // Receiver Alternative Address (string | null)
-      senderCustomerId: null,                // Sender Customer ID (number | null)
-      sendTime: null,                        // Send Time (Date | null)
-      receiverCustomerId: null,              // Receiver Customer ID (number | null)
-      receiveTime: null,                     // Receive Time (Date | null)
-      senderBranchId: null,                  // Sender Branch ID (number | null)
-      receiverBranchId: null,                // Receiver Branch ID (number | null)
-      estimatedReceiveTime: null,            // Estimated Receive Time (Date | null)
-      isPaid: null,                          // Payment Status (boolean | null)
-      price: null,                           // Price (number | null)
-      weight: null,                          // Weight (number | null)
-      createdBy: null,                       // Created By (string | null)
-      createDate: null,                      // Create Date (Date | null)
-      updatedBy: null,                       // Updated By (string | null)
-      updateDate: null,                      // Update Date (Date | null)
-      sendingBranch: null,                   // Sending Branch Status (boolean | null)
-      percelSendingDestribution: null,       // Percel Sending Distribution (boolean | null)
-      recebingDistributin: null,             // Receiving Distribution (boolean | null)
-      recebingBranch: null,                  // Receiving Branch Status (boolean | null)
-      recebingReceber: null,                 // Receiving Receiver Status (boolean | null)
-      isActive: null,                        // Active Status (boolean | null)
-      vanId: null,                           // Van ID (number | null)
-      driverId: null,                        // Driver ID (number | null)
-      deliveryChargeId: null,                // Delivery Charge ID (number | null)
-      parcelTypeId: null                     // Parcel Type ID (number | null)
-    };
-    
-// Pagination
-pageIndex: number = 0;
-pageSize: number = 10;
-rowCount: number = 0;
-listPageSize: number[] = [5, 10, 20];
-pageStart: number = 0;
-pageEnd: number = 0;
-totalRowsInList: number = 0;
-pagedItems: any[] = [];
-pager: {
-  pages: number[];
-  totalPages: number;
-} = {
-  pages: [],
-  totalPages: 0
-};
 
-  constructor( private cs: CommonService, private httpClient: HttpClient, public authService: AuthService) {}
+  parcels: Parcel = {
+    parcelId: 0,
+    trackingCode: '',
+    senderName: '',
+    senderPhone: null, // Sender Phone (number | null)
+    senderAddress: null, // Sender Address (string | null)
+    senderAlternativetoAddress: null, // Sender Alternative Address (string | null)
+    receiverName: null, // Receiver Name (string | null)
+    receiverPhone: null, // Receiver Phone (number | null)
+    receiverEmail: null, // Receiver Email (string | null)
+    receiverAddress: null, // Receiver Address (string | null)
+    receiverAlternativetoAddress: null, // Receiver Alternative Address (string | null)
+    senderCustomerId: null, // Sender Customer ID (number | null)
+    sendTime: null, // Send Time (Date | null)
+    receiverCustomerId: null, // Receiver Customer ID (number | null)
+    receiveTime: null, // Receive Time (Date | null)
+    senderBranchId: null, // Sender Branch ID (number | null)
+    receiverBranchId: null, // Receiver Branch ID (number | null)
+    estimatedReceiveTime: null, // Estimated Receive Time (Date | null)
+    isPaid: false, // Payment Status (boolean | null)
+    price: null, // Price (number | null)
+    weight: null, // Weight (number | null)
+    createdBy: null, // Created By (string | null)
+    createDate: null, // Create Date (Date | null)
+    updatedBy: null, // Updated By (string | null)
+    updateDate: null, // Update Date (Date | null)
+    sendingBranch: null, // Sending Branch Status (boolean | null)
+    percelSendingDestribution: null, // Percel Sending Distribution (boolean | null)
+    recebingDistributin: null, // Receiving Distribution (boolean | null)
+    recebingBranch: null, // Receiving Branch Status (boolean | null)
+    recebingReceber: null, // Receiving Receiver Status (boolean | null)
+    isActive: null, // Active Status (boolean | null)
+    vanId: null, // Van ID (number | null)
+    driverId: null, // Driver ID (number | null)
+    deliveryChargeId: null, // Delivery Charge ID (number | null)
+    parcelTypeId: null, // Parcel Type ID (number | null)
+  };
+
+  // Pagination
+  pageIndex: number = 0;
+  pageSize: number = 10;
+  rowCount: number = 0;
+  listPageSize: number[] = [5, 10, 20];
+  pageStart: number = 0;
+  pageEnd: number = 0;
+  totalRowsInList: number = 0;
+  pagedItems: any[] = [];
+  pager: {
+    pages: number[];
+    totalPages: number;
+  } = {
+    pages: [],
+    totalPages: 0,
+  };
+  price: number = 0;
+  constructor(
+    private cs: CommonService,
+    private httpClient: HttpClient,
+    public authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.get();
+    this.getParcel();
+    this.getPercelType();
+    this.getBranches();
+    this. updatePrice();
+  console.log(this.parcelType);
   }
-  get(): void {
+
+  getParcel(): void {
     const headers = new HttpHeaders({
-      'Token': this.authService.UserInfo?.Token || '',
+      Token: this.authService.UserInfo?.Token || '',
     });
-    this.httpClient.get<any>(`${this.authService.baseURL}/api/Parcels`, { headers })
-    .subscribe({
-      next: (response) => {
-        this.Listparcels = response;
-      //  this.rowCount = response.totalCount || 0;
-        this.applyPaging();
-      },
-      error: () => {
-        this.showMessage('error', 'Failed to load parcel types');
-      },
-    });
-}
-edit(item: Parcel): void {
-  this.parcels = {
-    parcelId: item.parcelId,
-    trackingCode: item.trackingCode,
-    senderName: item.senderName,
-    senderPhone: item.senderPhone,
-    senderAddress: item.senderAddress,
-    senderAlternativetoAddress: item.senderAlternativetoAddress,
-    receiverName: item.receiverName,
-    receiverPhone: item.receiverPhone,
-    receiverEmail: item.receiverEmail,
-    receiverAddress: item.receiverAddress,
-    receiverAlternativetoAddress: item.receiverAlternativetoAddress,
-    senderCustomerId: item.senderCustomerId,
-    sendTime: item.sendTime,
-    receiverCustomerId: item.receiverCustomerId,
-    receiveTime: item.receiveTime,
-    senderBranchId: item.senderBranchId,
-    receiverBranchId: item.receiverBranchId,
-    estimatedReceiveTime: item.estimatedReceiveTime,
-    isPaid: item.isPaid,
-    price: item.price,
-    weight: item.weight,
-    createdBy: item.createdBy,
-    createDate: item.createDate,
-    updatedBy: item.updatedBy,
-    updateDate: item.updateDate,
-    sendingBranch: item.sendingBranch,
-    percelSendingDestribution: item.percelSendingDestribution,
-    recebingDistributin: item.recebingDistributin,
-    recebingBranch: item.recebingBranch,
-    recebingReceber: item.recebingReceber,
-    isActive: item.isActive,
-    vanId: item.vanId,
-    driverId: item.driverId,
-    deliveryChargeId: item.deliveryChargeId,
-    parcelTypeId: item.parcelTypeId
-  };
-  this.isList = false;
-}
-//স্প্রেড অপারেটর সমাধান
-// edit(item: Parcel): void {
-//   this.parcels = { ...item };
-//   this.isList = false;
-// }
-
-// add(): void {
-//   if (!this.validateForm()) {
-//     return;
-//   }
-
-//   const headers = new HttpHeaders({
-//     'Token': this.authService.UserInfo?.Token,
-//     'Content-Type': 'application/json',
-//   });
-
-//   const payload = {
-//     ...this.parcels, // Include all necessary properties for a new parcel type
-//   };
-
-//   this.httpClient.post(
-//     `${this.authService.baseURL}/api/Parcels`,
-//     payload,
-//     { headers }
-//   ).subscribe({
-//     next: () => {
-//       this.reset();
-//       this.get();
-//       this.showMessage('success', 'Parcel type added successfully');
-//     },
-//     error: (error) => {
-//       this.showMessage('error', error.error || 'Failed to add parcel type');
-//     },
-//   });
-// }
-
-add(): void {
-  if (!this.validateForm()) {
-    return;
+    this.httpClient
+      .get<any>(`${this.authService.baseURL}/api/Parcels`, { headers })
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+          this.Listparcels = response;
+          //  this.rowCount = response.totalCount || 0;
+          this.applyPaging();
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to load parcel types');
+        },
+      });
   }
-
-  const token = this.authService.UserInfo?.Token || '';
-  if (!token) {
-    this.showMessage('error', 'Authentication token is missing');
-    return;
-  }
-
-  const headers = new HttpHeaders({
-    'Token': token,
-    'Content-Type': 'application/json',
-  });
-
-  const payload = {
-    ...this.parcels, // Include all necessary properties for a new parcel type
-  };
-
-  this.httpClient.post(
-    `${this.authService.baseURL}/api/Parcels`,
-    payload,
-    { headers }
-  ).subscribe({
-    next: () => {
-      this.reset();
-      this.get();
-      this.showMessage('success', 'Parcel added successfully');
-    },
-    error: (error) => {
-      const errorMessage = error.error?.message || 'Failed to add parcel';
-      this.showMessage('error', errorMessage);
-    },
-  });
-}
-
-// validateForm(): boolean {
-//   if (!this.parcels.trackingCode.trim()) {
-//     this.showMessage('warning', 'Parcel type name is required');
-//     return false;
-//   }
-//   return true;
-// }
-validateForm(): boolean {
-  if (!this.parcels.trackingCode || !this.parcels.trackingCode.trim()) {
-    this.showMessage('warning', 'Parcel tracking code is required');
-    return false;
-  }
-  return true;
-}
-
-//update all
-update(): void {
-  if (!this.validateForm()) {
-    return;
-  }
-
-  const headers = new HttpHeaders({
-    'Token': this.authService.UserInfo?.Token,
-  });
-
-  console.log(this.parcels)
-
-  // const payload = {
-  //   parcelId: this.parcels.parcelId,
-  //   trackingCode: this.parcels.trackingCode,
-  //   senderName:this.parcels.senderName,
-  //   isActive: this.parcels.isActive, 
+  // parcels: Parcel = {
+  //   parcelId: 0,
+  //   trackingCode: '',
+  //   parcelTypeId: null,
+  //   weight: 1, // Default value set to 1
+  //   price: null,
+  //   isActive: true,
   // };
 
-  const payload = {
-    parcelId: this.parcels.parcelId, // Parcel ID
-    trackingCode: this.parcels.trackingCode, // Tracking Code
-    senderName: this.parcels.senderName, // Sender Name
-    senderPhone: this.parcels.senderPhone, // Sender Phone
-    senderAddress: this.parcels.senderAddress, // Sender Address
-    senderAlternativetoAddress: this.parcels.senderAlternativetoAddress, // Sender Alternative Address
-    receiverName: this.parcels.receiverName, // Receiver Name
-    receiverPhone: this.parcels.receiverPhone, // Receiver Phone
-    receiverEmail: this.parcels.receiverEmail, // Receiver Email
-    receiverAddress: this.parcels.receiverAddress, // Receiver Address
-    receiverAlternativetoAddress: this.parcels.receiverAlternativetoAddress, // Receiver Alternative Address
-    senderCustomerId: this.parcels.senderCustomerId, // Sender Customer ID
-    sendTime: this.parcels.sendTime, // Parcel Send Time
-    receiverCustomerId: this.parcels.receiverCustomerId, // Receiver Customer ID
-    receiveTime: this.parcels.receiveTime, // Parcel Receive Time
-    senderBranchId: this.parcels.senderBranchId, // Sender Branch ID
-    receiverBranchId: this.parcels.receiverBranchId, // Receiver Branch ID
-    estimatedReceiveTime: this.parcels.estimatedReceiveTime, // Estimated Receive Time
-    isPaid: this.parcels.isPaid, // Payment Status
-    price: this.parcels.price, // Parcel Price
-    weight: this.parcels.weight, // Parcel Weight
-    createdBy: this.parcels.createdBy, // Created By
-    createDate: this.parcels.createDate, // Create Date
-    updatedBy: this.parcels.updatedBy, // Updated By
-    updateDate: this.parcels.updateDate, // Update Date
-    sendingBranch: this.parcels.sendingBranch, // Sending Branch Status
-    percelSendingDestribution: this.parcels.percelSendingDestribution, // Distribution Status during Sending
-    recebingDistributin: this.parcels.recebingDistributin, // Distribution Status during Receiving
-    recebingBranch: this.parcels.recebingBranch, // Receiving Branch Status
-    recebingReceber: this.parcels.recebingReceber, // Receiving Receiver Status
-    isActive: this.parcels.isActive, // Active Status
-    vanId: this.parcels.vanId, // Van ID
-    driverId: this.parcels.driverId, // Driver ID
-    deliveryChargeId: this.parcels.deliveryChargeId, // Delivery Charge ID
-    parcelTypeId: this.parcels.parcelTypeId, // Parcel Type ID
-  };
   
+  updatePrice(): void {
+    const selectedType = this.parcelType.find(pt => pt.parcelTypeId === this.parcels.parcelTypeId);
+ console.log(this.parcelType)
+    if (!selectedType) {
+      this.price = 0;
+      return;
+    }
+  
+    // Calculate price based on selected type and weight
+    if (this.parcels.weight && this.parcels.weight > 0) {
+      this.price = selectedType.defaultPrice * this.parcels.weight;
+      console.log(this.price)
+    } else {
+      this.price = selectedType.defaultPrice; // Default price if weight is not entered
+      console.log(this.price)
+    }
+  }
+  getPercelType(): void {
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+    });
+    this.httpClient
+      .get<any>(`${this.authService.baseURL}/api/ParcelTypes`, { headers })
+      .subscribe({
+        next: (response) => {
+          // if(response.isActive)
+          // {
 
-  console.log(payload);
+          // }
 
-  this.httpClient.put(
-    `${this.authService.baseURL}/api/Parcels/${this.parcels.parcelId}`,
-    payload,
-    { headers }
-  ).subscribe({
-    next: () => {
-      this.isList = true;
-      this.get();
-      this.showMessage('success', 'Parcel type updated successfully');
-    },
-    error: (error) => {
-      this.showMessage('error', error.error || 'Failed to update parcel type');
-    },
-  });
-}
+          this.parcelType = response;
+         console.log(response);
+          // for (let index = 0; index < response.length; index++) {
+          //   const element = response[index];
+          //   console.log(element.parcelTypeId);
+          //   if(element.parcelTypeId == 1){
+          //     this.price = 100;
+          //   }else if(element.parcelTypeId == 4){
+          //     this.price = 50;
+          //   }else{
+          //     0
+          //   }
+          // }
+         
+          //  console.log(response);
 
+          //  this.rowCount = response.totalCount || 0;
+          this.applyPaging();
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to load parcel types');
+        },
+      });
+  }
+  getBranches(): void {
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+    });
 
-removeConfirm(parcel: Parcel): void {
-  this.parcels = { ...parcel };
+    this.httpClient
+      .get<{ status: boolean; message: string; content: Branch[] }>(
+        `${this.authService.baseURL}/api/Branches`,
+        { headers }
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.status) {
+            if (response.content) this.listBranchs = response.content;
+            console.log(response.content);
+            // this.rowCount = response.content.length;
+            // this.paginate();
+            // this.prepareDropdownBranches(response.content);
+          } else {
+            this.showMessage('warning', response.message);
+          }
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to load branches');
+        },
+      });
+  }
+  //Brnach dropdwon
+  selectedParentBranch: any = null;
+  filteredChildBranches: any[] = [];
+  onParentBranchChange(): void {
+    if (this.selectedParentBranch) {
+      this.filteredChildBranches =
+        this.selectedParentBranch.childBranches || [];
+    } else {
+      this.filteredChildBranches = [];
+    }
+  }
 
-}
+  recevarSelectedParentBranch: any = null;
+  recevarFilteredChildBranches: any[] = [];
+  recevarParentBranchChange(): void {
+    if (this.recevarSelectedParentBranch) {
+      this.recevarFilteredChildBranches =
+        this.recevarSelectedParentBranch.childBranches || [];
+    } else {
+      this.recevarFilteredChildBranches = [];
+    }
+  }
+
+  edit(item: Parcel): void {
+    this.parcels = {
+      parcelId: item.parcelId,
+      trackingCode: item.trackingCode,
+      senderName: item.senderName,
+      senderPhone: item.senderPhone,
+      senderAddress: item.senderAddress,
+      senderAlternativetoAddress: item.senderAlternativetoAddress,
+      receiverName: item.receiverName,
+      receiverPhone: item.receiverPhone,
+      receiverEmail: item.receiverEmail,
+      receiverAddress: item.receiverAddress,
+      receiverAlternativetoAddress: item.receiverAlternativetoAddress,
+      senderCustomerId: item.senderCustomerId,
+      sendTime: item.sendTime,
+      receiverCustomerId: item.receiverCustomerId,
+      receiveTime: item.receiveTime,
+      senderBranchId: item.senderBranchId,
+      receiverBranchId: item.receiverBranchId,
+      estimatedReceiveTime: item.estimatedReceiveTime,
+      isPaid: item.isPaid,
+      price: item.price,
+      weight: item.weight,
+      createdBy: item.createdBy,
+      createDate: item.createDate,
+      updatedBy: item.updatedBy,
+      updateDate: item.updateDate,
+      sendingBranch: item.sendingBranch,
+      percelSendingDestribution: item.percelSendingDestribution,
+      recebingDistributin: item.recebingDistributin,
+      recebingBranch: item.recebingBranch,
+      recebingReceber: item.recebingReceber,
+      isActive: item.isActive,
+      vanId: item.vanId,
+      driverId: item.driverId,
+      deliveryChargeId: item.deliveryChargeId,
+      parcelTypeId: item.parcelTypeId,
+    };
+    this.isList = false;
+  }
+  //স্প্রেড অপারেটর সমাধান
+  // edit(item: Parcel): void {
+  //   this.parcels = { ...item };
+  //   this.isList = false;
+  // }
+
+  // add(): void {
+  //   if (!this.validateForm()) {
+  //     return;
+  //   }
+
+  //   const headers = new HttpHeaders({
+  //     'Token': this.authService.UserInfo?.Token,
+  //     'Content-Type': 'application/json',
+  //   });
+
+  //   const payload = {
+  //     ...this.parcels, // Include all necessary properties for a new parcel type
+  //   };
+
+  //   this.httpClient.post(
+  //     `${this.authService.baseURL}/api/Parcels`,
+  //     payload,
+  //     { headers }
+  //   ).subscribe({
+  //     next: () => {
+  //       this.reset();
+  //       this.get();
+  //       this.showMessage('success', 'Parcel type added successfully');
+  //     },
+  //     error: (error) => {
+  //       this.showMessage('error', error.error || 'Failed to add parcel type');
+  //     },
+  //   });
+  // }
+
+  add(): void {
+    if (!this.validateForm()) {
+      return;
+    }
+
+    const token = this.authService.UserInfo?.Token || '';
+    if (!token) {
+      this.showMessage('error', 'Authentication token is missing');
+      return;
+    }
+
+    const headers = new HttpHeaders({
+      Token: token,
+      'Content-Type': 'application/json',
+    });
+
+    const payload = {
+      ...this.parcels, // Include all necessary properties for a new parcel type
+    };
+
+    this.httpClient
+      .post(`${this.authService.baseURL}/api/Parcels`, payload, { headers })
+      .subscribe({
+        next: () => {
+          this.isList = true;
+          this.reset();
+          this.getParcel();
+          this.showMessage('success', 'Parcel added successfully');
+        },
+        error: (error) => {
+          const errorMessage = error.error?.message || 'Failed to add parcel';
+          this.showMessage('error', errorMessage);
+        },
+      });
+  }
+
+  // validateForm(): boolean {
+  //   if (!this.parcels.trackingCode.trim()) {
+  //     this.showMessage('warning', 'Parcel type name is required');
+  //     return false;
+  //   }
+  //   return true;
+  // }
+  validateForm(): boolean {
+    if (!this.parcels.trackingCode || !this.parcels.trackingCode.trim()) {
+      this.showMessage('warning', 'Parcel tracking code is required');
+      return false;
+    }
+    return true;
+  }
+
+  //update all
+  update(): void {
+    if (!this.validateForm()) {
+      return;
+    }
+
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token,
+    });
+
+    console.log(this.parcels);
+
+    // const payload = {
+    //   parcelId: this.parcels.parcelId,
+    //   trackingCode: this.parcels.trackingCode,
+    //   senderName:this.parcels.senderName,
+    //   isActive: this.parcels.isActive,
+    // };
+
+    const payload = {
+      parcelId: this.parcels.parcelId, // Parcel ID
+      trackingCode: this.parcels.trackingCode, // Tracking Code
+      senderName: this.parcels.senderName, // Sender Name
+      senderPhone: this.parcels.senderPhone, // Sender Phone
+      senderAddress: this.parcels.senderAddress, // Sender Address
+      senderAlternativetoAddress: this.parcels.senderAlternativetoAddress, // Sender Alternative Address
+      receiverName: this.parcels.receiverName, // Receiver Name
+      receiverPhone: this.parcels.receiverPhone, // Receiver Phone
+      receiverEmail: this.parcels.receiverEmail, // Receiver Email
+      receiverAddress: this.parcels.receiverAddress, // Receiver Address
+      receiverAlternativetoAddress: this.parcels.receiverAlternativetoAddress, // Receiver Alternative Address
+      senderCustomerId: this.parcels.senderCustomerId, // Sender Customer ID
+      sendTime: this.parcels.sendTime, // Parcel Send Time
+      receiverCustomerId: this.parcels.receiverCustomerId, // Receiver Customer ID
+      receiveTime: this.parcels.receiveTime, // Parcel Receive Time
+      senderBranchId: this.parcels.senderBranchId, // Sender Branch ID
+      receiverBranchId: this.parcels.receiverBranchId, // Receiver Branch ID
+      estimatedReceiveTime: this.parcels.estimatedReceiveTime, // Estimated Receive Time
+      isPaid: this.parcels.isPaid, // Payment Status
+      price: this.parcels.price, // Parcel Price
+      weight: this.parcels.weight, // Parcel Weight
+      createdBy: this.parcels.createdBy, // Created By
+      createDate: this.parcels.createDate, // Create Date
+      updatedBy: this.parcels.updatedBy, // Updated By
+      updateDate: this.parcels.updateDate, // Update Date
+      sendingBranch: this.parcels.sendingBranch, // Sending Branch Status
+      percelSendingDestribution: this.parcels.percelSendingDestribution, // Distribution Status during Sending
+      recebingDistributin: this.parcels.recebingDistributin, // Distribution Status during Receiving
+      recebingBranch: this.parcels.recebingBranch, // Receiving Branch Status
+      recebingReceber: this.parcels.recebingReceber, // Receiving Receiver Status
+      isActive: this.parcels.isActive, // Active Status
+      vanId: this.parcels.vanId, // Van ID
+      driverId: this.parcels.driverId, // Driver ID
+      deliveryChargeId: this.parcels.deliveryChargeId, // Delivery Charge ID
+      parcelTypeId: this.parcels.parcelTypeId, // Parcel Type ID
+    };
+
+    console.log(payload);
+
+    this.httpClient
+      .put(
+        `${this.authService.baseURL}/api/Parcels/${this.parcels.parcelId}`,
+        payload,
+        { headers }
+      )
+      .subscribe({
+        next: () => {
+          this.isList = true;
+          this.getParcel();
+          this.showMessage('success', 'Parcel type updated successfully');
+        },
+        error: (error) => {
+          this.showMessage(
+            'error',
+            error.error || 'Failed to update parcel type'
+          );
+        },
+      });
+  }
+
+  removeConfirm(parcel: Parcel): void {
+    this.parcels = { ...parcel };
+  }
 
   remove(parcel: Parcel): void {
     const headers = new HttpHeaders({
-      'Token': this.authService.UserInfo?.Token || '',
+      Token: this.authService.UserInfo?.Token || '',
     });
 
-    this.httpClient.delete(`${this.authService.baseURL}/api/ParcelTypes/${parcel.parcelId}`, { headers })
+    this.httpClient
+      .delete(
+        `${this.authService.baseURL}/api/ParcelTypes/${parcel.parcelId}`,
+        { headers }
+      )
       .subscribe({
         next: () => {
           this.reset();
-          this.get();
+          this.getParcel();
           this.showMessage('success', 'Parcel type deleted successfully');
         },
         error: () => {
@@ -611,10 +744,6 @@ removeConfirm(parcel: Parcel): void {
         },
       });
   }
-
-
-
-
 
   showMessage(type: string, message: string): void {
     this.toast = {
@@ -633,12 +762,12 @@ removeConfirm(parcel: Parcel): void {
     this.parcels = {
       parcelId: 0,
       trackingCode: '',
-      createdBy: '',        // Corrected property name
+      createdBy: '', // Corrected property name
       createDate: null,
-      updatedBy: '',        // Corrected property name
+      updatedBy: '', // Corrected property name
       updateDate: null,
       isActive: true,
-      senderName: '',        // Add other mandatory properties as per the Parcel interface
+      senderName: '', // Add other mandatory properties as per the Parcel interface
       senderPhone: null,
       senderAddress: null,
       senderAlternativetoAddress: null,
@@ -654,7 +783,7 @@ removeConfirm(parcel: Parcel): void {
       senderBranchId: null,
       receiverBranchId: null,
       estimatedReceiveTime: null,
-      isPaid: null,
+      isPaid: false,
       price: null,
       weight: null,
       sendingBranch: null,
@@ -668,36 +797,31 @@ removeConfirm(parcel: Parcel): void {
       parcelTypeId: null,
     };
   }
+
+  applyPaging(): void {
+    const start = this.pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    this.pagedItems = this.Listparcels.slice(start, end);
+    this.calculatePages();
+  }
+
+  calculatePages(): void {
+    this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+    this.pager.pages = Array.from(Array(this.pager.totalPages).keys());
+  }
+
+  changePageSize(): void {
+    this.pageIndex = 0;
+    this.applyPaging();
+  }
+
+  changePageNumber(pageIndex: number): void {
+    this.pageIndex = pageIndex;
+    this.applyPaging();
+  }
+  search(): void {
+    this.applyPaging();
+  }
+
   
-applyPaging(): void {
-  const start = this.pageIndex * this.pageSize;
-  const end = start + this.pageSize;
-  this.pagedItems = this.Listparcels.slice(start, end);
-  this.calculatePages();
 }
-
-calculatePages(): void {
-  this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
-  this.pager.pages = Array.from(Array(this.pager.totalPages).keys());
-}
-
-changePageSize(): void {
-  this.pageIndex = 0;
-  this.applyPaging();
-}
-
-changePageNumber(pageIndex: number): void {
-  this.pageIndex = pageIndex;
-  this.applyPaging();
-}
-search(): void {
-  this.applyPaging();
-}
-
-
-
-
-
-
-}
-

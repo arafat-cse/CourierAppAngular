@@ -23,7 +23,7 @@
         <th>Sl</th>
         <th>Branch Name</th>
         <th class="text-center">Address</th>
-        <th class="text-center">Created By</th>
+        <th class="text-center">BranchId</th>
         
         <th class="text-center">Parent ID</th>
         <th class="text-center">Active / Inactive</th>
@@ -36,7 +36,7 @@
         <td>{{ item.branchName }}</td>
         <td class="text-center">{{ item.address }}</td>
 
-        <td class="text-center">{{ item.createBy }}</td>
+        <td class="text-center">{{ item.branchId }}</td>
         <td class="text-center">{{ item.parentId }}</td>
         <td class="text-center">
           <span class="badge px-3 py-2 w-50" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
