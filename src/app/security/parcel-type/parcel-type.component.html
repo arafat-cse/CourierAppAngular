@@ -50,7 +50,6 @@
         </tbody>
     </table>
 </div>
-
 <div *ngIf="!isList">
     <h4 class="text-center">Parcel Type Entry Form</h4>
     <div class="row g-3">
@@ -59,12 +58,15 @@
             <input type="text" id="parcelTypeName" [(ngModel)]="parcelType.parcelTypeName" class="form-control" />
         </div>
         <div class="col-md-6">
+            <label for="defaultPrice" class="form-label">defaultPrice:</label>
+            <input type="text" id="defaultPrice" [(ngModel)]="parcelType.defaultPrice" class="form-control" />
+        </div>
+        <div class="col-md-6">
             <label for="isActive" class="form-label">Is Active:</label>
             <select id="isActive" [(ngModel)]="parcelType.isActive" class="form-select">
                 <option [ngValue]="true">Active</option>
                 <option [ngValue]="false">Inactive</option>
-              </select>
-              
+              </select>              
         </div>
         <div class="col-md-12 mt-5">
             <button type="button" class="btn btn-secondary" *ngIf="parcelType.parcelTypeId > 0" (click)="update()">Update</button>
