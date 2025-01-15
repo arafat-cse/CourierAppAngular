@@ -1,255 +1,3 @@
-// // import { Component } from '@angular/core';
-
-// // @Component({
-// //   selector: 'app-parcel',
-// //   templateUrl: './parcel.component.html',
-// //   styleUrl: './parcel.component.css'
-// // })
-// // export class ParcelComponent {
-
-// // }
-// import { Component, OnInit } from '@angular/core';
-
-// @Component({
-//   selector: 'app-parcel',
-//   templateUrl: './parcel.component.html',
-//   styleUrls: ['./parcel.component.css'],
-// })
-// export class ParcelComponent implements OnInit {
-//   parcels: any[] = []; // Parcel list
-//   paginatedParcels: any[] = [];
-//   parcel: any = {}; // Current parcel
-//   parcelTypes = [
-//     { id: 1, name: 'Document' },
-//     { id: 2, name: 'Non-Document' },
-//     { id: 3, name: 'Other' },
-//   ];
-//   senderBranch = [
-//     { id: 1, name: 'Dhaka' },
-//     { id: 2, name: 'Khulna' },
-//     { id: 3, name: 'Borishal' },
-//     { id: 4, name: 'Satkhira' },
-//     { id: 5, name: 'Gazipur' },
-//     { id: 6, name: 'Nobinagar' },
-//   ];
-//   recebarBranch = [
-//     { id: 1, name: 'Noiyakhali' },
-//     { id: 2, name: 'Raishai' },
-//     { id: 3, name: 'Rangpur' },
-//   ];
-//   isFormVisible = false;
-//   isEditing = false;
-
-//   currentPage = 1;
-//   itemsPerPage = 5;
-
-//   ngOnInit(): void {
-//     // Load parcels (mock data or API call)
-//     this.parcels = this.loadMockData();
-//     this.updatePagination();
-//   }
-
-//   loadMockData() {
-//     return [
-//       {
-//         parcelId: 1,
-//         trackingCode: 'TRK123',
-//         senderCustomerName: 'John Doe',
-//         receiverCustomerName: 'Jane Smith',
-
-//         price: 200,
-//       },
-//       // Add more mock data here
-//     ];
-//   }
-
-//   updatePagination() {
-//     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-//     this.paginatedParcels = this.parcels.slice(
-//       startIndex,
-//       startIndex + this.itemsPerPage
-//     );
-//   }
-
-//   changePage(page: number) {
-//     this.currentPage = page;
-//     this.updatePagination();
-//   }
-
-//   showForm() {
-//     this.isFormVisible = true;
-//     this.isEditing = false;
-//     this.parcel = {};
-//   }
-
-//   editParcel(parcel: any) {
-//     this.isFormVisible = true;
-//     this.isEditing = true;
-//     this.parcel = { ...parcel };
-//   }
-
-//   saveParcel() {
-//     if (this.isEditing) {
-//       const index = this.parcels.findIndex(
-//         (p) => p.parcelId === this.parcel.parcelId
-//       );
-//       if (index > -1) {
-//         this.parcels[index] = this.parcel;
-//       }
-//     } else {
-//       this.parcel.parcelId = this.parcels.length + 1;
-//       this.parcels.push(this.parcel);
-//     }
-//     this.cancelForm();
-//     this.updatePagination();
-//   }
-
-//   deleteParcel(parcelId: number) {
-//     this.parcels = this.parcels.filter((p) => p.parcelId !== parcelId);
-//     this.updatePagination();
-//   }
-
-//   cancelForm() {
-//     this.isFormVisible = false;
-//     this.parcel = {};
-//   }
-
-//   get totalPages() {
-//     return Array(Math.ceil(this.parcels.length / this.itemsPerPage))
-//       .fill(0)
-//       .map((x, i) => i + 1);
-//   }
-// }
-
-// Demo
-// import { Component, OnInit } from '@angular/core';
-
-// @Component({
-//   selector: 'app-parcel',
-//   templateUrl: './parcel.component.html',
-//   styleUrls: ['./parcel.component.css'],
-// })
-// export class ParcelComponent implements OnInit {
-//   parcels: any[] = []; // All parcels
-//   paginatedParcels: any[] = []; // Parcels for the current page
-//   parcel: any = {}; // Current parcel object for form
-//   parcelTypes = [
-//     { id: 1, name: 'Document' },
-//     { id: 2, name: 'Non-Document' },
-//     { id: 3, name: 'Other' },
-//   ];
-//   senderBranch = [
-//     { id: 1, name: 'Dhaka' },
-//     { id: 2, name: 'Khulna' },
-//     { id: 3, name: 'Barishal' },
-//     { id: 4, name: 'Satkhira' },
-//     { id: 5, name: 'Gazipur' },
-//     { id: 6, name: 'Nabinagar' },
-//   ];
-//   recebarBranch = [
-//     { id: 1, name: 'Noakhali' },
-//     { id: 2, name: 'Comilla' },
-//     { id: 3, name: 'Feni' },
-//     { id: 4, name: 'Sylhet' },
-//     { id: 5, name: 'Rangpur' },
-//     { id: 6, name: 'Bogura' },
-//   ];
-//   isFormVisible: boolean = false; // To toggle form visibility
-//   isEditing: boolean = false; // To check if it's editing mode
-//   currentPage: number = 1; // Current pagination page
-//   itemsPerPage: number = 5; // Items per page
-//   totalPages: number[] = []; // Total pages
-
-//   ngOnInit(): void {
-//     this.loadParcels(); // Load initial data
-//   }
-
-//   // Load initial parcels (mock data for demonstration)
-//   loadParcels(): void {
-//     for (let i = 1; i <= 1; i++) {
-//       this.parcels.push({
-//         parcelId: i,
-//         trackingCode: `TC-${i}`,
-//         senderCustomerName: `Sender ${i}`,
-//         senderTime: new Date(),
-//         receiverCustomerName: `Receiver ${i}`,
-//         receiverTime: new Date(),
-//         senderBranch: this.senderBranch[i % this.senderBranch.length].name,
-//         receiverBranch: this.recebarBranch[i % this.recebarBranch.length].name,
-//         IsPaid: i % 2 === 0 ? 'Yes' : 'No',
-//         price: (i * 100).toFixed(2),
-//         SendingBranch: this.senderBranch[i % this.senderBranch.length].name,
-//         PercelSendingDestribution: `Distribution ${i}`,
-//         RecebingDistributin: `Receiving ${i}`,
-//         RecebingBranch: this.recebarBranch[i % this.recebarBranch.length].name,
-//         RecebingReceber: `Receiver ${i}`,
-//         ParcelTypeId: this.parcelTypes[i % this.parcelTypes.length].id,
-//         VanId: `Van-${i % 5}`,
-//         DriverId: `Driver-${i % 10}`,
-//       });
-//     }
-//     this.updatePagination();
-//   }
-
-//   // Toggle form visibility
-//   showForm(): void {
-//     this.isFormVisible = true;
-//     this.parcel = {};
-//     this.isEditing = false;
-//   }
-
-//   // Cancel form and return to the list view
-//   cancelForm(): void {
-//     this.isFormVisible = false;
-//     this.parcel = {};
-//   }
-
-//   // Save parcel (add or update)
-//   saveParcel(): void {
-//     if (this.isEditing) {
-//       // Update existing parcel
-//       const index = this.parcels.findIndex((p) => p.parcelId === this.parcel.parcelId);
-//       if (index !== -1) this.parcels[index] = { ...this.parcel };
-//     } else {
-//       // Add new parcel
-//       this.parcel.parcelId = this.parcels.length + 1;
-//       this.parcels.push({ ...this.parcel });
-//     }
-//     this.isFormVisible = false;
-//     this.updatePagination();
-//   }
-
-//   // Edit parcel
-//   editParcel(parcel: any): void {
-//     this.isEditing = true;
-//     this.isFormVisible = true;
-//     this.parcel = { ...parcel }; // Create a copy of the parcel to edit
-//   }
-
-//   // Delete parcel
-//   deleteParcel(parcelId: number): void {
-//     if (confirm('Are you sure you want to delete this parcel?')) {
-//       this.parcels = this.parcels.filter((p) => p.parcelId !== parcelId);
-//       this.updatePagination();
-//     }
-//   }
-
-//   // Pagination: update visible parcels
-//   updatePagination(): void {
-//     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-//     const endIndex = startIndex + this.itemsPerPage;
-//     this.paginatedParcels = this.parcels.slice(startIndex, endIndex);
-//     this.totalPages = Array.from({ length: Math.ceil(this.parcels.length / this.itemsPerPage) }, (_, i) => i + 1);
-//   }
-
-//   // Change pagination page
-//   changePage(page: number): void {
-//     if (page < 1 || page > this.totalPages.length) return;
-//     this.currentPage = page;
-//     this.updatePagination();
-//   }
-// }
-
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -257,6 +5,10 @@ import { IndividualConfig } from 'ngx-toastr';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
 import { ParcelType } from '../interface/ParcelType';
 import { Branch } from '../interface/listBranchs';
+import { Parcels } from '../interface/parcel';
+import jsPDF from 'jspdf';
+
+
 interface Parcel {
   parcelId: number; // Primary Key
   trackingCode: string; // Tracking Code (nvarchar)
@@ -394,7 +146,7 @@ export class ParcelComponent implements OnInit {
           this.applyPaging();
         },
         error: () => {
-          this.showMessage('error', 'Failed to load parcel types');
+          this.showMessage('error', 'Failed to load parcel ');
         },
       });
   }
@@ -462,6 +214,13 @@ export class ParcelComponent implements OnInit {
         },
       });
   }
+    // Get branch name by ID
+    getParcelTypeName(parcelTypeId: number | null): string {
+      if (parcelTypeId === null) return 'N/A';
+      const branch = this.parcelType.find(b => b.parcelTypeId === parcelTypeId);
+      return branch ? branch.parcelTypeName : 'Unknown';
+    }
+  // ----------------------------------------ParcelType----------------------------
   getBranches(): void {
     const headers = new HttpHeaders({
       Token: this.authService.UserInfo?.Token || '',
@@ -488,6 +247,12 @@ export class ParcelComponent implements OnInit {
           this.showMessage('error', 'Failed to load branches');
         },
       });
+  }
+   // Get branch name by ID
+   getBranchName(branchId: number | null): string {
+    if (branchId === null) return 'N/A';
+    const branch = this.listBranchs.find(b => b.branchId === branchId);
+    return branch ? branch.branchName : 'Unknown';
   }
   //Brnach dropdwon
   selectedParentBranch: any = null;
@@ -708,12 +473,12 @@ export class ParcelComponent implements OnInit {
         next: () => {
           this.isList = true;
           this.getParcel();
-          this.showMessage('success', 'Parcel type updated successfully');
+          this.showMessage('success', 'Parcel updated successfully');
         },
         error: (error) => {
           this.showMessage(
             'error',
-            error.error || 'Failed to update parcel type'
+            error.error || 'Failed to update parcel '
           );
         },
       });
@@ -737,10 +502,10 @@ export class ParcelComponent implements OnInit {
         next: () => {
           this.reset();
           this.getParcel();
-          this.showMessage('success', 'Parcel type deleted successfully');
+          this.showMessage('success', 'Parcel deleted successfully');
         },
         error: () => {
-          this.showMessage('error', 'Failed to delete parcel type');
+          this.showMessage('error', 'Failed to delete parcel ');
         },
       });
   }
@@ -822,6 +587,98 @@ export class ParcelComponent implements OnInit {
   search(): void {
     this.applyPaging();
   }
+//Model Data Uthano
+  selectedParcel: any = null;
 
+  selectParcel(parcel: any): void {
+    this.selectedParcel = parcel;
+  }
+  //  // Method to generate PDF for a single row
+  //  generatePDF(parcel: any) {
+  //   const doc = new jsPDF();
+
+
+  //   // Define the content of the PDF
+  //   const content = `
+  //     Parcel Invoice
+  //     -------------------------------
+  //     Tracking Code: ${parcel.trackingCode}
+  //     Sender Name: ${parcel.senderName}
+  //     Sender Phone: ${parcel.senderPhone}
+  //     Receiver Name: ${parcel.receiverName}
+  //     Receiver Phone: ${parcel.receiverPhone}
+  //     Sender Branch: ${this.getBranchName(parcel.senderBranchId)}
+  //     Receiver Branch: ${this.getBranchName(parcel.receiverBranchId)}
+  //     Is Paid: ${parcel.isPaid ? 'YES' : 'NO'}
+  //     Parcel Type: ${this.getParcelTypeName(parcel.parcelTypeId)}
+  //     Status: ${parcel.isActive ? 'Active' : 'Inactive'}
+  //   `;
+
+  //   // Add content to PDF
+  //   doc.text(content, 10, 10);
+
+  //   // Save the PDF
+  //   doc.save(`Parcel_${parcel.trackingCode}.pdf`);
+  // }
+  generatePDF(parcel: any) {
+    const doc = new jsPDF();
+  
+    // Set company details at the top
+    const companyLogo = 'data:image/png;base64,...'; // Replace with your Base64 logo
+    //doc.addImage(companyLogo, 'PNG', 10, 10, 30, 15); // x, y, width, height
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.text('Parcel Invoice', 105, 20, { align: 'center' });
+    doc.setFontSize(12);
+    doc.text('SmartCourier', 105, 26, { align: 'center' });
+    doc.text('Address: Shawrapara, Mirpur-12, Dhaka, Bangladesh', 105, 32, { align: 'center' });
+    doc.text('Phone: 01949201049 | Email: info@smartcourier.com', 105, 38, { align: 'center' });
+  
+    // Draw a separator line
+    doc.setDrawColor(0, 0, 0);
+    doc.line(10, 45, 200, 45); // x1, y1, x2, y2
+  
+    // Add sender information
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.text('Sender Information', 10, 55);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    doc.text(`Name: ${parcel.senderName}`, 10, 62);
+    doc.text(`Phone: ${parcel.senderPhone}`, 10, 68);
+    doc.text(`Branch: ${this.getBranchName(parcel.senderBranchId)}`, 10, 74);
+  
+    // Add receiver information
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.text('Receiver Information', 10, 85);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    doc.text(`Name: ${parcel.receiverName}`, 10, 92);
+    doc.text(`Phone: ${parcel.receiverPhone}`, 10, 98);
+    doc.text(`E-mail: ${parcel.receiverEmail}`, 10, 98);
+    doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 10, 104);
+  
+    // Add parcel details
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.text('Parcel Details', 10, 115);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    doc.text(`Tracking Code: ${parcel.trackingCode}`, 10, 122);
+    doc.text(`Type: ${this.getParcelTypeName(parcel.parcelTypeId)}`, 10, 128);
+    doc.text(`Paid: ${parcel.isPaid ? 'YES' : 'NO'}`, 10, 134);
+    doc.text(`Status: ${parcel.isActive ? 'Active' : 'Inactive'}`, 10, 140);
+  
+    // Footer with date
+    const currentDate = new Date().toLocaleDateString();
+    doc.setFontSize(10);
+    doc.text(`Generated on: ${currentDate}`, 10, 285); // Bottom-left corner
+    doc.text('Thank you for choosing our service!', 105, 285, { align: 'center' });
+  
+    // Save the PDF
+    doc.save(`Parcel_${parcel.trackingCode}.pdf`);
+  }
+  
   
 }

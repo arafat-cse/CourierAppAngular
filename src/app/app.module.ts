@@ -48,6 +48,7 @@ import { HomeComponent } from "./home/home.component";
     VanComponent,
     ParcelComponent,
     InvoiceComponent,
+    
    
   ],
   imports: [
@@ -60,7 +61,8 @@ import { HomeComponent } from "./home/home.component";
     CommonModule,
     //NgChartsModule
     MatSlideToggleModule,
-    HomeComponent
+    HomeComponent,
+    
 ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
