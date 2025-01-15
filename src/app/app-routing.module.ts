@@ -41,7 +41,8 @@ const routes: Routes = [
   { path: 'staff', component: StaffComponent, canActivate: [authGuard] },
   { path: 'van', component: VanComponent, canActivate: [authGuard] },
   { path: 'parcel', component: ParcelComponent, canActivate: [authGuard] },
-  { path: 'invoice', component: InvoiceComponent, canActivate: [authGuard] }
+  { path: 'invoice', component: InvoiceComponent, canActivate: [authGuard] },
+ 
 
 ];
 

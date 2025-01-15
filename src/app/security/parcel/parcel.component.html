@@ -27,7 +27,8 @@
               <th class="text-center">Recevar Phone</th>
               <th class="text-center">Sender Branch Name</th>
               <th class="text-center">Recevar Branch Name</th>
-              <th class="text-center">Created By</th>
+              <th class="text-center">IsPaid</th>
+              <th class="text-center">ParcelType</th>
               <th class="text-center">Active / Inactive</th>
               <th class="text-center">Action</th>
           </tr>
@@ -41,18 +42,197 @@
               <td class="text-center">{{item.senderPhone}}</td>
               <td class="text-center">{{item.receiverName}}</td>
               <td class="text-center">{{item.receiverPhone}}</td>
-              <td class="text-center">{{item.senderBranchId}}</td>
-              <td class="text-center">{{item.receiverBranchId}}</td>
-              <td class="text-center">{{item.createdBy}}</td>
+              <!-- <td class="text-center">{{item.senderBranchId}}</td> -->
+              <td>{{ getBranchName(item.senderBranchId) }}</td>
+              <!-- <td class="text-center">{{item.receiverBranchId}}</td> -->
+              <td>{{ getBranchName(item.receiverBranchId) }}</td>
+              <!-- <td class="text-center ">{{item.isPaid}}</td> -->
+              <td class="text-center">
+                <span class="badge px-3 py-2" [ngClass]="{'bg-success': item.isPaid, 'bg-danger': !item.isPaid}">
+                    {{item.isPaid ? 'YES' : 'NO'}}
+                </span>
+            </td>
+          
+            <!-- <td class="text-center">{{item.parcelTypeId}}</td> -->
+            <td>{{ getParcelTypeName(item.parcelTypeId) }}</td>
+
               <td class="text-center">
                   <span class="badge px-3 py-2" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
                       {{item.isActive ? 'Active' : 'Inactive'}}
                   </span>
               </td>
-              <td class="text-center">
+              <td >
+                <!-- <button viewModal class="btn btn-sm btn-outline-primary text-primary me-2 px-3"  data-bs-toggle="modal" data-bs-target="#viewModal" >
+                  <i class="fas fa-eye me-2"></i> View
+                </button>
+                 -->
+                <button viewModal class="btn btn-sm btn-outline-primary text-primary me-2 px-3" data-bs-toggle="modal" data-bs-target="#viewModal" (click)="selectParcel(item)">
+                 <i class="fas fa-eye me-2"></i> View
+               </button>
+               <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="viewModalLabel">Parcel Details</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                                              
+                        <section class="container py-3">
+                          <h2 class="mb-4 text-center courier-title ">TrackingCode: <h1 class="text-primary">{{selectedParcel?.trackingCode}}</h1></h2>
+                          
+                          <!-- Cards -->
+                          <div class="row g-4">
+                            <!-- Card 1 -->
+                            <div class="col-md-6 col-lg-6">
+                              <div class="card p-4  shadow-sm">
+                                <div>
+                                  <table class="table">
+                                      <thead >
+                                        <tr>
+                                          <th>Sender Name: </th>
+                                          <td>{{selectedParcel?.senderName}}</td>
+                                        </tr>
+                                        <tr>
+                                          <th>Sender Phone: </th>
+                                          <td>{{selectedParcel?.senderPhone}}</td>
+                                        </tr>
+                                     
+                                        <tr>
+                                          <th>Sender Branch: </th>
+                                          <td>{{getBranchName(selectedParcel?.senderBranchId)}}</td>
+                                        </tr>
+                                        <tr>
+                                          <th>Parcel Type: </th>
+                                          <td>{{getParcelTypeName(selectedParcel?.parcelTypeId)}}</td>
+                                        </tr>
+                                     
+                                      </thead>
+
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Card 2 -->
+                            <div class="col-md-6 col-lg-6">
+                              <div class="card p-4 shadow-sm">
+                                <div>
+                                  <table class="table">
+                                      <thead >
+                                        <tr>
+                                          <th>Receiver Name:</th>
+                                          <td>{{selectedParcel?.receiverName}}</td>
+                                        </tr>
+                                        <tr>
+                                          <th>Receiver Phone: </th>
+                                          <td>{{selectedParcel?.receiverPhone}}</td>
+                                        </tr>
+                                          <tr>
+                                            <th>Sender E-mail:</th>
+                                            <td>{{selectedParcel?.receiverEmail}}</td>
+                                          </tr>
+                                          <tr>
+                                            <th>Receiver Branch:</th>
+                                            <td>{{getBranchName(selectedParcel?.receiverBranchId)}}</td>
+                                          </tr>
+                                      </thead>
+
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                              <!-- Card 3 -->
+                              <div class="col-md-12 col-lg-12">
+                                  <div class="card p-4 shadow-sm">
+                                    <div class="row g-4">
+                                      <!-- Card 4 -->
+                                      <div class="col-md-12 col-lg-12">
+                                          <div class="card p-4  shadow-sm">
+                                              <div>
+                                                  <table class="table text-primary">
+                                                      <thead class="table-primary" >
+                                                        <tr>
+                                                          <th>Is Paid: </th>
+                                                          <td>{{selectedParcel?.isPaid ? 'Yes' : 'No'}}</td>
+                                                        </tr>
+                                                      
+                                                        <tr>
+                                                          <th>Status: </th>
+                                                          <td>{{selectedParcel?.isActive ? 'Active' : 'Inactive'}}</td>
+                                                        </tr>
+                                                      </thead> 
+                                                  </table>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card p-4 shadow-sm">
+                              <div class="row g-4">
+                                
+                                      <!-- Card 4 -->
+                                  <div class="col-md-6 col-lg-6">
+                                    <div class="card p-4 text-center shadow-sm">
+                                      <div>
+                                        <h5>Total Customers</h5>
+                                        <i class="fas fa-users icon fs-1 text-warning"></i>
+                                        <h3>2,374</h3>
+                                        <p>Active Customers</p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <!-- Card 5 -->
+                                  <div class="col-md-6 col-lg-6">
+                                    <div class="card p-4 text-center shadow-sm">
+                                      <div>
+                                        <h5>Revenue Generated</h5>
+                                        <i class="fas fa-dollar-sign icon fs-1 text-danger"></i>
+                                        <h3>$78,645</h3>
+                                        <p>This Year</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  </div>
+                            </div>
+                            <button class="btn btn-sm btn-outline-success text-success me-2 px-3" 
+                                    (click)="generatePDF(item)">
+                              <i class="fas fa-file-pdf me-2"></i> PDF
+                            </button>
+                        </section>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+               
+                <!-- <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="viewModalLabel">View Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <app-view ></app-view>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                 -->
+                <!-- <button class="btn btn-sm btn-outline-primary text-primary me-2 px-3" (click)="view(item)"><i class="fas fa-eye me-2"></i> View</button> -->
+                <!-- <button class="btn btn-sm btn-outline-primary text-primary me-2 px-3" ><i class="fas fa-eye me-2"></i> View</button> -->
+                <button class="btn btn-sm btn-outline-warning text-primary" (click)="edit(item)"> <i class="fas fa-edit"></i> </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="removeConfirm(item)"data-bs-toggle="modal"data-bs-target="#confirmModal"><i class="fas fa-trash-alt"></i></button>
+              </td>
+              
+              <!-- <td class="text-center">
                   <button class="btn btn-sm btn-outline-warning text-primary me-2 px-3" (click)="edit(item)">Edit</button>
                   <button class="btn btn-sm btn-outline-danger px-3" (click)="removeConfirm(item)" data-bs-toggle="modal" data-bs-target="#confirmModal">Delete</button>
-              </td>
+              </td> -->
           </tr>
       </tbody>
   </table>
