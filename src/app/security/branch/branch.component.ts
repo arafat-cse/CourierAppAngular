@@ -266,7 +266,7 @@ interface Branch {
 export class BranchComponent implements OnInit {
   // Display control
   isList: boolean = true;
-
+  isNew: boolean = true;
   // Toast notification
   toast!: toastPayload;
 
@@ -307,14 +307,13 @@ export class BranchComponent implements OnInit {
       Token: this.authService.UserInfo?.Token || '',
     });
 
-    this.httpClient.get<{ status: boolean; message: string; content: Branch[] }>(
-      `${this.authService.baseURL}/api/Branches`,
+    this.httpClient.get<{ status: boolean; message: string; content: Branch[] }>(`${this.authService.baseURL}/api/Branches`,
       { headers }
     ).subscribe({
       next: (response) => {
         if (response.status) {
           this.listBranchs = response.content;
-          // this.rowCount = response.content.length;
+          this.rowCount = response.content.length;
           this.paginate();
           this.prepareDropdownBranches(response.content);
         } else {
@@ -328,41 +327,98 @@ export class BranchComponent implements OnInit {
   }
 
   // Prepare branches for dropdown display
-  prepareDropdownBranches(branches: Branch[]): void {
-    this.dropdownBranches = branches.map(branch => ({
+  // prepareDropdownBranches(branches: Branch[]): void {
+  //   this.dropdownBranches = branches.map(branch => ({
+  //     label: branch.branchName,
+  //     value: branch.branchId,
+  //     children: branch.childBranches?.map(child => ({
+  //       label: child.branchName,
+  //       value: child.branchId,
+  //     })),
+  //   }));
+  // }
+// Prepare branches for dropdown display where parent ID is null
+prepareDropdownBranches(branches: Branch[]): void {
+  this.dropdownBranches = branches
+    .filter(branch => branch.parentId === null) // Filter only branches with parentId null
+    .map(branch => ({
       label: branch.branchName,
       value: branch.branchId,
-      children: branch.childBranches?.map(child => ({
-        label: child.branchName,
-        value: child.branchId,
-      })),
+      children: branches
+        .filter(child => child.parentId === branch.branchId) // Find children of the current branch
+        .map(child => ({
+          label: child.branchName,
+          value: child.branchId,
+        })),
     }));
-  }
+}
 
   // Add a new branch
+  // add(): void {
+  //   if (!this.validateForm()) return;
+
+  //   const headers = new HttpHeaders({
+  //     Token: this.authService.UserInfo?.Token || '',
+  //     'Content-Type': 'application/json',
+  //   });
+
+  //   const payload = { ...this.branchs };
+  //   console.log(this.branchs);
+
+  //   this.httpClient.post(`${this.authService.baseURL}/api/Branche`, payload, { headers })
+  //     .subscribe({
+  //       next: () => {
+  //         this.reset();
+  //         console.log(this.branchs);
+  //         this.getBranches();
+  //         console.log(this.getBranches)
+  //         this.showMessage('success', 'Branch added successfully');
+          
+  //       },
+  //       error: () => {
+  //         this.showMessage('error', 'Failed to add branch');
+  //       },
+  //     });
+  // }
+  // edit(item: Branch): void {
+  //   this.branchs = {
+  //     branchId: item.branchId,
+  //     branchName: item.branchName,
+  //     address:item.address,
+  //     parentId:item.parentId,
+  //     childBranches: item.childBranches,
+  //     isActive: item.isActive
+  //   };
+  //   this.isList = false;
+  // }
   add(): void {
     if (!this.validateForm()) return;
-
+  
     const headers = new HttpHeaders({
-      Token: this.authService.UserInfo?.Token || '',
+      'Token': this.authService.UserInfo?.Token || '',
       'Content-Type': 'application/json',
     });
-
+  
     const payload = { ...this.branchs };
-
+  
+    console.log('API URL:', `${this.authService.baseURL}/api/Branches`);
+    console.log('Payload:', payload);
+    console.log('Headers:', headers);
+  
     this.httpClient.post(`${this.authService.baseURL}/api/Branches`, payload, { headers })
       .subscribe({
         next: () => {
+          this.reset();
           this.getBranches();
           this.showMessage('success', 'Branch added successfully');
-          this.reset();
         },
-        error: () => {
-          this.showMessage('error', 'Failed to add branch');
+        error: (error) => {
+          console.error('Error:', error);
+          this.showMessage('error', error.error || 'Failed to add branch');
         },
       });
   }
-
+  
   // Update an existing branch
   update(): void {
     if (!this.validateForm()) return;
@@ -385,7 +441,10 @@ export class BranchComponent implements OnInit {
         },
       });
   }
+  removeConfirm(parcel: Branch): void {
+    this.branchs = { ...parcel };
 
+  }
   // Delete a branch
   remove(branchId: Branch): void {
     const headers = new HttpHeaders({
@@ -395,6 +454,7 @@ export class BranchComponent implements OnInit {
     this.httpClient.delete(`${this.authService.baseURL}/api/Branches/${branchId}`, { headers })
       .subscribe({
         next: () => {
+          this.reset();
           this.getBranches();
           this.showMessage('success', 'Branch deleted successfully');
         },
