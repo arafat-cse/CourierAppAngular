@@ -1,13 +1,19 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { IndividualConfig } from 'ngx-toastr';
+import { AuthService } from 'src/app/auth/auth.service';
+import { CommonService, toastPayload } from 'src/app/services/common.service';
+
+
 interface Designation {
-  designationId?: number;
+  designationId: number;
   title: string;
   salaryRange?: string;
-  isActive: boolean;
-  createBy: string;
-  createDate: Date;
+  createBy?: string;
+  createDate?: Date | null;
   updateBy?: string;
-  updateDate?: Date;
+  updateDate?: Date | null;
+  isActive: boolean;
 }
 @Component({
   selector: 'app-designation',
@@ -15,61 +21,229 @@ interface Designation {
   styleUrls: ['./designation.component.css'],
 })
 export class DesignationComponent implements OnInit {
-  designations: Designation[] = []; // Array to store designations
-  designation: Designation = this.resetDesignation(); // Current designation model
-  editIndex: number | null = null; // Index for editing
-  showList: boolean = false; // Toggle between list and form view
+  // Display control
+    isList: boolean = true;
+    isNew: boolean = true;
+  
+    // Toast notification
+    toast!: toastPayload;
+  // Parcel Type data
+  listDesignation: Designation[] = [];
+  designation: Designation = {
+    designationId: 0,
+    title: '',
+    salaryRange: '',
+    createBy: '',
+    createDate: null,
+    updateBy: '',
+    updateDate: null,
+    isActive: true,
+  };
+  
+  // Pagination
+  pageIndex: number = 0;
+  pageSize: number = 10;
+  rowCount: number = 0;
+  listPageSize: number[] = [5, 10, 20];
+  pageStart: number = 0;
+  pageEnd: number = 0;
+  totalRowsInList: number = 0;
+  pagedItems: any[] = [];
+  pager: {
+    pages: number[];
+    totalPages: number;
+  } = {
+    pages: [],
+    totalPages: 0
+  };
+  constructor(
+    private cs: CommonService,
+    private httpClient: HttpClient,
+    public authService: AuthService
+  ) {}
 
-  constructor() {}
-
-  ngOnInit(): void {}
-
-  // Toggle between Designation Form and List
-  toggleView(): void {
-    this.showList = !this.showList;
+  ngOnInit(): void {
+    this.get();
   }
+  get(): void {
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo?.Token || '',
+    });
 
-  // Create or Update a Designation
-  createDesignation(): void {
-    if (this.designation.title.trim() && this.designation.createBy.trim()) {
-      if (this.editIndex !== null) {
-        // Update existing designation
-        this.designations[this.editIndex] = {
-          ...this.designation,
-          updateDate: new Date(), // Set update date
-        };
-        this.editIndex = null; // Reset edit index
-      } else {
-        // Add new designation
-        this.designations.push({
-          ...this.designation,
-          createDate: new Date(), // Set create date
-        });
-      }
-      this.designation = this.resetDesignation(); // Reset form
+    this.httpClient.get<any>(`${this.authService.baseURL}/api/Designations`, { headers })
+      .subscribe({
+        next: (response) => {
+          this.listDesignation = response;
+        //  this.rowCount = response.totalCount || 0;
+          this.applyPaging();
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to load parcel types');
+        },
+      });
+  }
+  edit(item: Designation): void {
+    this.designation = {
+      designationId: item.designationId,
+      title: item.title,
+      salaryRange:item.salaryRange,
+      isActive: item.isActive
+    };
+    this.isList = false;
+  }
+   
+  add(): void {
+    if (!this.validateForm()) {
+      return;
     }
+  
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo?.Token,
+      'Content-Type': 'application/json',
+    });
+  
+    const payload = {
+      ...this.designation, // Include all necessary properties for a new parcel type
+    };
+  
+    this.httpClient.post(
+      `${this.authService.baseURL}/api/Designations`,
+      payload,
+      { headers }
+    ).subscribe({
+      next: () => {
+        this.isList = true;
+        this.reset();
+        this.get();
+        this.showMessage('success', 'Parcel type added successfully');
+
+      },
+      error: (error) => {
+        this.showMessage('error', error.error || 'Failed to add parcel type');
+      },
+    });
   }
 
-  // Edit a Designation
-  editDesignation(index: number): void {
-    this.designation = { ...this.designations[index] }; // Populate form with existing values
-    this.editIndex = index; // Set edit index
-    this.showList = false; // Show form
+  update(): void {
+    if (!this.validateForm()) {
+      return;
+    }
+  
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo?.Token,
+    });
+
+    console.log(this.designation)
+  
+    const payload = {
+      designationId: this.designation.designationId,
+      title: this.designation.title,
+      salaryRange: this.designation.salaryRange,
+      isActive: this.designation.isActive, // No conversion needed
+    };
+    // const payload = { ...this.designation };
+    console.log(payload);
+  
+    this.httpClient.put(
+      `${this.authService.baseURL}/api/Designations/${this.designation.designationId}`,
+      payload,
+      { headers }
+    ).subscribe({
+      next: () => {
+        this.isList = true;
+        this.get();
+        this.showMessage('success', 'Parcel type updated successfully');
+      },
+      error: (error) => {
+        this.showMessage('error', error.error || 'Failed to update parcel type');
+      },
+    });
   }
 
-  // Delete a Designation
-  deleteDesignation(index: number): void {
-    this.designations.splice(index, 1); // Remove designation
+  removeConfirm(parcel: Designation): void {
+    this.designation = { ...parcel };
+
   }
 
-  // Reset Designation Model
-  resetDesignation(): Designation {
-    return {
+  remove(designation: Designation): void {
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo?.Token || '',
+    });
+
+    this.httpClient.delete(`${this.authService.baseURL}/api/Designations/${designation.designationId}`, { headers })
+      .subscribe({
+        next: () => {
+          this.reset();
+          this.get();
+          this.showMessage('success', 'Parcel type deleted successfully');
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to delete parcel type');
+        },
+      });
+  }
+
+  reset(): void {
+    this.designation = {
+      designationId: 0,
       title: '',
-      salaryRange: '',
+      salaryRange:'',
+      // createBy: '',
+      // createDate: null,
+      // updateBy: '',
+      // updateDate: null,
       isActive: true,
-      createBy: '',
-      createDate: new Date(),
     };
   }
+
+ validateForm(): boolean {
+    if (!this.designation.title.trim()) {
+      this.showMessage('warning', 'Parcel type name is required');
+      return false;
+    }
+    return true;
+  }
+
+  showMessage(type: string, message: string): void {
+    this.toast = {
+      message: message,
+      title: type.toUpperCase(),
+      type: type,
+      ic: {
+        timeOut: 2500,
+        closeButton: true,
+      } as IndividualConfig,
+    };
+    this.cs.showToast(this.toast);
+  }
+
+  applyPaging(): void {
+    const start = this.pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    this.pagedItems = this.listDesignation.slice(start, end);
+    this.calculatePages();
+  }
+
+  calculatePages(): void {
+    this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+    this.pager.pages = Array.from(Array(this.pager.totalPages).keys());
+  }
+
+  changePageSize(): void {
+    this.pageIndex = 0;
+    this.applyPaging();
+  }
+
+  changePageNumber(pageIndex: number): void {
+    this.pageIndex = pageIndex;
+    this.applyPaging();
+  }
+  search(): void {
+    this.applyPaging();
+  }
+
+
+
+
+
 }
