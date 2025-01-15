@@ -314,7 +314,7 @@ export class BranchComponent implements OnInit {
       next: (response) => {
         if (response.status) {
           this.listBranchs = response.content;
-          this.rowCount = response.content.length;
+          // this.rowCount = response.content.length;
           this.paginate();
           this.prepareDropdownBranches(response.content);
         } else {
