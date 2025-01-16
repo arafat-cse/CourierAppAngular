@@ -64,6 +64,7 @@ export class ParcelComponent implements OnInit {
 
 
   parcels: Parcel = {
+   
     parcelId: 0,
     trackingCode: '',
     senderName: '',
@@ -550,7 +551,7 @@ export class ParcelComponent implements OnInit {
 
     this.httpClient
       .delete(
-        `${this.authService.baseURL}/api/ParcelTypes/${parcel.parcelId}`,
+        `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
         { headers }
       )
       .subscribe({
@@ -580,6 +581,7 @@ export class ParcelComponent implements OnInit {
 
   reset(): void {
     this.parcels = {
+     
       parcelId: 0,
       trackingCode: '',
       createdBy: '', // Corrected property name
@@ -694,26 +696,45 @@ export class ParcelComponent implements OnInit {
     doc.line(10, 45, 200, 45); // x1, y1, x2, y2
   
     // Add sender information
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(14);
-    doc.text('Sender Information', 10, 55);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(12);
-    doc.text(`Name: ${parcel.senderName}`, 10, 62);
-    doc.text(`Phone: ${parcel.senderPhone}`, 10, 68);
-    doc.text(`Branch: ${this.getBranchName(parcel.senderBranchId)}`, 10, 74);
-  
+    // doc.setFont('helvetica', 'bold');
+    // doc.setFontSize(14);
+    // doc.text('Sender Information', 10, 55);
+    // doc.setFont('helvetica', 'normal');
+    // doc.setFontSize(12);
+    // doc.text(`Name: ${parcel.senderName}`, 10, 62);
+    // doc.text(`Phone: ${parcel.senderPhone}`, 10, 68);
+    // doc.text(`Branch: ${this.getBranchName(parcel.senderBranchId)}`, 10, 74);
+  // // Add sender information
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(14);
+      doc.text('Sender Information', 10, 55); // Left side
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(12);
+      doc.text(`Name: ${parcel.senderName}`, 10, 62);
+      doc.text(`Phone: ${parcel.senderPhone}`, 10, 68);
+      doc.text(`Branch: ${this.getBranchName(parcel.senderBranchId)}`, 10, 74);
+      doc.text(`Estimated: ${parcel.estimatedReceiveTime}`, 10, 80);
+
     // Add receiver information
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(14);
-    doc.text('Receiver Information', 10, 85);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(12);
-    doc.text(`Name: ${parcel.receiverName}`, 10, 92);
-    doc.text(`Phone: ${parcel.receiverPhone}`, 10, 98);
-    doc.text(`E-mail: ${parcel.receiverEmail}`, 10, 98);
-    doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 10, 104);
-  
+    // doc.setFont('helvetica', 'bold');
+    // doc.setFontSize(14);
+    // doc.text('Receiver Information', 10, 85);
+    // doc.setFont('helvetica', 'normal');
+    // doc.setFontSize(12);
+    // doc.text(`Name: ${parcel.receiverName}`, 10, 92);
+    // doc.text(`Phone: ${parcel.receiverPhone}`, 10, 98);
+    // doc.text(`E-mail: ${parcel.receiverEmail}`, 10, 106);
+    // doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 10, 112);
+// Add receiver information
+doc.setFont('helvetica', 'bold');
+doc.setFontSize(14);
+doc.text('Receiver Information', 120, 55); // Right side
+doc.setFont('helvetica', 'normal');
+doc.setFontSize(12);
+doc.text(`Name: ${parcel.receiverName}`, 120, 62);
+doc.text(`Phone: ${parcel.receiverPhone}`, 120, 68);
+doc.text(`E-mail: ${parcel.receiverEmail}`, 120, 74);
+doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 120, 80);
     // Add parcel details
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(14);
@@ -723,7 +744,9 @@ export class ParcelComponent implements OnInit {
     doc.text(`Tracking Code: ${parcel.trackingCode}`, 10, 122);
     doc.text(`Type: ${this.getParcelTypeName(parcel.parcelTypeId)}`, 10, 128);
     doc.text(`Paid: ${parcel.isPaid ? 'YES' : 'NO'}`, 10, 134);
-    doc.text(`Status: ${parcel.isActive ? 'Active' : 'Inactive'}`, 10, 140);
+    // doc.text(`Status: ${parcel.isActive ? 'Active' : 'Inactive'}`, 10, 140);
+    doc.text(`Delivery Charge: ${parcel.price}`, 10, 140);
+
   
     // Footer with date
     const currentDate = new Date().toLocaleDateString();
@@ -734,6 +757,5 @@ export class ParcelComponent implements OnInit {
     // Save the PDF
     doc.save(`Parcel_${parcel.trackingCode}.pdf`);
   }
-  
   
 }

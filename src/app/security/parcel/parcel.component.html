@@ -2,6 +2,7 @@
 <a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;reset();getParcel()" class="btn-new btn btn-warning mb-4 px-5">New</a>
 
 <div *ngIf="isList">
+  
   <div class="row">
       <div class="col-lg-4">
           Show
@@ -99,12 +100,12 @@
                                         </tr>
                                      
                                         <tr>
-                                          <th>Sender Branch: </th>
-                                          <td>{{getBranchName(selectedParcel?.senderBranchId)}}</td>
+                                          <th >Sender Branch: </th>
+                                          <td class="text-success"><strong>{{getBranchName(selectedParcel?.senderBranchId)}}</strong></td>
                                         </tr>
                                         <tr>
                                           <th>Parcel Type: </th>
-                                          <td>{{getParcelTypeName(selectedParcel?.parcelTypeId)}}</td>
+                                          <td class="text-primary"><strong>{{getParcelTypeName(selectedParcel?.parcelTypeId)}}</strong></td>
                                         </tr>
                                      
                                       </thead>
@@ -134,7 +135,7 @@
                                           </tr>
                                           <tr>
                                             <th>Receiver Branch:</th>
-                                            <td>{{getBranchName(selectedParcel?.receiverBranchId)}}</td>
+                                            <td class="text-success" ><strong>{{getBranchName(selectedParcel?.receiverBranchId)}}</strong></td>
                                           </tr>
                                       </thead>
 
@@ -153,12 +154,16 @@
                                                   <table class="table text-primary">
                                                       <thead class="table-primary" >
                                                         <tr>
+                                                          <th>EstimatedReceiveTime: </th>
+                                                          <td>{{selectedParcel?.estimatedReceiveTime}}</td>
+                                                        </tr> 
+                                                        <tr>
                                                           <th>Is Paid: </th>
-                                                          <td>{{selectedParcel?.isPaid ? 'Yes' : 'No'}}</td>
+                                                          <td><strong>{{selectedParcel?.isPaid ? 'Yes' : 'No'}}</strong></td>
                                                         </tr>
                                                         <tr>
                                                           <th>Price: </th>
-                                                          <td>{{selectedParcel?.price}}</td>
+                                                          <td ><strong>{{selectedParcel?.price}}</strong></td>
                                                         </tr> 
                                                         <tr>
                                                           <th>Status: </th>
