@@ -81,7 +81,7 @@ export class ParcelComponent implements OnInit {
     receiveTime: null, // Receive Time (Date | null)
     senderBranchId: null, // Sender Branch ID (number | null)
     receiverBranchId: null, // Receiver Branch ID (number | null)
-    estimatedReceiveTime: null, // Estimated Receive Time (Date | null)
+    estimatedReceiveTime: new Date(), // Estimated Receive Time (Date | null)
     isPaid: false, // Payment Status (boolean | null)
     price: null, // Price (number | null)
     weight: null, // Weight (number | null)
@@ -396,14 +396,69 @@ export class ParcelComponent implements OnInit {
   //   }
   //   return true;
   // }
+
+
+
+// -------------------------------------From Validation-----------------------
+
+
+  // validateForm(): boolean {
+  //   if (!this.parcels.trackingCode || !this.parcels.trackingCode.trim()) {
+  //     this.showMessage('warning', 'Parcel tracking code is required');
+  //     return false;
+  //   }
+  //   return true;
+  // }
   validateForm(): boolean {
+        // Tracking Code Validation
     if (!this.parcels.trackingCode || !this.parcels.trackingCode.trim()) {
       this.showMessage('warning', 'Parcel tracking code is required');
       return false;
     }
+    // Sender Validation
+    if (!this.parcels.senderName || !this.parcels.senderName.trim()) {
+      this.showMessage('warning', 'Sender Name is required');
+      return false;
+    }
+    if (!this.parcels.senderPhone || !this.parcels.senderPhone.toString().trim()) {
+      this.showMessage('warning', 'Sender Phone is required');
+      return false;
+    }
+ 
+    // if (!this.parcels.senderAddress || !this.parcels.senderAddress.trim()) {
+    //   this.showMessage('warning', 'Sender Address is required');
+    //   return false;
+    // }
+    // if (!this.parcels.senderAlternativetoAddress || !this.parcels.senderAlternativetoAddress.trim()) {
+    //   this.showMessage('warning', 'Sender Alternative Address is required');
+    //   return false;
+    // }
+  
+    // Receiver Validation
+    if (!this.parcels.receiverName || !this.parcels.receiverName.trim()) {
+      this.showMessage('warning', 'Receiver Name is required');
+      return false;
+    }
+    if (!this.parcels.receiverPhone || !this.parcels.receiverPhone.toString().trim()) {
+      this.showMessage('warning', 'Receiver Phone is required');
+      return false;
+    }
+    if (!this.parcels.receiverEmail || !this.parcels.receiverEmail.trim()) {
+      this.showMessage('warning', 'Receiver Email is required');
+      return false;
+    }
+    // if (!this.parcels.receiverAddress || !this.parcels.receiverAddress.trim()) {
+    //   this.showMessage('warning', 'Receiver Address is required');
+    //   return false;
+    // }
+    // if (!this.parcels.receiverAlternativetoAddress || !this.parcels.receiverAlternativetoAddress.trim()) {
+    //   this.showMessage('warning', 'Receiver Alternative Address is required');
+    //   return false;
+    // }
+    // If all fields are valid
     return true;
   }
-
+  // -------------------------------------From Validation-----------------------
   //update all
   update(): void {
     if (!this.validateForm()) {
