@@ -247,8 +247,8 @@ edit(item: Staff): void {
 
   // -------------------------------------Branch---------------------------------------
 
-  removeConfirm(parcel: Staff): void {
-    this.staff$ = { ...parcel };
+  removeConfirm(staffs: Staff): void {
+    this.staff$ = { ...staffs };
   }
   remove(staffId: Staff): void {
       const headers = new HttpHeaders({
@@ -260,10 +260,10 @@ edit(item: Staff): void {
           next: () => {
             this.reset();
             this.getStaff();
-            this.showMessage('success', 'Parcel type deleted successfully');
+            this.showMessage('success', 'staffs  deleted successfully');
           },
           error: () => {
-            this.showMessage('error', 'Failed to delete parcel type');
+            this.showMessage('error', 'Failed to delete staffs ');
           },
         });
     }
@@ -286,7 +286,7 @@ edit(item: Staff): void {
     
       validateForm(): boolean {
         if (!this.staff$.staffName.trim()) {
-          this.showMessage('warning', 'Parcel type name is required');
+          this.showMessage('warning', 'staffs name is required');
           return false;
         }
         return true;
@@ -330,12 +330,34 @@ edit(item: Staff): void {
         this.applyPaging();
       }
 
+// ---------------------------------active inActive --------------------------
+ toggleStaff(staff: Staff): void {
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo?.Token || '',
+    });
 
+    const updatedStatus = {
+      ...staff,
+      isActive: !staff.isActive, // বর্তমান isActive মানটি উল্টানো হবে
+    };
 
-
-
-
-
+    this.httpClient.put(
+      `${this.authService.baseURL}/api/Staffs/${staff.staffId}`,
+      updatedStatus,
+      { headers }
+    ).subscribe({
+      next: () => {
+        staff.isActive = !staff.isActive; // UI আপডেট করুন
+        this.showMessage(
+          'success',
+          `Status changed to ${staff.isActive ? 'Active' : 'Inactive'}`
+        );
+      },
+      error: () => {
+        this.showMessage('error', 'Failed to change status');
+      },
+    });
+  }
 
 
 }
