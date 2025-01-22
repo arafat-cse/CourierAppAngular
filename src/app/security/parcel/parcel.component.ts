@@ -644,6 +644,53 @@ export class ParcelComponent implements OnInit {
   search(): void {
     this.applyPaging();
   }
+
+// -----------------------------------------Boolean--------------------------Status--------
+
+// ---------------------------------active inActive --------------------------
+ toggleParcel(parcel: Parcel): void {
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo?.Token || '',
+    });
+
+    const updatedStatus = {
+      ...parcel,
+      SendingBranch: !parcel.sendingBranch, // বর্তমান isActive মানটি উল্টানো হবে
+    };
+
+    this.httpClient.put(
+      `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
+      updatedStatus,
+      { headers }
+    ).subscribe({
+      next: () => {
+        parcel.sendingBranch = !parcel.sendingBranch; // UI আপডেট করুন
+        this.showMessage(
+          'success',
+          `Status changed to ${parcel.sendingBranch ? 'YES' : 'NO'}`
+        );
+      },
+      error: () => {
+        this.showMessage('error', 'Failed to change status');
+      },
+    });
+  }
+
+
+
+// -----------------------------------------Boolean--------------------------Status--------
+
+
+
+
+
+
+
+
+
+
+
+
 //Model Data Uthano
   selectedParcel: any = null;
 

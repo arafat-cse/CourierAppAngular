@@ -166,6 +166,22 @@
                                                           <td><strong>{{selectedParcel?.SendingBranch ? 'Yes' : 'No'}}</strong></td>
                                                         </tr>
                                                         <tr>
+                                                          <th>PercelSendingDestribution: </th>
+                                                          <td><strong>{{selectedParcel?.PercelSendingDestribution ? 'Yes' : 'No'}}</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th>RecebingDistributin: </th>
+                                                          <td><strong>{{selectedParcel?.RecebingDistributin ? 'Yes' : 'No'}}</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th>RecebingBranch: </th>
+                                                          <td><strong>{{selectedParcel?.RecebingBranch ? 'Yes' : 'No'}}</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th>RecebingReceber: </th>
+                                                          <td><strong>{{selectedParcel?.RecebingReceber ? 'Yes' : 'No'}}</strong></td>
+                                                        </tr>
+                                                        <tr>
                                                           <th>Price: </th>
                                                           <td ><strong>{{selectedParcel?.price}}</strong></td>
                                                         </tr> 
@@ -187,12 +203,58 @@
                                 
                                       <!-- Card 4 -->
                                   <div class="col-md-6 col-lg-6">
-                                    <div class="card p-4 text-center shadow-sm">
+                                    <div class="card p-4  shadow-sm">
                                       <div>
                                         <h5>Total Customers</h5>
                                         <i class="fas fa-users icon fs-1 text-warning"></i>
-                                        <h3>2,374</h3>
-                                        <p>Active Customers</p>
+                                        <table class="table text-primary">
+                                          <thead class="table-primary" >
+                                            <tr>
+                                              <th>EstimatedReceiveTime: </th>
+                                              <td>{{selectedParcel?.estimatedReceiveTime}}</td>
+                                            </tr> 
+                                            <tr>
+                                              <th>Is Paid: </th>
+                                              <td><strong>{{selectedParcel?.isPaid ? 'Yes' : 'No'}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                              <th>Sending Parcel: </th>
+                                              <!-- <td><strong>{{selectedParcel?.SendingBranch ? 'Yes' : 'No'}}</strong></td> -->
+                                              <td class="text-center">
+                                                <button
+                                                  class="btn btn-sm"
+                                                  [ngClass]="{'btn-success': selectedParcel?.SendingBranch, 'btn-danger': !selectedParcel?.SendingBranch}"
+                                                  (click)="toggleParcel(selectedParcel)">
+                                                  {{ selectedParcel?.SendingBranch ? 'YES' : 'NO' }}
+                                                </button>
+                                            </td>
+                                            </tr>
+                                            <tr>
+                                              <th>PercelSendingDestribution: </th>
+                                              <td><strong>{{selectedParcel?.PercelSendingDestribution ? 'Yes' : 'No'}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                              <th>RecebingDistributin: </th>
+                                              <td><strong>{{selectedParcel?.RecebingDistributin ? 'Yes' : 'No'}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                              <th>RecebingBranch: </th>
+                                              <td><strong>{{selectedParcel?.RecebingBranch ? 'Yes' : 'No'}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                              <th>RecebingReceber: </th>
+                                              <td><strong>{{selectedParcel?.RecebingReceber ? 'Yes' : 'No'}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                              <th>Price: </th>
+                                              <td ><strong>{{selectedParcel?.price}}</strong></td>
+                                            </tr> 
+                                            <tr>
+                                              <th>Status: </th>
+                                              <td>{{selectedParcel?.isActive ? 'Active' : 'Inactive'}}</td>
+                                            </tr>
+                                          </thead> 
+                                      </table>
                                       </div>
                                     </div>
                                   </div>
