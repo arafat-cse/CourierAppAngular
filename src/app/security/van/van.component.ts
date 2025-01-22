@@ -241,5 +241,34 @@ showMessage(type: string, message: string): void {
     this.applyPaging();
   }
 
+ toggleVan(vans: Vans): void {
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo?.Token || '',
+    });
+
+    const updatedStatus = {
+      ...vans,
+      isActive: !vans.isActive, // বর্তমান isActive মানটি উল্টানো হবে
+    };
+
+    this.httpClient.put(
+      `${this.authService.baseURL}/api/Vans/${vans.vanId}`,
+      updatedStatus,
+      { headers }
+    ).subscribe({
+      next: () => {
+        vans.isActive = !vans.isActive; // UI আপডেট করুন
+        this.showMessage(
+          'success',
+          `Status changed to ${vans.isActive ? 'Active' : 'Inactive'}`
+        );
+      },
+      error: () => {
+        this.showMessage('error', 'Failed to change status');
+      },
+    });
+  }
+  
+
 }
 

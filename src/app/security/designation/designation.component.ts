@@ -65,6 +65,24 @@ export class DesignationComponent implements OnInit {
   ngOnInit(): void {
     this.get();
   }
+  // get(): void {
+  //   const headers = new HttpHeaders({
+  //     'Token': this.authService.UserInfo?.Token || '',
+  //   });
+
+  //   this.httpClient.get<any>(`${this.authService.baseURL}/api/Designations`, { headers })
+  //     .subscribe({
+  //       next: (response) => {
+  //         this.listDesignation = response;
+  //       //  this.rowCount = response.totalCount || 0;
+  //         this.applyPaging();
+  //       },
+  //       error: () => {
+  //         this.showMessage('error', 'Failed to load parcel types');
+  //       },
+  //     });
+  // }
+
   get(): void {
     const headers = new HttpHeaders({
       'Token': this.authService.UserInfo?.Token || '',
@@ -74,14 +92,42 @@ export class DesignationComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.listDesignation = response;
-        //  this.rowCount = response.totalCount || 0;
           this.applyPaging();
         },
         error: () => {
-          this.showMessage('error', 'Failed to load parcel types');
+          this.showMessage('error', 'Failed to load designations');
         },
       });
   }
+
+  toggleActive(designation: Designation): void {
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo?.Token || '',
+    });
+
+    const updatedStatus = {
+      ...designation,
+      isActive: !designation.isActive, // বর্তমান isActive মানটি উল্টানো হবে
+    };
+
+    this.httpClient.put(
+      `${this.authService.baseURL}/api/Designations/${designation.designationId}`,
+      updatedStatus,
+      { headers }
+    ).subscribe({
+      next: () => {
+        designation.isActive = !designation.isActive; // UI আপডেট করুন
+        this.showMessage(
+          'success',
+          `Status changed to ${designation.isActive ? 'Active' : 'Inactive'}`
+        );
+      },
+      error: () => {
+        this.showMessage('error', 'Failed to change status');
+      },
+    });
+  }
+
   edit(item: Designation): void {
     this.designation = {
       designationId: item.designationId,
@@ -127,6 +173,8 @@ export class DesignationComponent implements OnInit {
   update(): void {
     if (!this.validateForm()) {
       return;
+
+      
     }
   
     const headers = new HttpHeaders({

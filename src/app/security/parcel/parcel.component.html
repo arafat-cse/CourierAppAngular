@@ -162,6 +162,10 @@
                                                           <td><strong>{{selectedParcel?.isPaid ? 'Yes' : 'No'}}</strong></td>
                                                         </tr>
                                                         <tr>
+                                                          <th>Sending Parcel: </th>
+                                                          <td><strong>{{selectedParcel?.SendingBranch ? 'Yes' : 'No'}}</strong></td>
+                                                        </tr>
+                                                        <tr>
                                                           <th>Price: </th>
                                                           <td ><strong>{{selectedParcel?.price}}</strong></td>
                                                         </tr> 
@@ -252,7 +256,8 @@
   <div class="row g-3">
       <div class="col-md-6">
           <label for="trackingCode" class="form-label text-primary"> TrackingCode*</label>
-          <input type="text" id="trackingCode" [(ngModel)]="parcels.trackingCode" class="form-control" placeholder="Tracking Code"/>
+          <input type="text" id="trackingCode" class="form-control" [(ngModel)]="parcels.trackingCode" readonly />
+          <!-- <input type="text" id="trackingCode" [(ngModel)]="parcels.trackingCode" class="form-control" placeholder="Tracking Code"/> -->
       </div>
     
       <div class="col-md-6">
