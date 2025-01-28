@@ -228,6 +228,7 @@
                                                   {{ selectedParcel?.SendingBranch ? 'YES' : 'NO' }}
                                                 </button>
                                             </td>
+                                            
                                             </tr>
                                             <tr>
                                               <th>PercelSendingDestribution: </th>
@@ -265,8 +266,32 @@
                                       <div>
                                         <h5>Revenue Generated</h5>
                                         <i class="fas fa-dollar-sign icon fs-1 text-danger"></i>
-                                        <h3>$78,645</h3>
-                                        <p>This Year</p>
+                                        <table>
+                                          <thead>
+                                            <tr>
+                                              <th>Tracking Code</th>
+                                              <th>Current Status</th>
+                                              <th>Update Status</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr *ngFor="let parcel of Listparcels">
+                                              <td>{{ parcel.trackingCode }}</td>
+                                              <td>{{ parcel.status }}</td>
+                                              <td>
+                                                <select [(ngModel)]="parcel.newStatus">
+                                                <!-- <select [(ngModel)]="parcel.newStatus"> -->
+                                                  <option value="In Transit">In Transit</option>
+                                                  <option value="Delivered">Delivered</option>
+                                                  <option value="Pending">Pending</option>
+                                                  <option value="Canceled">Canceled</option>
+                                                </select>
+                                                <button (click)="updateStatus(parcel.parcelId, parcel.newStatus)">Update</button>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                        
                                       </div>
                                     </div>
                                   </div>

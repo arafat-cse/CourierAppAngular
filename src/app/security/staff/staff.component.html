@@ -82,7 +82,7 @@
             <input type="text" id="defaultPrice" [(ngModel)]="staff$.staffPhone" class="form-control" />
         </div>
         <div class="col-md-3">
-            <label for="senderChild" class="form-label">Sender Child</label>
+            <label for="senderChild" class="form-label">Designation</label>
             <select id="senderChild" [(ngModel)]="staff$.designationId" class="form-select">
               <option *ngFor="let designation of listDesignation" [ngValue]="designation.designationId">
                 {{ designation.title }}
@@ -90,7 +90,7 @@
             </select>
           </div>
         <div class="col-md-3">
-            <label for="senderChild" class="form-label">Sender Child</label>
+            <label for="senderChild" class="form-label">Branch Name</label>
             <select id="senderChild" [(ngModel)]="staff$.branchId" class="form-select">
               <option *ngFor="let child of listBranchs" [ngValue]="child.branchId">
                 {{ child.branchName }}

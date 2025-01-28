@@ -132,6 +132,7 @@ edit(item: Staff): void {
       { headers }
     ).subscribe({
       next: () => {
+        this.isList = true;
         this.reset();
         this.getStaff();
         this.showMessage('success', 'Parcel type added successfully');

@@ -100,33 +100,6 @@ export class DesignationComponent implements OnInit {
       });
   }
 
-  toggleActive(designation: Designation): void {
-    const headers = new HttpHeaders({
-      'Token': this.authService.UserInfo?.Token || '',
-    });
-
-    const updatedStatus = {
-      ...designation,
-      isActive: !designation.isActive, // বর্তমান isActive মানটি উল্টানো হবে
-    };
-
-    this.httpClient.put(
-      `${this.authService.baseURL}/api/Designations/${designation.designationId}`,
-      updatedStatus,
-      { headers }
-    ).subscribe({
-      next: () => {
-        designation.isActive = !designation.isActive; // UI আপডেট করুন
-        this.showMessage(
-          'success',
-          `Status changed to ${designation.isActive ? 'Active' : 'Inactive'}`
-        );
-      },
-      error: () => {
-        this.showMessage('error', 'Failed to change status');
-      },
-    });
-  }
 
   edit(item: Designation): void {
     this.designation = {
@@ -289,9 +262,33 @@ export class DesignationComponent implements OnInit {
   search(): void {
     this.applyPaging();
   }
+// ---------------------------------active inActive --------------------------
 
+toggleActive(designation: Designation): void {
+  const headers = new HttpHeaders({
+    'Token': this.authService.UserInfo?.Token || '',
+  });
 
+  const updatedStatus = {
+    ...designation,
+    isActive: !designation.isActive, // বর্তমান isActive মানটি উল্টানো হবে
+  };
 
-
-
+  this.httpClient.put(
+    `${this.authService.baseURL}/api/Designations/${designation.designationId}`,
+    updatedStatus,
+    { headers }
+  ).subscribe({
+    next: () => {
+      designation.isActive = !designation.isActive; // UI আপডেট করুন
+      this.showMessage(
+        'success',
+        `Status changed to ${designation.isActive ? 'Active' : 'Inactive'}`
+      );
+    },
+    error: () => {
+      this.showMessage('error', 'Failed to change status');
+    },
+  });
+}
 }

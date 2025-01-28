@@ -7,6 +7,7 @@ import { ParcelType } from '../interface/ParcelType';
 import { Branch } from '../interface/listBranchs';
 import { Parcels } from '../interface/parcel';
 import jsPDF from 'jspdf';
+import { Observable } from 'rxjs';
 
 
 interface Parcel {
@@ -35,16 +36,18 @@ interface Parcel {
   createDate: Date | null; // Create Date (datetime, nullable)
   updatedBy: string | null; // Updated By (nvarchar, nullable)
   updateDate: Date | null; // Update Date (datetime, nullable)
-  sendingBranch: boolean | null; // Sending Branch Status (bit, nullable)
-  percelSendingDestribution: boolean | null; // Distribution Status during Sending (bit, nullable)
-  recebingDistributin: boolean | null; // Distribution Status during Receiving (bit, nullable)
-  recebingBranch: boolean | null; // Receiving Branch Status (bit, nullable)
-  recebingReceber: boolean | null; // Receiving Receiver Status (bit, nullable)
+  sendingBranch?: boolean | null; // Sending Branch Status (bit, nullable)
+  percelSendingDestribution?: boolean | null; // Distribution Status during Sending (bit, nullable)
+  recebingDistributin?: boolean | null; // Distribution Status during Receiving (bit, nullable)
+  recebingBranch?: boolean | null; // Receiving Branch Status (bit, nullable)
+  recebingReceber?: boolean | null; // Receiving Receiver Status (bit, nullable)
   isActive: boolean | null; // Active Status (bit, nullable)
   vanId: number | null; // Van ID (int, nullable)
   driverId: number | null; // Driver ID (int, nullable)
   deliveryChargeId: number | null; // Delivery Charge ID (int, nullable)
   parcelTypeId: number | null; // Parcel Type ID (int, nullable)
+  status: string | null; 
+  newStatus?: string|undefined;
 }
 
 @Component({
@@ -100,6 +103,7 @@ export class ParcelComponent implements OnInit {
     driverId: null, // Driver ID (number | null)
     deliveryChargeId: null, // Delivery Charge ID (number | null)
     parcelTypeId: null, // Parcel Type ID (number | null)
+    status: null, // Parcel Type ID (number | null)
   };
 
   // Pagination
@@ -315,6 +319,7 @@ export class ParcelComponent implements OnInit {
       driverId: item.driverId,
       deliveryChargeId: item.deliveryChargeId,
       parcelTypeId: item.parcelTypeId,
+      status: item.status,
     };
     this.isList = false;
   }
@@ -617,6 +622,7 @@ export class ParcelComponent implements OnInit {
       driverId: null,
       deliveryChargeId: null,
       parcelTypeId: null,
+      status: null,
     };
   }
 
@@ -648,33 +654,60 @@ export class ParcelComponent implements OnInit {
 // -----------------------------------------Boolean--------------------------Status--------
 
 // ---------------------------------active inActive --------------------------
- toggleParcel(parcel: Parcel): void {
-    const headers = new HttpHeaders({
-      'Token': this.authService.UserInfo?.Token || '',
-    });
+//  toggleParcel(parcel: Parcel): void {
+//     const headers = new HttpHeaders({
+//       'Token': this.authService.UserInfo?.Token || '',
+//     });
 
-    const updatedStatus = {
-      ...parcel,
-      SendingBranch: !parcel.sendingBranch, // বর্তমান isActive মানটি উল্টানো হবে
-    };
+//     const updatedStatus = {
+//       ...parcel,
+//       SendingBranch: !parcel.sendingBranch, // বর্তমান isActive মানটি উল্টানো হবে
+//     };
 
-    this.httpClient.put(
-      `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
-      updatedStatus,
-      { headers }
-    ).subscribe({
-      next: () => {
-        parcel.sendingBranch = !parcel.sendingBranch; // UI আপডেট করুন
-        this.showMessage(
-          'success',
-          `Status changed to ${parcel.sendingBranch ? 'YES' : 'NO'}`
-        );
-      },
-      error: () => {
-        this.showMessage('error', 'Failed to change status');
-      },
-    });
-  }
+//     this.httpClient.put(
+//       `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
+//       updatedStatus,
+//       { headers }
+//     ).subscribe({
+//       next: () => {
+//         parcel.sendingBranch = !parcel.sendingBranch; // UI আপডেট করুন
+//         this.showMessage(
+//           'success',
+//           `Status changed to ${parcel.sendingBranch ? 'YES' : 'NO'}`
+//         );
+//       },
+//       error: () => {
+//         this.showMessage('error', 'Failed to change status');
+//       },
+//     });
+//   }
+toggleParcel(parcel: Parcel): void {
+  const headers = new HttpHeaders({
+    'Token': this.authService.UserInfo?.Token || '',
+  });
+
+  const updatedStatus = {
+    ...parcel,
+    SendingBranch: !parcel.sendingBranch, // বর্তমান SendingBranch মান উল্টানো হবে
+  };
+
+  this.httpClient.put(
+    `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
+    updatedStatus,
+    { headers }
+  ).subscribe({
+    next: () => {
+      parcel.sendingBranch = updatedStatus.sendingBranch; // UI-তে পরিবর্তন নিশ্চিত করা
+      this.showMessage(
+        'success',
+        `Status changed to ${parcel.sendingBranch ? 'YES' : 'NO'}`
+      );
+    },
+    error: () => {
+      this.showMessage('error', 'Failed to change status');
+    },
+  });
+}
 
 
 
@@ -804,5 +837,32 @@ doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 120, 80);
     // Save the PDF
     doc.save(`Parcel_${parcel.trackingCode}.pdf`);
   }
+  // updateParcelStatus(id: number, status: string): Observable<any> {
+  //   const url =  `${this.authService.baseURL}/api//Parcels/UpdateStatus/${id}`;
+  //   return this.httpClient.put(url, status, { headers: { 'Content-Type': 'application/json' } });
+  // }
   
+  updateParcelStatus(id: number, status: string): Observable<any> {
+    const url = `${this.authService.baseURL}/api/Parcels/UpdateStatus/${id}`;
+    return this.httpClient.put(url, status, { headers: { 'Content-Type': 'application/json' } });
+  }
+
+  updateStatus(parcelId: number, newStatus: string| undefined): void {
+    if (!newStatus) {
+      alert('Please select a valid status.');
+      return;
+    }
+    this.updateParcelStatus(parcelId, newStatus).subscribe({
+      next: (response) => {
+        console.log(response);
+        alert('Status updated successfully!');
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Failed to update status.');
+      },
+    });
+  }
 }
+  
+
