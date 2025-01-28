@@ -44,11 +44,19 @@
                 <!-- Replace ID with the corresponding branch name -->
                 <td>{{ getBranchName(item.branchId) }}</td>
                 <td class="text-center">{{item.createBy}}</td>
-                <td class="text-center">
+                <!-- <td class="text-center">
                  
                     <span class="badge px-3 py-2 w-50" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
                         {{item.isActive ? 'Active' : 'Inactive'}}
                     </span>
+                </td> -->
+                <td class="text-center">
+                    <button
+                      class="btn btn-sm"
+                      [ngClass]="{'btn-success': item.isActive, 'btn-danger': !item.isActive}"
+                      (click)="toggleStaff(item)">
+                      {{ item.isActive ? 'Active' : 'Inactive' }}
+                    </button>
                 </td>
                 <td class=" text-center">
                     <button class="btn btn-sm btn-outline-warning text-primary me-2 px-3" (click)="edit(item)">Edit</button>
@@ -74,7 +82,7 @@
             <input type="text" id="defaultPrice" [(ngModel)]="staff$.staffPhone" class="form-control" />
         </div>
         <div class="col-md-3">
-            <label for="senderChild" class="form-label">Sender Child</label>
+            <label for="senderChild" class="form-label">Designation</label>
             <select id="senderChild" [(ngModel)]="staff$.designationId" class="form-select">
               <option *ngFor="let designation of listDesignation" [ngValue]="designation.designationId">
                 {{ designation.title }}
@@ -82,7 +90,7 @@
             </select>
           </div>
         <div class="col-md-3">
-            <label for="senderChild" class="form-label">Sender Child</label>
+            <label for="senderChild" class="form-label">Branch Name</label>
             <select id="senderChild" [(ngModel)]="staff$.branchId" class="form-select">
               <option *ngFor="let child of listBranchs" [ngValue]="child.branchId">
                 {{ child.branchName }}

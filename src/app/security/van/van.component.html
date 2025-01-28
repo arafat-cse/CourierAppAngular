@@ -34,11 +34,21 @@
                 <td class="text-center">{{item.registrationNo}}</td>
                 <td class="text-center">{{item.createBy}} </td>
                 <td class="text-center">{{item.updateBy}} </td>
-                <td class="text-center">
+                <!-- <td class="text-center">
                     <span class="badge px-3 py-2 w-50" [ngClass]="{'bg-success': item.isActive, 'bg-danger': !item.isActive}">
                         {{item.isActive ? 'Active' : 'Inactive'}}
                     </span>
-                </td>
+                </td> -->
+
+                <td class="text-center">
+                    <button
+                      class="btn btn-sm"
+                      [ngClass]="{'btn-success': item.isActive, 'btn-danger': !item.isActive}"
+                      (click)="toggleVan(item)">
+                      {{ item.isActive ? 'Active' : 'Inactive' }}
+                    </button>
+                  </td>
+                  
                 <td class="w-25 text-center">
                     <button class="btn btn-sm btn-outline-warning text-primary me-2 px-3" (click)="edit(item)">Edit</button>
                     <button class="btn btn-sm btn-outline-danger px-3" (click)="removeConfirm(item)" data-bs-toggle="modal" data-bs-target="#confirmModal">Delete</button>

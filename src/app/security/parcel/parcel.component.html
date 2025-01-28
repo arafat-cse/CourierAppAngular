@@ -2,6 +2,7 @@
 <a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;reset();getParcel()" class="btn-new btn btn-warning mb-4 px-5">New</a>
 
 <div *ngIf="isList">
+  
   <div class="row">
       <div class="col-lg-4">
           Show
@@ -99,12 +100,12 @@
                                         </tr>
                                      
                                         <tr>
-                                          <th>Sender Branch: </th>
-                                          <td>{{getBranchName(selectedParcel?.senderBranchId)}}</td>
+                                          <th >Sender Branch: </th>
+                                          <td class="text-success"><strong>{{getBranchName(selectedParcel?.senderBranchId)}}</strong></td>
                                         </tr>
                                         <tr>
                                           <th>Parcel Type: </th>
-                                          <td>{{getParcelTypeName(selectedParcel?.parcelTypeId)}}</td>
+                                          <td class="text-primary"><strong>{{getParcelTypeName(selectedParcel?.parcelTypeId)}}</strong></td>
                                         </tr>
                                      
                                       </thead>
@@ -134,7 +135,7 @@
                                           </tr>
                                           <tr>
                                             <th>Receiver Branch:</th>
-                                            <td>{{getBranchName(selectedParcel?.receiverBranchId)}}</td>
+                                            <td class="text-success" ><strong>{{getBranchName(selectedParcel?.receiverBranchId)}}</strong></td>
                                           </tr>
                                       </thead>
 
@@ -153,12 +154,36 @@
                                                   <table class="table text-primary">
                                                       <thead class="table-primary" >
                                                         <tr>
+                                                          <th>EstimatedReceiveTime: </th>
+                                                          <td>{{selectedParcel?.estimatedReceiveTime}}</td>
+                                                        </tr> 
+                                                        <tr>
                                                           <th>Is Paid: </th>
-                                                          <td>{{selectedParcel?.isPaid ? 'Yes' : 'No'}}</td>
+                                                          <td><strong>{{selectedParcel?.isPaid ? 'Yes' : 'No'}}</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th>Sending Parcel: </th>
+                                                          <td><strong>{{selectedParcel?.SendingBranch ? 'Yes' : 'No'}}</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th>PercelSendingDestribution: </th>
+                                                          <td><strong>{{selectedParcel?.PercelSendingDestribution ? 'Yes' : 'No'}}</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th>RecebingDistributin: </th>
+                                                          <td><strong>{{selectedParcel?.RecebingDistributin ? 'Yes' : 'No'}}</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th>RecebingBranch: </th>
+                                                          <td><strong>{{selectedParcel?.RecebingBranch ? 'Yes' : 'No'}}</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th>RecebingReceber: </th>
+                                                          <td><strong>{{selectedParcel?.RecebingReceber ? 'Yes' : 'No'}}</strong></td>
                                                         </tr>
                                                         <tr>
                                                           <th>Price: </th>
-                                                          <td>{{selectedParcel?.price}}</td>
+                                                          <td ><strong>{{selectedParcel?.price}}</strong></td>
                                                         </tr> 
                                                         <tr>
                                                           <th>Status: </th>
@@ -178,12 +203,59 @@
                                 
                                       <!-- Card 4 -->
                                   <div class="col-md-6 col-lg-6">
-                                    <div class="card p-4 text-center shadow-sm">
+                                    <div class="card p-4  shadow-sm">
                                       <div>
                                         <h5>Total Customers</h5>
                                         <i class="fas fa-users icon fs-1 text-warning"></i>
-                                        <h3>2,374</h3>
-                                        <p>Active Customers</p>
+                                        <table class="table text-primary">
+                                          <thead class="table-primary" >
+                                            <tr>
+                                              <th>EstimatedReceiveTime: </th>
+                                              <td>{{selectedParcel?.estimatedReceiveTime}}</td>
+                                            </tr> 
+                                            <tr>
+                                              <th>Is Paid: </th>
+                                              <td><strong>{{selectedParcel?.isPaid ? 'Yes' : 'No'}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                              <th>Sending Parcel: </th>
+                                              <!-- <td><strong>{{selectedParcel?.SendingBranch ? 'Yes' : 'No'}}</strong></td> -->
+                                              <td class="text-center">
+                                                <button
+                                                  class="btn btn-sm"
+                                                  [ngClass]="{'btn-success': selectedParcel?.SendingBranch, 'btn-danger': !selectedParcel?.SendingBranch}"
+                                                  (click)="toggleParcel(selectedParcel)">
+                                                  {{ selectedParcel?.SendingBranch ? 'YES' : 'NO' }}
+                                                </button>
+                                            </td>
+                                            
+                                            </tr>
+                                            <tr>
+                                              <th>PercelSendingDestribution: </th>
+                                              <td><strong>{{selectedParcel?.PercelSendingDestribution ? 'Yes' : 'No'}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                              <th>RecebingDistributin: </th>
+                                              <td><strong>{{selectedParcel?.RecebingDistributin ? 'Yes' : 'No'}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                              <th>RecebingBranch: </th>
+                                              <td><strong>{{selectedParcel?.RecebingBranch ? 'Yes' : 'No'}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                              <th>RecebingReceber: </th>
+                                              <td><strong>{{selectedParcel?.RecebingReceber ? 'Yes' : 'No'}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                              <th>Price: </th>
+                                              <td ><strong>{{selectedParcel?.price}}</strong></td>
+                                            </tr> 
+                                            <tr>
+                                              <th>Status: </th>
+                                              <td>{{selectedParcel?.isActive ? 'Active' : 'Inactive'}}</td>
+                                            </tr>
+                                          </thead> 
+                                      </table>
                                       </div>
                                     </div>
                                   </div>
@@ -194,8 +266,32 @@
                                       <div>
                                         <h5>Revenue Generated</h5>
                                         <i class="fas fa-dollar-sign icon fs-1 text-danger"></i>
-                                        <h3>$78,645</h3>
-                                        <p>This Year</p>
+                                        <table>
+                                          <thead>
+                                            <tr>
+                                              <th>Tracking Code</th>
+                                              <th>Current Status</th>
+                                              <th>Update Status</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr *ngFor="let parcel of Listparcels">
+                                              <td>{{ parcel.trackingCode }}</td>
+                                              <td>{{ parcel.status }}</td>
+                                              <td>
+                                                <select [(ngModel)]="parcel.newStatus">
+                                                <!-- <select [(ngModel)]="parcel.newStatus"> -->
+                                                  <option value="In Transit">In Transit</option>
+                                                  <option value="Delivered">Delivered</option>
+                                                  <option value="Pending">Pending</option>
+                                                  <option value="Canceled">Canceled</option>
+                                                </select>
+                                                <button (click)="updateStatus(parcel.parcelId, parcel.newStatus)">Update</button>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                        
                                       </div>
                                     </div>
                                   </div>
@@ -247,7 +343,8 @@
   <div class="row g-3">
       <div class="col-md-6">
           <label for="trackingCode" class="form-label text-primary"> TrackingCode*</label>
-          <input type="text" id="trackingCode" [(ngModel)]="parcels.trackingCode" class="form-control" placeholder="Tracking Code"/>
+          <input type="text" id="trackingCode" class="form-control" [(ngModel)]="parcels.trackingCode" readonly />
+          <!-- <input type="text" id="trackingCode" [(ngModel)]="parcels.trackingCode" class="form-control" placeholder="Tracking Code"/> -->
       </div>
     
       <div class="col-md-6">
