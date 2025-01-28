@@ -22,6 +22,8 @@
           <tr>
               <th>sl</th>
               <th class="text-center">Tranking Code</th>
+              <!-- <th class="text-center">sendingBranch</th> -->
+              <!-- <th class="text-center">percelSendingDestribution</th> -->
               <th class="text-center">Sender Name</th>
               <th class="text-center">Sender Phone</th>
               <th class="text-center">Recevar Name</th>
@@ -39,6 +41,24 @@
           <tr *ngFor="let item of Listparcels let i = index">
               <td>{{i+1}}</td>
               <td>{{item.trackingCode}}</td>
+              <!-- <td class="text-center">
+                <span class="badge px-3 py-2" [ngClass]="{'bg-success': item.sendingBranch, 'bg-danger': !item.sendingBranch}">
+                    {{item.sendingBranch ? 'YES' : 'NO'}}
+                </span>
+              </td> -->
+              <!-- <td class="text-center">
+                <button
+                  class="btn btn-sm"
+                  [ngClass]="{'btn-success': item.sendingBranch, 'btn-danger': !item.sendingBranch}"
+                  (click)="toggleSendingBranch(item)">
+                  {{ item.sendingBranch ? 'Yes' : 'NO' }}
+                </button>
+              </td> -->
+              <!-- <td class="text-center">
+                <span class="badge px-3 py-2" [ngClass]="{'bg-success': item.percelSendingDestribution, 'bg-danger': !item.percelSendingDestribution}">
+                    {{item.percelSendingDestribution ? 'YES' : 'NO'}}
+                </span>
+              </td> -->
               <td class="text-center">{{item.senderName}}</td>
               <td class="text-center">{{item.senderPhone}}</td>
               <td class="text-center">{{item.receiverName}}</td>
@@ -70,242 +90,7 @@
                 <button viewModal class="btn btn-sm btn-outline-primary text-primary me-2 px-3" data-bs-toggle="modal" data-bs-target="#viewModal" (click)="selectParcel(item)">
                  <i class="fas fa-eye me-2"></i> View
                </button>
-               <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="viewModalLabel">Parcel Details</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                                              
-                        <section class="container py-3">
-                          <h2 class="mb-4 text-center courier-title ">TrackingCode: <h1 class="text-primary">{{selectedParcel?.trackingCode}}</h1></h2>
-                          
-                          <!-- Cards -->
-                          <div class="row g-4">
-                            <!-- Card 1 -->
-                            <div class="col-md-6 col-lg-6">
-                              <div class="card p-4  shadow-sm">
-                                <div>
-                                  <table class="table">
-                                      <thead >
-                                        <tr>
-                                          <th>Sender Name: </th>
-                                          <td>{{selectedParcel?.senderName}}</td>
-                                        </tr>
-                                        <tr>
-                                          <th>Sender Phone: </th>
-                                          <td>{{selectedParcel?.senderPhone}}</td>
-                                        </tr>
-                                     
-                                        <tr>
-                                          <th >Sender Branch: </th>
-                                          <td class="text-success"><strong>{{getBranchName(selectedParcel?.senderBranchId)}}</strong></td>
-                                        </tr>
-                                        <tr>
-                                          <th>Parcel Type: </th>
-                                          <td class="text-primary"><strong>{{getParcelTypeName(selectedParcel?.parcelTypeId)}}</strong></td>
-                                        </tr>
-                                     
-                                      </thead>
-
-                                  </table>
-                                </div>
-                              </div>
-                            </div>
-
-                            <!-- Card 2 -->
-                            <div class="col-md-6 col-lg-6">
-                              <div class="card p-4 shadow-sm">
-                                <div>
-                                  <table class="table">
-                                      <thead >
-                                        <tr>
-                                          <th>Receiver Name:</th>
-                                          <td>{{selectedParcel?.receiverName}}</td>
-                                        </tr>
-                                        <tr>
-                                          <th>Receiver Phone: </th>
-                                          <td>{{selectedParcel?.receiverPhone}}</td>
-                                        </tr>
-                                          <tr>
-                                            <th>Sender E-mail:</th>
-                                            <td>{{selectedParcel?.receiverEmail}}</td>
-                                          </tr>
-                                          <tr>
-                                            <th>Receiver Branch:</th>
-                                            <td class="text-success" ><strong>{{getBranchName(selectedParcel?.receiverBranchId)}}</strong></td>
-                                          </tr>
-                                      </thead>
-
-                                  </table>
-                                </div>
-                              </div>
-                            </div>
-                              <!-- Card 3 -->
-                              <div class="col-md-12 col-lg-12">
-                                  <div class="card p-4 shadow-sm">
-                                    <div class="row g-4">
-                                      <!-- Card 4 -->
-                                      <div class="col-md-12 col-lg-12">
-                                          <div class="card p-4  shadow-sm">
-                                              <div>
-                                                  <table class="table text-primary">
-                                                      <thead class="table-primary" >
-                                                        <tr>
-                                                          <th>EstimatedReceiveTime: </th>
-                                                          <td>{{selectedParcel?.estimatedReceiveTime}}</td>
-                                                        </tr> 
-                                                        <tr>
-                                                          <th>Is Paid: </th>
-                                                          <td><strong>{{selectedParcel?.isPaid ? 'Yes' : 'No'}}</strong></td>
-                                                        </tr>
-                                                        <tr>
-                                                          <th>Sending Parcel: </th>
-                                                          <td><strong>{{selectedParcel?.SendingBranch ? 'Yes' : 'No'}}</strong></td>
-                                                        </tr>
-                                                        <tr>
-                                                          <th>PercelSendingDestribution: </th>
-                                                          <td><strong>{{selectedParcel?.PercelSendingDestribution ? 'Yes' : 'No'}}</strong></td>
-                                                        </tr>
-                                                        <tr>
-                                                          <th>RecebingDistributin: </th>
-                                                          <td><strong>{{selectedParcel?.RecebingDistributin ? 'Yes' : 'No'}}</strong></td>
-                                                        </tr>
-                                                        <tr>
-                                                          <th>RecebingBranch: </th>
-                                                          <td><strong>{{selectedParcel?.RecebingBranch ? 'Yes' : 'No'}}</strong></td>
-                                                        </tr>
-                                                        <tr>
-                                                          <th>RecebingReceber: </th>
-                                                          <td><strong>{{selectedParcel?.RecebingReceber ? 'Yes' : 'No'}}</strong></td>
-                                                        </tr>
-                                                        <tr>
-                                                          <th>Price: </th>
-                                                          <td ><strong>{{selectedParcel?.price}}</strong></td>
-                                                        </tr> 
-                                                        <tr>
-                                                          <th>Status: </th>
-                                                          <td>{{selectedParcel?.isActive ? 'Active' : 'Inactive'}}</td>
-                                                        </tr>
-                                                      </thead> 
-                                                  </table>
-                                              </div>
-                                          </div>
-                                      </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card p-4 shadow-sm">
-                              <div class="row g-4">
-                                
-                                      <!-- Card 4 -->
-                                  <div class="col-md-6 col-lg-6">
-                                    <div class="card p-4  shadow-sm">
-                                      <div>
-                                        <h5>Total Customers</h5>
-                                        <i class="fas fa-users icon fs-1 text-warning"></i>
-                                        <table class="table text-primary">
-                                          <thead class="table-primary" >
-                                            <tr>
-                                              <th>EstimatedReceiveTime: </th>
-                                              <td>{{selectedParcel?.estimatedReceiveTime}}</td>
-                                            </tr> 
-                                            <tr>
-                                              <th>Is Paid: </th>
-                                              <td><strong>{{selectedParcel?.isPaid ? 'Yes' : 'No'}}</strong></td>
-                                            </tr>
-                                            <tr>
-                                              <th>Sending Parcel: </th>
-                                              <!-- <td><strong>{{selectedParcel?.SendingBranch ? 'Yes' : 'No'}}</strong></td> -->
-                                              <td class="text-center">
-                                                <button
-                                                  class="btn btn-sm"
-                                                  [ngClass]="{'btn-success': selectedParcel?.SendingBranch, 'btn-danger': !selectedParcel?.SendingBranch}"
-                                                  (click)="toggleParcel(selectedParcel)">
-                                                  {{ selectedParcel?.SendingBranch ? 'YES' : 'NO' }}
-                                                </button>
-                                            </td>
-                                            
-                                            </tr>
-                                            <tr>
-                                              <th>PercelSendingDestribution: </th>
-                                              <td><strong>{{selectedParcel?.PercelSendingDestribution ? 'Yes' : 'No'}}</strong></td>
-                                            </tr>
-                                            <tr>
-                                              <th>RecebingDistributin: </th>
-                                              <td><strong>{{selectedParcel?.RecebingDistributin ? 'Yes' : 'No'}}</strong></td>
-                                            </tr>
-                                            <tr>
-                                              <th>RecebingBranch: </th>
-                                              <td><strong>{{selectedParcel?.RecebingBranch ? 'Yes' : 'No'}}</strong></td>
-                                            </tr>
-                                            <tr>
-                                              <th>RecebingReceber: </th>
-                                              <td><strong>{{selectedParcel?.RecebingReceber ? 'Yes' : 'No'}}</strong></td>
-                                            </tr>
-                                            <tr>
-                                              <th>Price: </th>
-                                              <td ><strong>{{selectedParcel?.price}}</strong></td>
-                                            </tr> 
-                                            <tr>
-                                              <th>Status: </th>
-                                              <td>{{selectedParcel?.isActive ? 'Active' : 'Inactive'}}</td>
-                                            </tr>
-                                          </thead> 
-                                      </table>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <!-- Card 5 -->
-                                  <div class="col-md-6 col-lg-6">
-                                    <div class="card p-4 text-center shadow-sm">
-                                      <div>
-                                        <h5>Revenue Generated</h5>
-                                        <i class="fas fa-dollar-sign icon fs-1 text-danger"></i>
-                                        <table>
-                                          <thead>
-                                            <tr>
-                                              <th>Tracking Code</th>
-                                              <th>Current Status</th>
-                                              <th>Update Status</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr *ngFor="let parcel of Listparcels">
-                                              <td>{{ parcel.trackingCode }}</td>
-                                              <td>{{ parcel.status }}</td>
-                                              <td>
-                                                <select [(ngModel)]="parcel.newStatus">
-                                                <!-- <select [(ngModel)]="parcel.newStatus"> -->
-                                                  <option value="In Transit">In Transit</option>
-                                                  <option value="Delivered">Delivered</option>
-                                                  <option value="Pending">Pending</option>
-                                                  <option value="Canceled">Canceled</option>
-                                                </select>
-                                                <button (click)="updateStatus(parcel.parcelId, parcel.newStatus)">Update</button>
-                                              </td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
-                                        
-                                      </div>
-                                    </div>
-                                  </div>
-                                  </div>
-                            </div>
-                            <button class="btn btn-sm btn-outline-success text-success me-2 px-3" 
-                                    (click)="generatePDF(item)">
-                              <i class="fas fa-file-pdf me-2"></i> PDF
-                            </button>
-                        </section>
-                    </div>
-                  </div>
-                </div>
-              </div>
+               
               
                
                 <!-- <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
@@ -336,20 +121,271 @@
       </tbody>
   </table>
 </div>
+<!-- ---------------------------------Model-------------------------------  -->
+<div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewModalLabel">Parcel Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <section class="container py-3">
+          <h2 class="mb-4 text-center courier-title ">TrackingCode: <h1 class="text-primary">{{selectedParcel?.trackingCode}}</h1></h2>
+          
+          <!-- Cards -->
+          <div class="row g-4">
+            <!-- Card 1 -->
+            <div class="col-md-6 col-lg-6">
+              <div class="card p-4  shadow-sm">
+                <div>
+                  <table class="table">
+                      <thead >
+                        <tr>
+                          <th>Sender Name: </th>
+                          <td>{{selectedParcel?.senderName}}</td>
+                        </tr>
+                        <tr>
+                          <th>Sender Phone: </th>
+                          <td>{{selectedParcel?.senderPhone}}</td>
+                        </tr>
+                     
+                        <tr>
+                          <th >Sender Branch: </th>
+                          <td class="text-success"><strong>{{getBranchName(selectedParcel?.senderBranchId)}}</strong></td>
+                        </tr>
+                        <tr>
+                          <th>Parcel Type: </th>
+                          <td class="text-primary"><strong>{{getParcelTypeName(selectedParcel?.parcelTypeId)}}</strong></td>
+                        </tr>
+                     
+                      </thead>
 
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="col-md-6 col-lg-6">
+              <div class="card p-4 shadow-sm">
+                <div>
+                  <table class="table">
+                      <thead >
+                        <tr>
+                          <th>Receiver Name:</th>
+                          <td>{{selectedParcel?.receiverName}}</td>
+                        </tr>
+                        <tr>
+                          <th>Receiver Phone: </th>
+                          <td>{{selectedParcel?.receiverPhone}}</td>
+                        </tr>
+                          <tr>
+                            <th>Sender E-mail:</th>
+                            <td>{{selectedParcel?.receiverEmail}}</td>
+                          </tr>
+                          <tr>
+                            <th>Receiver Branch:</th>
+                            <td class="text-success" ><strong>{{getBranchName(selectedParcel?.receiverBranchId)}}</strong></td>
+                          </tr>
+                      </thead>
+
+                  </table>
+                </div>
+              </div>
+            </div>
+              <!-- Card 3 -->
+              <div class="col-md-12 col-lg-12">
+                  <div class="card p-4 shadow-sm">
+                    <div class="row g-4">
+                      <!-- Card 4 -->
+                      <div class="col-md-12 col-lg-12">
+                          <div class="card p-4  shadow-sm">
+                              <div>
+                                  <table class="table text-primary">
+                                      <thead class="table-primary" >
+                                        <tr>
+                                          <th>EstimatedReceiveTime: </th>
+                                          <td>{{selectedParcel?.estimatedReceiveTime}}</td>
+                                        </tr> 
+                                        <tr>
+                                          <th>Price: </th>
+                                          <td class="text-center" ><strong>{{selectedParcel?.price}}</strong></td>
+                                        </tr> 
+                                        <tr>
+                                          <th>Is Paid: </th>
+                                          <td class="text-center"><strong>{{selectedParcel?.isPaid ? 'Yes' : 'No'}}</strong></td>
+                                        </tr>
+                                        <tr>
+                                          <th>Sending Parcel: </th>
+                                          <!-- <td><strong>{{selectedParcel?.SendingBranch ? 'Yes' : 'No'}}</strong></td> -->
+                                          <td class="text-center">
+                                            <button
+                                              class="btn btn-sm"
+                                              [ngClass]="{'btn-success': selectedParcel?.sendingBranch, 'btn-danger': !selectedParcel?.sendingBranch}"
+                                              (click)="toggleSendingBranch(selectedParcel)">
+                                              {{ selectedParcel?.sendingBranch ? 'sendingBranch' : 'NO' }}
+                                      
+                                            </button>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>PercelSendingDestribution: </th>
+                                          <td class="text-center">
+                                            <button
+                                              class="btn btn-sm"
+                                              [ngClass]="{'btn-success': selectedParcel?.percelSendingDestribution, 'btn-danger': !selectedParcel?.percelSendingDestribution}"
+                                              (click)="togglePercelSendingDestribution(selectedParcel)">
+                                              {{ selectedParcel?.percelSendingDestribution ? 'PercelSendingDestribution' : 'NO' }}
+                                            </button>
+                                          </td>
+                                        </tr>
+                                       <tr>
+                                          <th>RecebingDistributin: </th>
+                                          <td class="text-center">
+                                            <button
+                                              class="btn btn-sm"
+                                              [ngClass]="{'btn-success': selectedParcel?.recebingDistributin, 'btn-danger': !selectedParcel?.recebingDistributin}"
+                                              (click)="toggleRecebingDistributin(selectedParcel)">
+                                              {{ selectedParcel?.recebingDistributin ? 'Yes' : 'NO' }}
+                                            </button>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>RecebingBranch: </th>
+                                          <td class="text-center">
+                                            <button
+                                              class="btn btn-sm"
+                                              [ngClass]="{'btn-success': selectedParcel?.recebingBranch, 'btn-danger': !selectedParcel?.recebingBranch}"
+                                              (click)="toggleRecebingBranch(selectedParcel)">
+                                              {{ selectedParcel?.recebingBranch ? 'Yes' : 'NO' }}
+                                            </button>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>RecebingReceber: </th>
+                                          <td class="text-center">
+                                            <button
+                                              class="btn btn-sm"
+                                              [ngClass]="{'btn-success': selectedParcel?.recebingReceber, 'btn-danger': !selectedParcel?.recebingReceber}"
+                                              (click)="toggleRecebingReceber(selectedParcel)">
+                                              {{ selectedParcel?.recebingReceber ? 'Yes' : 'NO' }}
+                                            </button>
+                                          </td>
+                                        </tr> 
+                                 
+                                        <tr>
+                                          <th>Status: </th>
+                                          <td class="text-center">{{selectedParcel?.isActive ? 'Active' : 'Inactive'}}</td>
+                                        </tr>
+                                      </thead> 
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card p-4 shadow-sm">
+              <div class="row g-4">
+                
+                      <!-- Card 4 -->
+                  <div class="col-md-6 col-lg-6">
+                    <div class="card p-4  shadow-sm">
+                      <div>
+                        <h5>Total Customers</h5>
+                        <i class="fas fa-users icon fs-1 text-warning"></i>
+                        <table class="table text-primary">
+                          <thead class="table-primary" >
+                            <tr>
+                              <th>EstimatedReceiveTime: </th>
+                              <td>{{selectedParcel?.estimatedReceiveTime}}</td>
+                            </tr> 
+                            <tr>
+                              <th>Is Paid: </th>
+                              <td><strong>{{selectedParcel?.isPaid ? 'Yes' : 'No'}}</strong></td>
+                            </tr>
+                            <tr>
+                              <th>Sending Parcel: </th>
+                              <!-- <td><strong>{{selectedParcel?.SendingBranch ? 'Yes' : 'No'}}</strong></td> -->
+                              <td class="text-center">
+                                <button
+                                  class="btn btn-sm"
+                                  [ngClass]="{'btn-success': selectedParcel?.SendingBranch, 'btn-danger': !selectedParcel?.SendingBranch}"
+                                  (click)="toggleParcel(selectedParcel)">
+                                  {{ selectedParcel?.SendingBranch ? 'YES' : 'NO' }}
+                                </button>
+                            </td>
+                            
+                            </tr>
+                            <tr>
+                              <th>PercelSendingDestribution: </th>
+                              <td><strong>{{selectedParcel?.PercelSendingDestribution ? 'Yes' : 'No'}}</strong></td>
+                            </tr>
+                            <tr>
+                              <th>RecebingDistributin: </th>
+                              <td><strong>{{selectedParcel?.RecebingDistributin ? 'Yes' : 'No'}}</strong></td>
+                            </tr>
+                            <tr>
+                              <th>RecebingBranch: </th>
+                              <td><strong>{{selectedParcel?.RecebingBranch ? 'Yes' : 'No'}}</strong></td>
+                            </tr>
+                            <tr>
+                              <th>RecebingReceber: </th>
+                              <td><strong>{{selectedParcel?.RecebingReceber ? 'Yes' : 'No'}}</strong></td>
+                            </tr>
+                            <tr>
+                              <th>Price: </th>
+                              <td ><strong>{{selectedParcel?.price}}</strong></td>
+                            </tr> 
+                            <tr>
+                              <th>Status: </th>
+                              <td>{{selectedParcel?.isActive ? 'Active' : 'Inactive'}}</td>
+                            </tr>
+                          </thead> 
+                      </table>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Card 5 -->
+                  <div class="col-md-6 col-lg-6">
+                    <div class="card p-4 text-center shadow-sm">
+                      <div>
+                        <h5>Revenue Generated</h5>
+                        <i class="fas fa-dollar-sign icon fs-1 text-danger"></i>
+                        
+                        
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+            </div>
+            <button class="btn btn-sm btn-outline-success text-warning me-2 px-3" 
+                    (click)="generatePDF(parcels)">
+                    <i class="fas fa-file-pdf me-2"></i> Download Invoice
+            </button>
+        </section>         
+         
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ---------------------------------Model-------------------------------  -->
 
 <div *ngIf="!isList">
   <h4 class="text-center text-uppercase text-primary">Parcel Entry Form</h4>
   <div class="row g-3">
-      <div class="col-md-6">
+      <div hidden class="col-md-6">
           <label for="trackingCode" class="form-label text-primary"> TrackingCode*</label>
           <input type="text" id="trackingCode" class="form-control" [(ngModel)]="parcels.trackingCode" readonly />
           <!-- <input type="text" id="trackingCode" [(ngModel)]="parcels.trackingCode" class="form-control" placeholder="Tracking Code"/> -->
       </div>
     
-      <div class="col-md-6">
+      <div class="col-md-12 text-center ">
         <label for="parcelType" class="form-label text-primary">Parcel Type*</label>
-        <select  id="parcelType" [(ngModel)]="parcels.parcelTypeId" (change)="updatePrice()"  class="form-select" >
+        <select  id="parcelType" [(ngModel)]="parcels.parcelTypeId" (change)="updatePrice()"  class="form-select w-50 mx-auto" >
           <ng-container *ngFor="let pt of parcelType">
             <option  *ngIf="pt.isActive" [ngValue]="pt.parcelTypeId">
               {{ pt.parcelTypeName }}
@@ -402,9 +438,15 @@
           [(ngModel)]="selectedParentBranch" 
           (change)="onParentBranchChange()" 
           class="form-select">
-          <option *ngFor="let branch of listBranchs" [ngValue]="branch">
+          <!-- <option *ngFor="let branch of listBranchs" [ngValue]="branch.branchId">
             {{ branch.branchName }}
-          </option>
+          </option> -->
+          <ng-container *ngFor="let branch of listBranchs" >
+            <option *ngIf="branch.parentId == null" [ngValue]="branch.branchId">
+              {{ branch.branchName }}
+            </option>
+          </ng-container>
+          
         </select>
       </div>
       
@@ -416,6 +458,7 @@
           </option>
         </select>
       </div>
+      
       
       <!-- recevar  -->
       <div class="col-md-3">
@@ -441,15 +484,40 @@
           [(ngModel)]="recevarSelectedParentBranch" 
           (change)="recevarParentBranchChange()" 
           class="form-select">
+          <ng-container *ngFor="let branch of listBranchs" >
+            <option *ngIf="branch.parentId == null" [ngValue]="branch.branchId">
+              {{ branch.branchName }}
+            </option>
+          </ng-container>
+          
+        </select>
+      </div>
+      
+      <!-- <div class="col-md-3">
+        <label for="senderZone" class="form-label text-primary">Recevar Zone*</label>
+        <select 
+          id="senderZone" 
+          [(ngModel)]="recevarSelectedParentBranch" 
+          (change)="recevarParentBranchChange()" 
+          class="form-select">
           <option *ngFor="let branch of listBranchs" [ngValue]="branch">
             {{ branch.branchName }}
           </option>
         </select>
-      </div>
+      </div> -->
       
-      <div class="col-md-3">
+      <!-- <div class="col-md-3">
         <label for="senderChild" class="form-label text-primary">Recevar Child*</label>
         <select id="senderChild" [(ngModel)]="parcels.receiverBranchId" class="form-select">
+          <option *ngFor="let child of recevarFilteredChildBranches" [ngValue]="child.branchId">
+            {{ child.branchName }}
+          </option>
+        </select>
+      </div> -->
+            
+      <div class="col-md-3">
+        <label for="senderChild" class="form-label text-primary">Recevar Child*</label>
+        <select id="senderChild" [(ngModel)]="parcels.recebingBranch" class="form-select">
           <option *ngFor="let child of recevarFilteredChildBranches" [ngValue]="child.branchId">
             {{ child.branchName }}
           </option>
