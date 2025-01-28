@@ -280,4 +280,33 @@ edit(item: ParcelType): void {
   search(): void {
     this.applyPaging();
   }
+  // ---------------------------------active inActive --------------------------
+  
+  toggleActive(parcelType: ParcelType): void {
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo?.Token || '',
+    });
+  
+    const updatedStatus = {
+      ...parcelType,
+      isActive: !parcelType.isActive, // বর্তমান isActive মানটি উল্টানো হবে
+    };
+  
+    this.httpClient.put(
+      `${this.authService.baseURL}/api/ParcelTypes/${parcelType.parcelTypeId}`,
+      updatedStatus,
+      { headers }
+    ).subscribe({
+      next: () => {
+        parcelType.isActive = !parcelType.isActive; // UI আপডেট করুন
+        this.showMessage(
+          'success',
+          `Status changed to ${parcelType.isActive ? 'Active' : 'Inactive'}`
+        );
+      },
+      error: () => {
+        this.showMessage('error', 'Failed to change status');
+      },
+    });
+  }
 }
