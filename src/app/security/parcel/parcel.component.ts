@@ -5,7 +5,6 @@ import { IndividualConfig } from 'ngx-toastr';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
 import { ParcelType } from '../interface/ParcelType';
 import { Branch } from '../interface/listBranchs';
-import { Parcels } from '../interface/parcel';
 import jsPDF from 'jspdf';
 import { Observable } from 'rxjs';
 
