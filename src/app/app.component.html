@@ -88,7 +88,7 @@
             <span class="visually-hidden">unread messages</span>
           </span>
         </button>
-        <a class="btn btn-sm btn-outline-primary me-2" href="javascript:void(0)" *ngIf="authService.UserInfo.IsLogIn">Welcome! {{authService.UserInfo.UserName}}</a>
+        <a class="btn btn-sm btn-outline-primary me-2" href="javascript:void(0)" *ngIf="authService.UserInfo.IsLogIn"><samp class="text-warning">User!</samp>  {{authService.UserInfo.UserName}}</a>
         <button class="btn btn-sm btn-outline-info" type="button" (click)="logout()" *ngIf="authService.UserInfo.IsLogIn">Logout</button>
         <button class="btn btn-sm btn-outline-success" type="button" (click)="login()" *ngIf="!authService.UserInfo.IsLogIn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Login</button>
         <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -104,65 +104,86 @@
   <!-- <li class="nav-item">
     <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/dashboard"><i class="fa fa-home"></i> Dashboard</a>
   </li> -->
-  <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/dashboard"><i class="fa fa-home"></i> Dashboard</a>
+  <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/dashboard"><i class="fa fa-home text-warning"></i> Dashboard</a>
   <div>
     <div class="dropdown">
       <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa fa-box"></i> Parcel
+        <i class="fa-solid fa-box text-warning"></i> Parcel
       </a>
       <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
         <li><a class="dropdown-item" routerLink="/parcel"><i class="fa fa-plus"></i> Add Parcel</a></li>
+        <li><a class="dropdown-item" routerLink="/parcel"><i class="fa fa-list"></i> Parcel List</a></li>
       </ul>
   </div>
    <div class="dropdown">
      <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-       <i class="fa fa-box"></i> Parcel Type
+      <i class="fa-solid fa-tape text-warning"></i> Parcel Type
      </a>
      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
        <li><a class="dropdown-item" routerLink="/parcel-type"><i class="fa fa-plus"></i> Parcel Type</a></li>
-       <!-- <li><a class="dropdown-item" routerLink="/Parcel"><i class="fa fa-plus"></i> Add Parcel</a></li> -->
+       <li><a class="dropdown-item" routerLink="/parcel-type"><i class="fa fa-list"></i> Parcel Type List</a></li>
+
+       <!-- <li><a class="dropdown-item" routerLink="/Parcel"><i class="fa fa-plus"></i> Add Parcel</a></li>
        <li><a class="dropdown-item" routerLink="/delivery-charge"><i class="fa fa-plus"></i> Add delivery-charge</a></li>
        <li><a class="dropdown-item" routerLink="/parcel"><i class="fa fa-list"></i> Parcel List</a></li>
-       <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-briefcase"></i> Branch</a></li>
+       <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-briefcase"></i> Branch</a></li> -->
      </ul>
    </div>
    <div class="dropdown">
+    <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="fa-solid fa-code-branch text-warning"></i> Branch
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-plus"></i> Branch</a></li>
+      <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-list"></i> Branch List</a></li>
+    </ul>
+  </div>
+  <div class="dropdown">
+    <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="fa fa-users icon text-warning"></i> Staff
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <li><a class="dropdown-item" routerLink="/staff"><i class="fa fa-plus"></i> Staff</a></li>
+      <li><a class="dropdown-item" routerLink="/staff"><i class="fa fa-list"></i> Staff List</a></li>
+    </ul>
+  </div>
+  <div class="dropdown">
+    <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="fa-solid fa-location-pin text-warning"></i> Designation
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <li><a class="dropdown-item" routerLink="/designation"><i class="fa fa-plus"></i> Designation</a></li>
+      <li><a class="dropdown-item" routerLink="/designation"><i class="fa fa-list"></i> Designation List</a></li>
+    </ul>
+  </div>
+   <div class="dropdown">
        <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-         <i class="fa fa-box"></i> Other
+        <i class="fa-brands fa-ethereum text-warning"></i> Other
        </a>
-       
-
        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-         <li><a class="dropdown-item" routerLink="/designation"><i class="fa fa-plus"></i> Designation</a></li>
          <!-- <li><a class="dropdown-item" routerLink="/staff"><i class="fa fa-plus"></i> Staff</a></li> -->
-         <li><a class="dropdown-item" routerLink="/staff"> <i class="fa fa-users icon text-warning"></i>  Staff</a></li>
-         <li><a class="dropdown-item" routerLink="/receiver"><i class="fa fa-plus"></i> List Receiver</a></li>
+         
        <li><a class="dropdown-item" routerLink="/van"><i class="fa fa-plus"></i> van</a></li>
-       <li><a class="dropdown-item" routerLink="/parcel/view"><i class="fa fa-plus"></i> View</a></li>
-
-         <li><a class="dropdown-item" routerLink="/parcel"><i class="fa fa-list"></i> Parcel List</a></li>
-         <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-plus"></i> Branch</a></li>
-         <!-- <li><a class="dropdown-item" routerLink="/vans"><i class="fa fa-plus"></i> Branch</a></li> -->
+         <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-plus"></i> Branch</a></li>         <!-- <li><a class="dropdown-item" routerLink="/vans"><i class="fa fa-plus"></i> Branch</a></li> -->
        </ul>
   </div>
  
-   <a routerLink="#"><i class="fa fa-file-alt"></i> Report</a>
-   <a routerLink="#"><i class="fa fa-th"></i> Grid</a>
+   <a routerLink="/dashboard"><i class="fa fa-file-alt text-warning"></i> Report</a>
+   <!-- <a routerLink="#"><i class="fa fa-th"></i> Grid</a> -->
   </div>
-  <a routerLink="#"><i class="fa fa-file-alt"></i> Reports</a>
-  <a routerLink="#"><i class="fa fa-cogs"></i> Settings</a>
-  <a routerLink="#"><i class="fa fa-users"></i> Users</a>
+  <a routerLink="#"><i class="fa fa-cogs text-warning"></i> Settings</a>
+  
   <div class="fixed-bottom mb-2 d-flex justify-content-center" style="width: 220px;">
     <button title="Notification here" type="button" class="border rounded-circle position-relative  me-4" >
       <i class="fa-regular fa-comment fs-5 pt-1 text-primary"></i>
-      <span class="position-absolute top-0 start-100 translate-middle badge  rounded-pill bg-danger ">
+      <span class="position-absolute top-0 start-100 translate-middle badge  rounded-pill bg-warning ">
         5
         <span class="visually-hidden">unread messages</span>
       </span>
     </button>
     <button title="Notification here" type="button" class="border rounded-circle position-relative  me-4" >
       <i class="fa-regular fa-envelope fs-5 pt-1 text-primary"></i>
-      <span class="position-absolute top-0 start-100 translate-middle badge  rounded-pill bg-danger ">
+      <span class="position-absolute top-0 start-100 translate-middle badge  rounded-pill bg-warning ">
         1
         <span class="visually-hidden">unread messages</span>
       </span>
