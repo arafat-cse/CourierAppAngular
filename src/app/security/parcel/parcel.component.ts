@@ -259,26 +259,25 @@ export class ParcelComponent implements OnInit {
     return branch ? branch.branchName : 'Unknown';
   }
   //Brnach dropdwon
-  selectedParentBranch: any = null;
-  filteredChildBranches: any[] = [];
-  onParentBranchChange(): void {
-    if (this.selectedParentBranch) {
-      this.filteredChildBranches =
-        this.selectedParentBranch.childBranches || [];
-    } else {
-      this.filteredChildBranches = [];
-    }
+  selectedParentBranch: any = null; // প্যারেন্ট ব্রাঞ্চের জন্য
+  filteredChildBranches: any[] = []; // ফিল্টার করা চাইল্ড ব্রাঞ্চ
+  onParentBranchChange() {
+    // প্যারেন্ট ব্রাঞ্চ পরিবর্তন হলে, চাইল্ড ব্রাঞ্চ ফিল্টার করুন
+    this.filteredChildBranches = this.listBranchs.filter(branch => branch.parentId === this.selectedParentBranch);
   }
+  // onParentBranchChange(): void {
+  //   if (this.selectedParentBranch) {
+  //     this.filteredChildBranches =
+  //       this.selectedParentBranch.childBranches || [];
+  //   } else {
+  //     this.filteredChildBranches = [];
+  //   }
+  // }
 
   recevarSelectedParentBranch: any = null;
   recevarFilteredChildBranches: any[] = [];
   recevarParentBranchChange(): void {
-    if (this.recevarSelectedParentBranch) {
-      this.recevarFilteredChildBranches =
-        this.recevarSelectedParentBranch.childBranches || [];
-    } else {
-      this.recevarFilteredChildBranches = [];
-    }
+    this.recevarFilteredChildBranches = this.listBranchs.filter(branch => branch.parentId === this.recevarSelectedParentBranch);
   }
 
   edit(item: Parcel): void {
@@ -357,12 +356,14 @@ export class ParcelComponent implements OnInit {
   //     },
   //   });
   // }
-
+  generate8DigitCode(): number {
+    return Math.floor(10000000 + Math.random() * 90000000);
+  }
   add(): void {
     if (!this.validateForm()) {
       return;
     }
-
+this.parcels.trackingCode= this.generate8DigitCode().toString();
     const token = this.authService.UserInfo?.Token || '';
     if (!token) {
       this.showMessage('error', 'Authentication token is missing');
@@ -383,7 +384,7 @@ export class ParcelComponent implements OnInit {
       .subscribe({
         next: () => {
           this.isList = true;
-          this.reset();
+          // this.reset();
           this.getParcel();
           this.showMessage('success', 'Parcel added successfully');
         },
@@ -416,10 +417,10 @@ export class ParcelComponent implements OnInit {
   // }
   validateForm(): boolean {
         // Tracking Code Validation
-    if (!this.parcels.trackingCode || !this.parcels.trackingCode.trim()) {
-      this.showMessage('warning', 'Parcel tracking code is required');
-      return false;
-    }
+    // if (!this.parcels.trackingCode) {
+    //   this.showMessage('warning', 'Parcel tracking code is required');
+    //   return false;
+    // }
     // Sender Validation
     if (!this.parcels.senderName || !this.parcels.senderName.trim()) {
       this.showMessage('warning', 'Sender Name is required');
@@ -448,10 +449,10 @@ export class ParcelComponent implements OnInit {
       this.showMessage('warning', 'Receiver Phone is required');
       return false;
     }
-    if (!this.parcels.receiverEmail || !this.parcels.receiverEmail.trim()) {
-      this.showMessage('warning', 'Receiver Email is required');
-      return false;
-    }
+    // if (!this.parcels.receiverEmail || !this.parcels.receiverEmail.trim()) {
+    //   this.showMessage('warning', 'Receiver Email is required');
+    //   return false;
+    // }
     // if (!this.parcels.receiverAddress || !this.parcels.receiverAddress.trim()) {
     //   this.showMessage('warning', 'Receiver Address is required');
     //   return false;
@@ -460,7 +461,7 @@ export class ParcelComponent implements OnInit {
     //   this.showMessage('warning', 'Receiver Alternative Address is required');
     //   return false;
     // }
-    // If all fields are valid
+  
     return true;
   }
   // -------------------------------------From Validation-----------------------
@@ -727,6 +728,7 @@ toggleParcel(parcel: Parcel): void {
   selectedParcel: any = null;
 
   selectParcel(parcel: any): void {
+    console.log(parcel)
     this.selectedParcel = parcel;
   }
   //  // Method to generate PDF for a single row
@@ -758,7 +760,9 @@ toggleParcel(parcel: Parcel): void {
   // }
   generatePDF(parcel: any) {
     const doc = new jsPDF();
-  
+
+  console.log('Selected Parcel:', parcel);
+
     // Set company details at the top
     const companyLogo = 'data:image/png;base64,...'; // Replace with your Base64 logo
     //doc.addImage(companyLogo, 'PNG', 10, 10, 30, 15); // x, y, width, height
@@ -789,10 +793,10 @@ toggleParcel(parcel: Parcel): void {
       doc.text('Sender Information', 10, 55); // Left side
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(12);
-      doc.text(`Name: ${parcel.senderName}`, 10, 62);
-      doc.text(`Phone: ${parcel.senderPhone}`, 10, 68);
-      doc.text(`Branch: ${this.getBranchName(parcel.senderBranchId)}`, 10, 74);
-      doc.text(`Estimated: ${parcel.estimatedReceiveTime}`, 10, 80);
+      doc.text(`Name: ${parcel?.senderName}`, 10, 62);
+      doc.text(`Phone: ${parcel?.senderPhone}`, 10, 68);
+      doc.text(`Branch: ${this.getBranchName(parcel?.senderBranchId)}`, 10, 74);
+      doc.text(`Estimated: ${parcel?.estimatedReceiveTime}`, 10, 80);
 
     // Add receiver information
     // doc.setFont('helvetica', 'bold');
@@ -804,17 +808,17 @@ toggleParcel(parcel: Parcel): void {
     // doc.text(`Phone: ${parcel.receiverPhone}`, 10, 98);
     // doc.text(`E-mail: ${parcel.receiverEmail}`, 10, 106);
     // doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 10, 112);
-// Add receiver information
-doc.setFont('helvetica', 'bold');
-doc.setFontSize(14);
-doc.text('Receiver Information', 120, 55); // Right side
-doc.setFont('helvetica', 'normal');
-doc.setFontSize(12);
-doc.text(`Name: ${parcel.receiverName}`, 120, 62);
-doc.text(`Phone: ${parcel.receiverPhone}`, 120, 68);
-doc.text(`E-mail: ${parcel.receiverEmail}`, 120, 74);
-doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 120, 80);
-    // Add parcel details
+    // Add receiver information
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.text('Receiver Information', 120, 55); // Right side
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    doc.text(`Name: ${parcel.receiverName}`, 120, 62);
+    doc.text(`Phone: ${parcel.receiverPhone}`, 120, 68);
+    doc.text(`E-mail: ${parcel.receiverEmail}`, 120, 74);
+    doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 120, 80);
+    // Add selectParcel details
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(14);
     doc.text('Parcel Details', 10, 115);
@@ -823,7 +827,7 @@ doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 120, 80);
     doc.text(`Tracking Code: ${parcel.trackingCode}`, 10, 122);
     doc.text(`Type: ${this.getParcelTypeName(parcel.parcelTypeId)}`, 10, 128);
     doc.text(`Paid: ${parcel.isPaid ? 'YES' : 'NO'}`, 10, 134);
-    // doc.text(`Status: ${parcel.isActive ? 'Active' : 'Inactive'}`, 10, 140);
+    // doc.text(`Status: ${selectParcel.isActive ? 'Active' : 'Inactive'}`, 10, 140);
     doc.text(`Delivery Charge: ${parcel.price}`, 10, 140);
 
   
@@ -862,6 +866,152 @@ doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 120, 80);
       },
     });
   }
+
+  // ---------------------------------active inActive --------------------------
+    
+    toggleSendingBranch(parcel: Parcel): void {
+      const headers = new HttpHeaders({
+        'Token': this.authService.UserInfo?.Token || '',
+      });
+    
+      const updatedStatus = {
+        ...parcel,
+        sendingBranch: !parcel.sendingBranch, // বর্তমান isActive মানটি উল্টানো হবে
+      };
+    
+      this.httpClient.put(
+        `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
+        updatedStatus,
+        { headers }
+      ).subscribe({
+        next: () => {
+          parcel.sendingBranch = !parcel.sendingBranch; // UI আপডেট করুন
+          this.showMessage(
+            'success',
+            `Status changed to ${parcel.sendingBranch ? 'YES' : 'NO'}`
+          );
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to change status');
+        },
+      });
+    }
+     // ---------------------------------active inActive --------------------------
+    
+     togglePercelSendingDestribution(parcel: Parcel): void {
+      const headers = new HttpHeaders({
+        'Token': this.authService.UserInfo?.Token || '',
+      });
+    
+      const updatedStatus = {
+        ...parcel,
+        percelSendingDestribution: !parcel.percelSendingDestribution, // বর্তমান isActive মানটি উল্টানো হবে
+      };
+    
+      this.httpClient.put(
+        `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
+        updatedStatus,
+        { headers }
+      ).subscribe({
+        next: () => {
+          parcel.percelSendingDestribution = !parcel.percelSendingDestribution; // UI আপডেট করুন
+          this.showMessage(
+            'success',
+            `Status changed to ${parcel.percelSendingDestribution ? 'YES' : 'NO'}`
+          );
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to change status');
+        },
+      });
+    }
+      // ---------------------------------active inActive --------------------------
+    
+      toggleRecebingDistributin(parcel: Parcel): void {
+        const headers = new HttpHeaders({
+          'Token': this.authService.UserInfo?.Token || '',
+        });
+      
+        const updatedStatus = {
+          ...parcel,
+          recebingDistributin: !parcel.recebingDistributin, // বর্তমান isActive মানটি উল্টানো হবে
+        };
+      
+        this.httpClient.put(
+          `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
+          updatedStatus,
+          { headers }
+        ).subscribe({
+          next: () => {
+            parcel.recebingDistributin = !parcel.recebingDistributin; // UI আপডেট করুন
+            this.showMessage(
+              'success',
+              `Status changed to ${parcel.recebingDistributin ? 'YES' : 'NO'}`
+            );
+          },
+          error: () => {
+            this.showMessage('error', 'Failed to change status');
+          },
+        });
+      }
+        // ---------------------------------active inActive --------------------------
+    
+     toggleRecebingBranch(parcel: Parcel): void {
+      const headers = new HttpHeaders({
+        'Token': this.authService.UserInfo?.Token || '',
+      });
+    
+      const updatedStatus = {
+        ...parcel,
+        recebingBranch: !parcel.recebingBranch, // বর্তমান isActive মানটি উল্টানো হবে
+      };
+    
+      this.httpClient.put(
+        `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
+        updatedStatus,
+        { headers }
+      ).subscribe({
+        next: () => {
+          parcel.recebingBranch = !parcel.recebingBranch; // UI আপডেট করুন
+          this.showMessage(
+            'success',
+            `Status changed to ${parcel.recebingBranch ? 'YES' : 'NO'}`
+          );
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to change status');
+        },
+      });
+    }
+      // ---------------------------------active inActive --------------------------
+    
+      toggleRecebingReceber(parcel: Parcel): void {
+        const headers = new HttpHeaders({
+          'Token': this.authService.UserInfo?.Token || '',
+        });
+      
+        const updatedStatus = {
+          ...parcel,
+          recebingReceber: !parcel.recebingReceber, // বর্তমান isActive মানটি উল্টানো হবে
+        };
+      
+        this.httpClient.put(
+          `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
+          updatedStatus,
+          { headers }
+        ).subscribe({
+          next: () => {
+            parcel.recebingReceber = !parcel.recebingReceber; // UI আপডেট করুন
+            this.showMessage(
+              'success',
+              `Status changed to ${parcel.recebingReceber ? 'YES' : 'NO'}`
+            );
+          },
+          error: () => {
+            this.showMessage('error', 'Failed to change status');
+          },
+        });
+      }
 }
   
 
