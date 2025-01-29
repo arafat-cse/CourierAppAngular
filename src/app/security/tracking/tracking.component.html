@@ -1,19 +1,22 @@
-<!-- <p>tracking works!</p>
-<div class="container">
-    <h2 class="mb-4 text-center courier-title">Tracking Code Search</h2>
-  
-    <div class="input-group mb-3">
-      <input
+
+<div class="container">  
+    <div class="banner-section text-center text-white py-5" style="background: linear-gradient(to right, #007bff, #6610f2); border-radius: 10px;">
+      <h1 class="fw-bold">Track Your Parcel</h1>
+      <p class="lead">Enter your tracking code below to get the latest status</p>
+      
+      <div class="input-group mt-3 w-50 mx-auto">
+        <input
         type="text"
         class="form-control"
         placeholder="Enter Tracking Code"
         [(ngModel)]="trackingCode"
       />
-      <button class="btn btn-primary" (click)="searchParcel()">Search</button>
+      <button class="btn btn-primary" (click)="searchParcel()">Tracking</button>
+      </div>
     </div>
   
     <div *ngIf="selectedParcel">
-      <h2 class="text-center text-primary">Tracking Code: {{ selectedParcel?.trackingCode }}</h2>
+      <h2 class="text-center text-black">Tracking Code: {{ selectedParcel?.trackingCode }}</h2>
   
       <div class="tracking-steps">
         <div *ngIf="selectedParcel?.sendingBranch" class="alert alert-success">✅ Sending Branch Completed</div>
@@ -24,8 +27,8 @@
       </div>
     </div>
   </div>
-   -->
-   <div class="container">
+<!--   
+<div class="container">
     <h2 class="mb-4 text-center courier-title">Tracking Code Search</h2>
   
     <div class="input-group mb-3">
@@ -78,5 +81,5 @@
         </ng-template>
       </div>
     </div>
-  </div>
+  </div> -->
   

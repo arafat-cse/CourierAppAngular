@@ -4,11 +4,13 @@ import { Router } from '@angular/router';
 import { CommonService } from '../services/common.service';
 import { HttpClient } from '@angular/common/http';
 import { AppComponent } from '../app.component';
+import { TrackingComponent } from '../security/tracking/tracking.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [TrackingComponent, CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -20,4 +22,7 @@ export class HomeComponent {
   private app:AppComponent) {
       this.router.navigate(['/home']);
     }
+
+    isModalOpen = true;
+   
   }
