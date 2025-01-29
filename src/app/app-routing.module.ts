@@ -43,7 +43,7 @@ const routes: Routes = [
   { path: 'van', component: VanComponent, canActivate: [authGuard] },
   { path: 'parcel', component: ParcelComponent, canActivate: [authGuard] },
   { path: 'invoice', component: InvoiceComponent, canActivate: [authGuard] },
-  { path: 'tracking', component: TrackingComponent, canActivate: [authGuard] },
+  { path: 'tracking', component: TrackingComponent },
  
 
 ];

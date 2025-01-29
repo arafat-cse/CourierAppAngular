@@ -33,8 +33,8 @@
 <!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
-<div class="container-fluid ">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark top-navigation">
+<div class="container-fluid " >
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark top-navigation" style="z-index: 100000;">
   <div class="container-fluid">
     <a class="navbar-brand" href="javascript:void(0);">
       <!-- <i class="fa fa-car"></i>  -->
@@ -91,6 +91,7 @@
         <a class="btn btn-sm btn-outline-primary me-2" href="javascript:void(0)" *ngIf="authService.UserInfo.IsLogIn"><samp class="text-warning">User!</samp>  {{authService.UserInfo.UserName}}</a>
         <button class="btn btn-sm btn-outline-info" type="button" (click)="logout()" *ngIf="authService.UserInfo.IsLogIn">Logout</button>
         <button class="btn btn-sm btn-outline-success" type="button" (click)="login()" *ngIf="!authService.UserInfo.IsLogIn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Login</button>
+       
         <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
           Launch demo modal
         </button> -->
@@ -199,8 +200,7 @@
 </div>
 
  <div class="content">
-  <router-outlet></router-outlet>
-  
+  <router-outlet></router-outlet> 
 
 </div>
 

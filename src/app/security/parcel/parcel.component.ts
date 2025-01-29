@@ -886,6 +886,7 @@ toggleParcel(parcel: Parcel): void {
       ).subscribe({
         next: () => {
           parcel.sendingBranch = !parcel.sendingBranch; // UI আপডেট করুন
+          window.location.reload();
           this.showMessage(
             'success',
             `Status changed to ${parcel.sendingBranch ? 'YES' : 'NO'}`
@@ -915,6 +916,7 @@ toggleParcel(parcel: Parcel): void {
       ).subscribe({
         next: () => {
           parcel.percelSendingDestribution = !parcel.percelSendingDestribution; // UI আপডেট করুন
+          window.location.reload();
           this.showMessage(
             'success',
             `Status changed to ${parcel.percelSendingDestribution ? 'YES' : 'NO'}`
@@ -944,6 +946,7 @@ toggleParcel(parcel: Parcel): void {
         ).subscribe({
           next: () => {
             parcel.recebingDistributin = !parcel.recebingDistributin; // UI আপডেট করুন
+            window.location.reload();
             this.showMessage(
               'success',
               `Status changed to ${parcel.recebingDistributin ? 'YES' : 'NO'}`
@@ -973,6 +976,7 @@ toggleParcel(parcel: Parcel): void {
       ).subscribe({
         next: () => {
           parcel.recebingBranch = !parcel.recebingBranch; // UI আপডেট করুন
+          window.location.reload();
           this.showMessage(
             'success',
             `Status changed to ${parcel.recebingBranch ? 'YES' : 'NO'}`
@@ -1002,6 +1006,7 @@ toggleParcel(parcel: Parcel): void {
         ).subscribe({
           next: () => {
             parcel.recebingReceber = !parcel.recebingReceber; // UI আপডেট করুন
+            window.location.reload();
             this.showMessage(
               'success',
               `Status changed to ${parcel.recebingReceber ? 'YES' : 'NO'}`

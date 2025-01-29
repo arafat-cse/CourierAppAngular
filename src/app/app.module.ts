@@ -49,7 +49,7 @@ import { TrackingComponent } from './security/tracking/tracking.component';
     VanComponent,
     ParcelComponent,
     InvoiceComponent,
-    TrackingComponent,
+   
     
    
   ],
@@ -64,6 +64,7 @@ import { TrackingComponent } from './security/tracking/tracking.component';
     //NgChartsModule
     MatSlideToggleModule,
     HomeComponent,
+    TrackingComponent
     
 ],
   providers: [DatePipe],
