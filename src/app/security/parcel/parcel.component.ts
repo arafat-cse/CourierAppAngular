@@ -431,14 +431,14 @@ this.parcels.trackingCode= this.generate8DigitCode().toString();
       return false;
     }
  
-    if (!this.parcels.senderAddress || !this.parcels.senderAddress.trim()) {
-      this.showMessage('warning', 'Sender Address is required');
-      return false;
-    }
-    if (!this.parcels.senderAlternativetoAddress || !this.parcels.senderAlternativetoAddress.trim()) {
-      this.showMessage('warning', 'Sender Alternative Address is required');
-      return false;
-    }
+    // if (!this.parcels.senderAddress || !this.parcels.senderAddress.trim()) {
+    //   this.showMessage('warning', 'Sender Address is required');
+    //   return false;
+    // }
+    // if (!this.parcels.senderAlternativetoAddress || !this.parcels.senderAlternativetoAddress.trim()) {
+    //   this.showMessage('warning', 'Sender Alternative Address is required');
+    //   return false;
+    // }
   
     // Receiver Validation
     if (!this.parcels.receiverName || !this.parcels.receiverName.trim()) {
@@ -449,18 +449,18 @@ this.parcels.trackingCode= this.generate8DigitCode().toString();
       this.showMessage('warning', 'Receiver Phone is required');
       return false;
     }
-    if (!this.parcels.receiverEmail || !this.parcels.receiverEmail.trim()) {
-      this.showMessage('warning', 'Receiver Email is required');
-      return false;
-    }
-    if (!this.parcels.receiverAddress || !this.parcels.receiverAddress.trim()) {
-      this.showMessage('warning', 'Receiver Address is required');
-      return false;
-    }
-    if (!this.parcels.receiverAlternativetoAddress || !this.parcels.receiverAlternativetoAddress.trim()) {
-      this.showMessage('warning', 'Receiver Alternative Address is required');
-      return false;
-    }
+    // if (!this.parcels.receiverEmail || !this.parcels.receiverEmail.trim()) {
+    //   this.showMessage('warning', 'Receiver Email is required');
+    //   return false;
+    // }
+    // if (!this.parcels.receiverAddress || !this.parcels.receiverAddress.trim()) {
+    //   this.showMessage('warning', 'Receiver Address is required');
+    //   return false;
+    // }
+    // if (!this.parcels.receiverAlternativetoAddress || !this.parcels.receiverAlternativetoAddress.trim()) {
+    //   this.showMessage('warning', 'Receiver Alternative Address is required');
+    //   return false;
+    // }
   
     return true;
   }
