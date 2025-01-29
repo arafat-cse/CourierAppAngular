@@ -1,6 +1,7 @@
 
 export interface Parcel {
     parcelId: number;
+    trackingCode?:string;
     SendingBranch?: boolean | null;
     PercelSendingDestribution?: boolean | null;
     RecebingDistributin?: boolean | null;
