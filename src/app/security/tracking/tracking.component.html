@@ -39,7 +39,7 @@
     </div>
   
     <div *ngIf="selectedParcel" class="tracking-status mt-4">
-      <h2 class="text-center text-primary">Tracking Code: {{ selectedParcel?.trackingCode }}</h2>
+      <h2 class="text-center text-primary">Tracking Code: {{ selectedParcel.trackingCode }}</h2>
   
       <div class="tracking-steps">
         <div *ngIf="selectedParcel?.SendingBranch; else pending1" class="alert alert-success">
