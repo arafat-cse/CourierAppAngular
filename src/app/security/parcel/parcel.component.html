@@ -517,7 +517,7 @@
             
       <div class="col-md-3">
         <label for="senderChild" class="form-label text-primary">Recevar Child*</label>
-        <select id="senderChild" [(ngModel)]="parcels.recebingBranch" class="form-select">
+        <select id="senderChild" [(ngModel)]="parcels.receiverBranchId" class="form-select">
           <option *ngFor="let child of recevarFilteredChildBranches" [ngValue]="child.branchId">
             {{ child.branchName }}
           </option>

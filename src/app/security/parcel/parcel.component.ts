@@ -422,14 +422,14 @@ this.parcels.trackingCode= this.generate8DigitCode().toString();
     //   return false;
     // }
     // Sender Validation
-    if (!this.parcels.senderName || !this.parcels.senderName.trim()) {
-      this.showMessage('warning', 'Sender Name is required');
-      return false;
-    }
-    if (!this.parcels.senderPhone || !this.parcels.senderPhone.toString().trim()) {
-      this.showMessage('warning', 'Sender Phone is required');
-      return false;
-    }
+    // if (!this.parcels.senderName || !this.parcels.senderName.trim()) {
+    //   this.showMessage('warning', 'Sender Name is required');
+    //   return false;
+    // }
+    // if (!this.parcels.senderPhone || !this.parcels.senderPhone.toString().trim()) {
+    //   this.showMessage('warning', 'Sender Phone is required');
+    //   return false;
+    // }
  
     // if (!this.parcels.senderAddress || !this.parcels.senderAddress.trim()) {
     //   this.showMessage('warning', 'Sender Address is required');
@@ -441,14 +441,14 @@ this.parcels.trackingCode= this.generate8DigitCode().toString();
     // }
   
     // Receiver Validation
-    if (!this.parcels.receiverName || !this.parcels.receiverName.trim()) {
-      this.showMessage('warning', 'Receiver Name is required');
-      return false;
-    }
-    if (!this.parcels.receiverPhone || !this.parcels.receiverPhone.toString().trim()) {
-      this.showMessage('warning', 'Receiver Phone is required');
-      return false;
-    }
+    // if (!this.parcels.receiverName || !this.parcels.receiverName.trim()) {
+    //   this.showMessage('warning', 'Receiver Name is required');
+    //   return false;
+    // }
+    // if (!this.parcels.receiverPhone || !this.parcels.receiverPhone.toString().trim()) {
+    //   this.showMessage('warning', 'Receiver Phone is required');
+    //   return false;
+    // }
     // if (!this.parcels.receiverEmail || !this.parcels.receiverEmail.trim()) {
     //   this.showMessage('warning', 'Receiver Email is required');
     //   return false;
