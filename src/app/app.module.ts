@@ -30,6 +30,7 @@ import { VanComponent } from './security/van/van.component';
 import { ParcelComponent } from './security/parcel/parcel.component';
 import { InvoiceComponent } from './security/invoice/invoice.component';
 import { HomeComponent } from "./home/home.component";
+import { TrackingComponent } from './security/tracking/tracking.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,6 +49,7 @@ import { HomeComponent } from "./home/home.component";
     VanComponent,
     ParcelComponent,
     InvoiceComponent,
+    TrackingComponent,
     
    
   ],

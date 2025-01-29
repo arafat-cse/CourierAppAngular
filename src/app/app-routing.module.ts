@@ -19,6 +19,7 @@ import { VanComponent } from './security/van/van.component';
 import { ParcelComponent } from './security/parcel/parcel.component';
 import { InvoiceComponent } from './security/invoice/invoice.component';
 import { HomeComponent } from './home/home.component';
+import { TrackingComponent } from './security/tracking/tracking.component';
 /*import { TestComponent } from '@angular/core/testing';*/
 
 const routes: Routes = [
@@ -42,6 +43,7 @@ const routes: Routes = [
   { path: 'van', component: VanComponent, canActivate: [authGuard] },
   { path: 'parcel', component: ParcelComponent, canActivate: [authGuard] },
   { path: 'invoice', component: InvoiceComponent, canActivate: [authGuard] },
+  { path: 'tracking', component: TrackingComponent, canActivate: [authGuard] },
  
 
 ];
