@@ -7,6 +7,7 @@ import { ParcelType } from '../interface/ParcelType';
 import { Branch } from '../interface/listBranchs';
 import jsPDF from 'jspdf';
 import { Observable } from 'rxjs';
+import { Van } from '../interface/van';
 
 
 interface Parcel {
@@ -63,6 +64,7 @@ export class ParcelComponent implements OnInit {
   Listparcels: Parcel[] = [];
   parcelType: ParcelType[] = [];
   listBranchs: Branch[] = [];
+  listVan:Van[]=[];
 
 
   parcels: Parcel = {
@@ -133,6 +135,7 @@ export class ParcelComponent implements OnInit {
     this.getPercelType();
     this.getBranches();
     this. updatePrice();
+    this.getVan();
   console.log(this.parcelType);
   }
 
@@ -181,6 +184,8 @@ export class ParcelComponent implements OnInit {
       console.log(this.price)
     }
   }
+  // ----------------------------------------ParcelType Start----------------------------
+
   getPercelType(): void {
     const headers = new HttpHeaders({
       Token: this.authService.UserInfo?.Token || '',
@@ -225,6 +230,42 @@ export class ParcelComponent implements OnInit {
       return branch ? branch.parcelTypeName : 'Unknown';
     }
   // ----------------------------------------ParcelType end----------------------------
+
+  // ----------------------------------------Vans Start----------------------------
+  getVan(): void {
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo?.Token || '',
+    });
+
+    this.httpClient.get<any>(`${this.authService.baseURL}/api/Vans`, { headers })
+      .subscribe({
+        next: (response) => {
+          console.log('API Response:', response); 
+           this.listVan = response;
+        //  this.rowCount = response.totalCount || 0;
+        console.log(this.listVan)
+          this.applyPaging();
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to load Vans');
+        },
+      });
+      console.log('Vans List:', this.listVan);
+
+  }
+  // getvanlist(vanId: number | null): string {
+  //   if (vanId === null) return 'N/A';
+  //   const van = this.listVan.find(d => d.VanId === vanId);
+  //   return van ? van.RegistrationNo : 'Unknown';
+  // }
+  getvanlist(vanId: number | null): string {
+    if (!vanId) return 'N/A';
+    const van = this.listVan.find(d => d.VanId === vanId);
+    return van ? van.registrationNo || 'Unknown' : 'Unknown';
+  }
+  
+  // ----------------------------------------Vans end----------------------------
+
   getBranches(): void {
     const headers = new HttpHeaders({
       Token: this.authService.UserInfo?.Token || '',

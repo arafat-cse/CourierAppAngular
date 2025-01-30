@@ -572,10 +572,19 @@
             <option [ngValue]="false" selected="true">No</option>
           </select>
     </div>
-      <div class="col-md-2">
+    <div class="col-md-2">
+      <label for="vans" class="form-label">Van</label>
+      <select id="vans" [(ngModel)]="parcels.vanId" class="form-select">
+        <option *ngFor="let van of listVan" [ngValue]="van.VanId">
+          {{ van.registrationNo }}
+        </option>
+      </select>
+    </div>
+
+      <!-- <div class="col-md-2">
         <label for="vanId" class="form-label"> Van:</label>
         <input type="text" id="vanId" [(ngModel)]="parcels.vanId" class="form-control" />
-      </div>
+      </div> -->
       <div class="col-md-2">
         <label for="driverId" class="form-label"> Driver:</label>
         <input type="text" id="driverId" [(ngModel)]="parcels.driverId" class="form-control" />
