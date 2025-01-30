@@ -84,9 +84,11 @@
         <div class="col-md-3">
             <label for="senderChild" class="form-label">Designation</label>
             <select id="senderChild" [(ngModel)]="staff$.designationId" class="form-select">
-              <option *ngFor="let designation of listDesignation" [ngValue]="designation.designationId">
-                {{ designation.title }}
-              </option>
+                <ng-container *ngFor="let designation of listDesignation">
+                    <option *ngIf="designation.isActive" [ngValue]="designation.designationId">
+                        {{ designation.title }}
+                    </option>
+                </ng-container>
             </select>
           </div>
         <div class="col-md-3">
