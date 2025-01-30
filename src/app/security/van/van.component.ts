@@ -145,10 +145,13 @@ export class VanComponent implements OnInit{
         payload,
         { headers }
       ).subscribe({
+      
         next: () => {
           this.isList = true;
           this.getVan();
           this.showMessage('success', 'Van updated successfully');
+          console.log(payload);
+          console.log(this.van$.registrationNo,  )
         },
         error: (error) => {
           this.showMessage('error', error.error || 'Failed to update Van');
