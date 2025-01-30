@@ -82,12 +82,24 @@
       </ul>
       <form class="d-flex align-items-center">
         <button *ngIf="authService.UserInfo.IsLogIn" title="Notification here" type="button" class="border rounded-circle position-relative  me-4" >
+          <!-- <i class="fa-solid fa-location-dot fs-5 pt-1 text-primary"></i> -->
+          
+            <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/tracking">  <i class="fa-solid fa-arrow-trend-up fs-5 p-1 text-primary"></i></a>
+         
+          <span class="position-absolute top-0 start-100 translate-middle badge  rounded-pill bg-danger ">
+          
+            <!-- <li class="nav-item">
+              <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/dashboard"><i class="fa fa-home"></i> Home</a>
+            </li> -->
+          </span>
+        </button>
+        <!-- <button *ngIf="authService.UserInfo.IsLogIn" title="Notification here" type="button" class="border rounded-circle position-relative  me-4" >
           <i class="fa-solid fa-bell fs-5 pt-1 text-primary"></i>
           <span class="position-absolute top-0 start-100 translate-middle badge  rounded-pill bg-danger ">
             9+
             <span class="visually-hidden">unread messages</span>
           </span>
-        </button>
+        </button> -->
         <a class="btn btn-sm btn-outline-primary me-2" href="javascript:void(0)" *ngIf="authService.UserInfo.IsLogIn"><samp class="text-warning">User!</samp>  {{authService.UserInfo.UserName}}</a>
         <button class="btn btn-sm btn-outline-info" type="button" (click)="logout()" *ngIf="authService.UserInfo.IsLogIn">Logout</button>
         <button class="btn btn-sm btn-outline-success" type="button" (click)="login()" *ngIf="!authService.UserInfo.IsLogIn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Login</button>
