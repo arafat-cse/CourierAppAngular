@@ -31,6 +31,7 @@
               <th class="text-center">Sender Branch Name</th>
               <th class="text-center">Recevar Branch Name</th>
               <th class="text-center">IsPaid</th>
+              <th class="text-center">Price </th>
               <th class="text-center">ParcelType</th>
               <th class="text-center">Active / Inactive</th>
               <th class="text-center">Action</th>
@@ -67,12 +68,14 @@
               <td>{{ getBranchName(item.senderBranchId) }}</td>
               <!-- <td class="text-center">{{item.receiverBranchId}}</td> -->
               <td>{{ getBranchName(item.receiverBranchId) }}</td>
+
               <!-- <td class="text-center ">{{item.isPaid}}</td> -->
               <td class="text-center">
                 <span class="badge px-3 py-2" [ngClass]="{'bg-success': item.isPaid, 'bg-danger': !item.isPaid}">
                     {{item.isPaid ? 'YES' : 'NO'}}
                 </span>
             </td>
+            <td class="text-center">{{item.price}}</td>
           
             <!-- <td class="text-center">{{item.parcelTypeId}}</td> -->
             <td>{{ getParcelTypeName(item.parcelTypeId) }}</td>
