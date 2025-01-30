@@ -224,7 +224,7 @@ export class ParcelComponent implements OnInit {
       const branch = this.parcelType.find(b => b.parcelTypeId === parcelTypeId);
       return branch ? branch.parcelTypeName : 'Unknown';
     }
-  // ----------------------------------------ParcelType----------------------------
+  // ----------------------------------------ParcelType end----------------------------
   getBranches(): void {
     const headers = new HttpHeaders({
       Token: this.authService.UserInfo?.Token || '',
@@ -374,15 +374,16 @@ this.parcels.trackingCode= this.generate8DigitCode().toString();
       Token: token,
       'Content-Type': 'application/json',
     });
-
+    this.parcels.price=this.price;
     const payload = {
       ...this.parcels, // Include all necessary properties for a new parcel type
     };
-
+console.log();
     this.httpClient
       .post(`${this.authService.baseURL}/api/Parcels`, payload, { headers })
       .subscribe({
-        next: () => {
+        next: (res) => {
+          console.log(res);
           this.isList = true;
           // this.reset();
           this.getParcel();
@@ -504,7 +505,7 @@ this.parcels.trackingCode= this.generate8DigitCode().toString();
       receiverBranchId: this.parcels.receiverBranchId, // Receiver Branch ID
       estimatedReceiveTime: this.parcels.estimatedReceiveTime, // Estimated Receive Time
       isPaid: this.parcels.isPaid, // Payment Status
-      price: this.parcels.price, // Parcel Price
+      price: this.price, // Parcel Price
       weight: this.parcels.weight, // Parcel Weight
       createdBy: this.parcels.createdBy, // Created By
       createDate: this.parcels.createDate, // Create Date
