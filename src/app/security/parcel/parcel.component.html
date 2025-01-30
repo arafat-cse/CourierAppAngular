@@ -575,9 +575,11 @@
     <div class="col-md-2">
       <label for="vans" class="form-label">Van</label>
       <select id="vans" [(ngModel)]="parcels.vanId" class="form-select">
-        <option *ngFor="let van of listVan" [ngValue]="van.VanId">
+        <ng-container *ngFor="let van of listVan" >
+        <option *ngIf="van.isActive" [ngValue]="van.VanId">
           {{ van.registrationNo }}
         </option>
+      </ng-container>
       </select>
     </div>
 
