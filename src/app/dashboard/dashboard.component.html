@@ -121,7 +121,8 @@
                     <div>
                         <h5>Completed Deliveries</h5>
                         <i class="fas fa-shipping-fast icon"></i>
-                        <h3>16,412</h3>
+                        <!-- <h3>16,412</h3> -->
+                        <h3>{{completeDelevery ()}}</h3>
                         <p>This Month</p>
                     </div>
                 </div>
@@ -131,26 +132,95 @@
                     <div>
                         <h5>Total Revenue</h5>
                         <i class="fa fa-chart-line icon"></i>
-                        <h3>$42,562</h3>
+                        <h3>{{ totalRevenue() | currency }}</h3>
                         <p>This Month</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            
+            
+            <!-- <div class="col-md-3">
+                <div class="card p-4 text-center">
+                    <div>
+                        <h5>Total Revenue</h5>
+                        <i class="fa fa-chart-line icon"></i>
+                        <div *ngFor="let item of listOfParcel.length">
+                            
+                        </div>
+                        <h3>$42,562</h3>
+                        <p>This Month</p>
+                    </div>
+                </div>
+            </div> -->
+            <!-- <div class="col-md-3">
                 <div class="card p-4 text-center">
                     <div>
                         <h5>Total Parcels</h5>
                         <i class="fa fa-wallet icon"></i>
-                        <h3>9,562</h3>
+                    
+                        <h3>{{ totalParcels }}</h3>
+                        <p>This Month</p>
+                    </div>
+                </div>
+            </div> -->
+            <div class="col-md-3">
+                <div class="card p-4 text-center">
+                    <div>
+                        <h5>Total Parcels</h5>
+                        <i class="fa fa-box icon"></i>
+                        <h3>{{ listOfParcel.length }}</h3>
                         <p>This Month</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <div class="container py-4">
+    <div class="container ">
+              <!-- Compnay document -->
+              <p class="mb-4 text-center courier-title text-white">Compnay Details</p>
+              <div class="row">
+                <div class="col-md-3 mb-3">
+                    <div class="card p-3 text-center">
+                        <div>
+                            <h5>Total Staff</h5>
+                            <i class="fa fa-users icon"></i>
+                            <h3>{{ listOfStaff.length }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card p-3 text-center">
+                        <div>
+                            <h5>Total vehicle</h5>
+                            <i class="fa fa-bus icon"></i>
+                            <h3>{{ listOfVan.length }}</h3>
+                            <!-- <p>This Month</p> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card p-3 text-center">
+                        <div>
+                            <h5>Total Branch</h5>
+                            <i class="fa fa-house icon"></i>
+                            <h3>{{ listOfBranch.length }}</h3>
+                            <!-- <p>This Month</p> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card p-3 text-center">
+                        <div>
+                            <h5>Total Parcels</h5>
+                            <i class="fa fa-box icon"></i>
+                            <h3>{{ listOfStaff.length }}</h3>
+                            <!-- <p>This Month</p> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
         <!-- Stats Section -->
-        <div class="row">
+        <!-- <div class="row">
           <div *ngFor="let stat of stats" class="col-md-3 mb-3">
             <div [class]="'card p-3 text-center ' + stat.bgClass">
               <h3 class="mb-2">{{ stat.value }}</h3>
@@ -158,7 +228,7 @@
             </div>
           </div>
         </div>
-      
+       -->
         <!-- Charts Section -->
         <div class="row mt-4">
           <div class="col-md-6 mb-4">

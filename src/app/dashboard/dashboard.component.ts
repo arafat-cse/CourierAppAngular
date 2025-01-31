@@ -18,8 +18,16 @@
 
   
 // }
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { map, Observable } from 'rxjs';
+import { CommonService } from '../services/common.service';
+import { AuthService } from '../auth/auth.service';
+import { Staff } from '../security/interface/listStaff';
+import { Van } from '../security/interface/van';
+import { Branch } from '../security/interface/listBranchs';
+import { Parcels } from '../security/interface/parcel';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,12 +36,18 @@ import { Chart, registerables } from 'chart.js';
 })
 export class DashboardComponent implements OnInit {
 
-  stats = [
-    { value: 40, label: 'Total Staff', bgClass: 'bg-warning text-white' },
-    { value: 42, label: 'Total Drivers', bgClass: 'bg-primary text-white' },
-    { value: 150, label: 'Total vehicle', bgClass: 'bg-success text-white' },
-    { value: 170, label: 'Total Branch', bgClass: 'bg-secondary text-white' },
-  ];
+  //staff interface
+  listOfStaff:Staff[]=[];
+  listOfVan:Van[]=[];
+  listOfBranch:Branch[]=[];
+  listOfParcel:Parcels[]=[];
+
+  // stats = [
+  //   { value: 40, label: 'Total Staff', bgClass: 'bg-warning text-white' },
+  //   { value: 42, label: 'Total Drivers', bgClass: 'bg-primary text-white' },
+  //   { value: 150, label: 'Total vehicle', bgClass: 'bg-success text-white' },
+  //   { value: 170, label: 'Total Branch', bgClass: 'bg-secondary text-white' },
+  // ];
 
   recentRides = [
     {
@@ -54,12 +68,22 @@ export class DashboardComponent implements OnInit {
     },
   ];
 
-  constructor() { }
+    constructor(
+      private cs: CommonService,
+      private httpClient: HttpClient,
+      public authService: AuthService,
+      
+    ) {}
+  
 
   ngOnInit(): void {
     // Register Chart.js components
     Chart.register(...registerables);
     this.loadCharts();
+    this.getStaff();
+    this.getVan();
+    this. getBranches();
+    this.getParcel()
   }
 
   loadCharts(): void {
@@ -106,4 +130,111 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+// --------------------------------------------------------- Staff Start--------------------------------------
+getStaff(): void {
+  const headers = new HttpHeaders({
+    'Token': this.authService.UserInfo?.Token || '',
+  });
+
+  this.httpClient.get<any>(`${this.authService.baseURL}/api/Staffs`, { headers })
+    .subscribe({
+      next: (response) => {
+        this.listOfStaff = response;
+        console.log(this.listOfStaff.length);
+
+      //  this.rowCount = response.totalCount || 0;
+        // this.applyPaging();
+      },
+      // error: () => {
+      //   this.showMessage('error', 'Failed to load parcel types');
+      // },
+    });
+}
+// --------------------------------------------------------- Staff End--------------------------------------
+// --------------------------------------------------------- Van Start--------------------------------------
+getVan(): void {
+  const headers = new HttpHeaders({
+    'Token': this.authService.UserInfo?.Token || '',
+  });
+
+  this.httpClient.get<any>(`${this.authService.baseURL}/api/Vans`, { headers })
+    .subscribe({
+      next: (response) => {
+        this.listOfVan = response;
+        console.log(this.listOfVan.length);
+      //  this.rowCount = response.totalCount || 0;
+        // this.applyPaging();
+      },
+      // error: () => {
+      //   this.showMessage('error', 'Failed to load Vans');
+      // },
+    });
+}
+
+// --------------------------------------------------------- Van End--------------------------------------
+// --------------------------------------------------------- Branch Start--------------------------------------
+ getBranches(): void {
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+    });
+
+    this.httpClient.get<{ status: boolean; message: string; content: Branch[] }>(
+      `${this.authService.baseURL}/api/Branches`,
+      { headers }
+    ).subscribe({
+      next: (response) => {
+        if (response.status) {
+          this.listOfBranch = response.content;
+        console.log(this.listOfBranch.length);
+
+         // this.rowCount = response.content.length;
+        //   this.paginate();
+        //   this.prepareDropdownBranches(response.content);
+        // } else {
+         // this.showMessage('warning', response.message);
+        }
+      },
+      // error: () => {
+      //   this.showMessage('error', 'Failed to load branches');
+      // },
+    });
+  }
+// --------------------------------------------------------- Brnach End--------------------------------------
+// --------------------------------------------------------- Parcel Start--------------------------------------
+getParcel(): void {
+  const headers = new HttpHeaders({
+    Token: this.authService.UserInfo?.Token || '',
+  });
+  this.httpClient
+    .get<any>(`${this.authService.baseURL}/api/Parcels`, { headers })
+    .subscribe({
+      next: (response) => {
+        console.log(response);
+        this.listOfParcel = response;
+        console.log(this.listOfParcel.length);
+
+        //  this.rowCount = response.totalCount || 0;
+        // this.applyPaging();
+      },
+      // error: () => {
+      //   this.showMessage('error', 'Failed to load parcel ');
+      // },
+    });
+}
+// totalRevenue(): number {
+//   return this.listOfParcel.reduce((sum, parcel) => sum + parcel.parcelId, 0);
+// }
+totalRevenue(): number {
+  return this.listOfParcel.reduce((sum, parcel) => sum + (parcel.price || 0), 0);
+}
+
+completeDelevery ():number{
+  this.listOfParcel.forEach(res=>{
+    console.log(res);
+  })
+  return 0;
+}
+// --------------------------------------------------------- Parcel End--------------------------------------
+
+
 }
