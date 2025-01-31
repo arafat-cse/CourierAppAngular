@@ -28,12 +28,12 @@
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5 mx-auto" id="staticBackdropLabel">Login</h1>
-          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+         
         </div>
         <div class="modal-body">
             <div class="row g-3 p-2">
                 <div class="col-12">
-                    <!-- <h4 class="text-center text-uppercase">Login</h4> -->
+           
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="UserName" [(ngModel)]="User.UserName" placeholder="user-name" (keypress)="enterUsername($event);">
                         <label for="UserName">User-name</label>
@@ -49,9 +49,46 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <!-- <button type="button" class="btn btn-primary">Understood</button> -->
-          <!-- <button (click)="login()" class="btn btn-success" id="btnLogin"  data-bs-dismiss="modal">LOG IN</button> -->
+
         </div>
       </div>
     </div>
   </div>
+
+<div class="container">
+    <div class="row login-container">
+        <!-- Left Side: Login Form -->
+        <div class="col-md-6 d-flex align-items-center">
+            <div class="login-form w-100">
+                <h2 class="text-center mb-4">Courier Login</h2>
+
+                <!-- <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-control" placeholder="Enter your username">
+                </div> -->
+                <div class="mb-3">
+                  <label class="form-label">Username</label>
+                  <input type="text" class="form-control" id="UserName" [(ngModel)]="User.UserName" placeholder="Enter your username" (keypress)="enterUsername($event);">
+              </div>
+
+                <!-- <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" placeholder="Enter your password">
+                </div> -->
+                <div class="mb-3">
+                  <label class="form-label">Password</label>
+                  <input type="password" class="form-control" id="PassWord" [(ngModel)]="User.PassWord" placeholder="Enter your password" (keypress)="enterPassword($event);">
+              </div>
+                <button (click)="login()" class="btn btn-primary w-100">Log In</button>
+
+                <div class="text-center mt-3">
+                    <small>New here? <a href="#">Create an account</a></small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Image -->
+        <div class="col-md-6 login-image d-none d-md-block"></div>
+    </div>
+</div>
+
