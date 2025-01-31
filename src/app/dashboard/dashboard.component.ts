@@ -228,11 +228,30 @@ totalRevenue(): number {
   return this.listOfParcel.reduce((sum, parcel) => sum + (parcel.price || 0), 0);
 }
 
-completeDelevery ():number{
-  this.listOfParcel.forEach(res=>{
-    console.log(res);
-  })
-  return 0;
+// completeDelevery ():number{
+//   this.listOfParcel.forEach(res=>{
+//     console.log(res);
+//   })
+//   return 0;
+// }
+completeDelevery(): number {
+  return this.listOfParcel.filter(parcel => 
+    parcel.sendingBranch &&
+    parcel.percelSendingDestribution &&
+    parcel.recebingDistributin &&
+    parcel.recebingBranch &&
+    parcel.recebingReceber
+  ).length;
+}
+
+panddingDelevery(): number {
+  return this.listOfParcel.filter(parcel => 
+    parcel.sendingBranch ||
+    parcel.percelSendingDestribution ||
+    parcel.recebingDistributin ||
+    parcel.recebingBranch ||
+    parcel.recebingReceber
+  ).length;
 }
 // --------------------------------------------------------- Parcel End--------------------------------------
 
