@@ -111,22 +111,32 @@
                     <div>
                         <h5>Pending Deliveries</h5>
                         <i class="fa fa-shopping-cart icon"></i>
-                        <h3>486</h3>
+                        <h3>{{ panddingDelevery() }}</h3>
                         <p>Waiting for Dispatch</p>
                     </div>
                 </div>
             </div>
+            <!-- <div class="col-md-3">
+                <div class="card p-4 text-center">
+                    <div>
+                        <h5>Completed Deliveries</h5>
+                        <i class="fas fa-shipping-fast icon"></i>
+                        <h3>{{completeDelevery ()}}</h3>
+                        <p>This Month</p>
+                    </div>
+                </div>
+            </div> -->
             <div class="col-md-3">
                 <div class="card p-4 text-center">
                     <div>
                         <h5>Completed Deliveries</h5>
                         <i class="fas fa-shipping-fast icon"></i>
-                        <!-- <h3>16,412</h3> -->
-                        <h3>{{completeDelevery ()}}</h3>
+                        <h3>{{ completeDelevery() }}</h3>
                         <p>This Month</p>
                     </div>
                 </div>
             </div>
+            
             <div class="col-md-3">
                 <div class="card p-4 text-center">
                     <div>
@@ -179,7 +189,7 @@
               <!-- Compnay document -->
               <p class="mb-4 text-center courier-title text-white">Compnay Details</p>
               <div class="row">
-                <div class="col-md-3 mb-3">
+                <div class="col-md-4 mb-4">
                     <div class="card p-3 text-center">
                         <div>
                             <h5>Total Staff</h5>
@@ -188,7 +198,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-4 mb-4">
                     <div class="card p-3 text-center">
                         <div>
                             <h5>Total vehicle</h5>
@@ -198,7 +208,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-4 mb-4">
                     <div class="card p-3 text-center">
                         <div>
                             <h5>Total Branch</h5>
@@ -208,16 +218,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <!-- <div class="col-md-3 mb-3">
                     <div class="card p-3 text-center">
                         <div>
                             <h5>Total Parcels</h5>
                             <i class="fa fa-box icon"></i>
-                            <h3>{{ listOfStaff.length }}</h3>
-                            <!-- <p>This Month</p> -->
+                            <h3>{{ listOfStaff.length }}</h3>          
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         <!-- Stats Section -->
         <!-- <div class="row">
