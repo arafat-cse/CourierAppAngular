@@ -47,7 +47,6 @@ interface Parcel {
   deliveryChargeId: number | null; // Delivery Charge ID (int, nullable)
   parcelTypeId: number | null; // Parcel Type ID (int, nullable)
   status: string | null; 
-  newStatus?: string|undefined;
 }
 
 @Component({
@@ -148,6 +147,8 @@ export class ParcelComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log(response);
+           this.reset();
+
           this.Listparcels = response;
           //  this.rowCount = response.totalCount || 0;
           this.applyPaging();
@@ -562,6 +563,7 @@ console.log();
       driverId: this.parcels.driverId, // Driver ID
       deliveryChargeId: this.parcels.deliveryChargeId, // Delivery Charge ID
       parcelTypeId: this.parcels.parcelTypeId, // Parcel Type ID
+      status: this.parcels.status,
     };
 
     console.log(payload);
@@ -723,47 +725,6 @@ console.log();
 //       },
 //     });
 //   }
-toggleParcel(parcel: Parcel): void {
-  const headers = new HttpHeaders({
-    'Token': this.authService.UserInfo?.Token || '',
-  });
-
-  const updatedStatus = {
-    ...parcel,
-    SendingBranch: !parcel.sendingBranch, // বর্তমান SendingBranch মান উল্টানো হবে
-  };
-
-  this.httpClient.put(
-    `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
-    updatedStatus,
-    { headers }
-  ).subscribe({
-    next: () => {
-      parcel.sendingBranch = updatedStatus.sendingBranch; // UI-তে পরিবর্তন নিশ্চিত করা
-      this.showMessage(
-        'success',
-        `Status changed to ${parcel.sendingBranch ? 'YES' : 'NO'}`
-      );
-    },
-    error: () => {
-      this.showMessage('error', 'Failed to change status');
-    },
-  });
-}
-
-
-
-// -----------------------------------------Boolean--------------------------Status--------
-
-
-
-
-
-
-
-
-
-
 
 
 //Model Data Uthano
@@ -819,16 +780,7 @@ toggleParcel(parcel: Parcel): void {
     // Draw a separator line
     doc.setDrawColor(0, 0, 0);
     doc.line(10, 45, 200, 45); // x1, y1, x2, y2
-  
-    // Add sender information
-    // doc.setFont('helvetica', 'bold');
-    // doc.setFontSize(14);
-    // doc.text('Sender Information', 10, 55);
-    // doc.setFont('helvetica', 'normal');
-    // doc.setFontSize(12);
-    // doc.text(`Name: ${parcel.senderName}`, 10, 62);
-    // doc.text(`Phone: ${parcel.senderPhone}`, 10, 68);
-    // doc.text(`Branch: ${this.getBranchName(parcel.senderBranchId)}`, 10, 74);
+
   // // Add sender information
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(14);
@@ -841,16 +793,6 @@ toggleParcel(parcel: Parcel): void {
       doc.text(`Estimated: ${parcel?.estimatedReceiveTime}`, 10, 80);
 
     // Add receiver information
-    // doc.setFont('helvetica', 'bold');
-    // doc.setFontSize(14);
-    // doc.text('Receiver Information', 10, 85);
-    // doc.setFont('helvetica', 'normal');
-    // doc.setFontSize(12);
-    // doc.text(`Name: ${parcel.receiverName}`, 10, 92);
-    // doc.text(`Phone: ${parcel.receiverPhone}`, 10, 98);
-    // doc.text(`E-mail: ${parcel.receiverEmail}`, 10, 106);
-    // doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 10, 112);
-    // Add receiver information
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(14);
     doc.text('Receiver Information', 120, 55); // Right side
@@ -860,6 +802,11 @@ toggleParcel(parcel: Parcel): void {
     doc.text(`Phone: ${parcel.receiverPhone}`, 120, 68);
     doc.text(`E-mail: ${parcel.receiverEmail}`, 120, 74);
     doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 120, 80);
+
+    // Draw a separator line
+    doc.setDrawColor(0, 0, 0);
+    doc.line(10, 45, 200, 45); // x1, y1, x2, y2
+
     // Add selectParcel details
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(14);

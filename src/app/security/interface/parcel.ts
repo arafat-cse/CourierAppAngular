@@ -34,4 +34,5 @@ export interface Parcels {
     driverId: number | null; // Driver ID (int, nullable)
     deliveryChargeId: number | null; // Delivery Charge ID (int, nullable)
     parcelTypeId: number | null; // Parcel Type ID (int, nullable)
+    status:string|null;
   }
