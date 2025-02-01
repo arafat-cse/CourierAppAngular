@@ -8,7 +8,8 @@ import { Branch } from '../interface/listBranchs';
 import jsPDF from 'jspdf';
 import { Observable } from 'rxjs';
 import { Van } from '../interface/van';
-
+import { ParcelService } from 'src/app/services/EmailService';
+import { Staff } from '../interface/listStaff';
 
 interface Parcel {
   parcelId: number; // Primary Key
@@ -46,7 +47,7 @@ interface Parcel {
   driverId: number | null; // Driver ID (int, nullable)
   deliveryChargeId: number | null; // Delivery Charge ID (int, nullable)
   parcelTypeId: number | null; // Parcel Type ID (int, nullable)
-  status: string | null; 
+  status: string | null;
 }
 
 @Component({
@@ -63,11 +64,10 @@ export class ParcelComponent implements OnInit {
   Listparcels: Parcel[] = [];
   parcelType: ParcelType[] = [];
   listBranchs: Branch[] = [];
-  listVan:Van[]=[];
-
+  listVan: Van[] = [];
+  listOfStaff:Staff[]=[];
 
   parcels: Parcel = {
-   
     parcelId: 0,
     trackingCode: '',
     senderName: '',
@@ -122,22 +122,54 @@ export class ParcelComponent implements OnInit {
     pages: [],
     totalPages: 0,
   };
-  price: number = 0;
+  price: number = 100;
+  receiverEmail: string = '';
   constructor(
     private cs: CommonService,
     private httpClient: HttpClient,
-    public authService: AuthService
+    public authService: AuthService,
+    private EmailService: ParcelService
   ) {}
 
   ngOnInit(): void {
     this.getParcel();
+    this.getStaff();
     this.getPercelType();
     this.getBranches();
-    this. updatePrice();
+    this.updatePrice();
     this.getVan();
-  console.log(this.parcelType);
+    console.log(this.parcelType);
+    
+  }
+  // ------------------------------------------
+  // fetchReceiverEmail() {
+  //   if (this.parcels.parcelId) {
+  //     this.EmailService.getReceiverEmail(this.parcels.parcelId).subscribe(
+  //       (email) => {
+  //         this.parcels.receiverEmail = email;
+  //         console.log(this.parcels.receiverEmail)
+  //       },
+  //       (error) => {
+  //         console.error('Error fetching email:', error);
+  //       }
+  //     );
+  //   }
+  // }
+  fetchReceiverEmail(parcelId: number) {
+    if (parcelId) {
+      this.EmailService.getReceiverEmail(parcelId).subscribe(
+        (email) => {
+          this.parcels.receiverEmail = email;
+          console.log('Fetched Receiver Email:', this.parcels.receiverEmail);
+        },
+        (error) => {
+          console.error('Error fetching email:', error);
+        }
+      );
+    }
   }
 
+  // ------------------------------------------
   getParcel(): void {
     const headers = new HttpHeaders({
       Token: this.authService.UserInfo?.Token || '',
@@ -147,7 +179,7 @@ export class ParcelComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log(response);
-           this.reset();
+          this.reset();
 
           this.Listparcels = response;
           //  this.rowCount = response.totalCount || 0;
@@ -167,22 +199,23 @@ export class ParcelComponent implements OnInit {
   //   isActive: true,
   // };
 
-  
   updatePrice(): void {
-    const selectedType = this.parcelType.find(pt => pt.parcelTypeId === this.parcels.parcelTypeId);
- console.log(this.parcelType)
+    const selectedType = this.parcelType.find(
+      (pt) => pt.parcelTypeId === this.parcels.parcelTypeId
+    );
+    console.log(this.parcelType);
     if (!selectedType) {
       this.price = 0;
       return;
     }
-  
+
     // Calculate price based on selected type and weight
     if (this.parcels.weight && this.parcels.weight > 0) {
       this.price = selectedType.defaultPrice * this.parcels.weight;
-      console.log(this.price)
+      console.log(this.price);
     } else {
       this.price = selectedType.defaultPrice; // Default price if weight is not entered
-      console.log(this.price)
+      console.log(this.price);
     }
   }
   // ----------------------------------------ParcelType Start----------------------------
@@ -201,7 +234,7 @@ export class ParcelComponent implements OnInit {
           // }
 
           this.parcelType = response;
-         console.log(response);
+          console.log(response);
           // for (let index = 0; index < response.length; index++) {
           //   const element = response[index];
           //   console.log(element.parcelTypeId);
@@ -213,7 +246,7 @@ export class ParcelComponent implements OnInit {
           //     0
           //   }
           // }
-         
+
           //  console.log(response);
 
           //  this.rowCount = response.totalCount || 0;
@@ -224,35 +257,35 @@ export class ParcelComponent implements OnInit {
         },
       });
   }
-    // Get branch name by ID
-    getParcelTypeName(parcelTypeId: number | null): string {
-      if (parcelTypeId === null) return 'N/A';
-      const branch = this.parcelType.find(b => b.parcelTypeId === parcelTypeId);
-      return branch ? branch.parcelTypeName : 'Unknown';
-    }
+  // Get branch name by ID
+  getParcelTypeName(parcelTypeId: number | null): string {
+    if (parcelTypeId === null) return 'N/A';
+    const branch = this.parcelType.find((b) => b.parcelTypeId === parcelTypeId);
+    return branch ? branch.parcelTypeName : 'Unknown';
+  }
   // ----------------------------------------ParcelType end----------------------------
 
   // ----------------------------------------Vans Start----------------------------
   getVan(): void {
     const headers = new HttpHeaders({
-      'Token': this.authService.UserInfo?.Token || '',
+      Token: this.authService.UserInfo?.Token || '',
     });
 
-    this.httpClient.get<any>(`${this.authService.baseURL}/api/Vans`, { headers })
+    this.httpClient
+      .get<any>(`${this.authService.baseURL}/api/Vans`, { headers })
       .subscribe({
         next: (response) => {
-          console.log('API Response:', response); 
-           this.listVan = response;
-        //  this.rowCount = response.totalCount || 0;
-        console.log(this.listVan)
+          console.log('API Response:', response);
+          this.listVan = response;
+          //  this.rowCount = response.totalCount || 0;
+          console.log(this.listVan);
           this.applyPaging();
         },
         error: () => {
           this.showMessage('error', 'Failed to load Vans');
         },
       });
-      console.log('Vans List:', this.listVan);
-
+    console.log('Vans List:', this.listVan);
   }
   // getvanlist(vanId: number | null): string {
   //   if (vanId === null) return 'N/A';
@@ -261,11 +294,32 @@ export class ParcelComponent implements OnInit {
   // }
   getvanlist(vanId: number | null): string {
     if (!vanId) return 'N/A';
-    const van = this.listVan.find(d => d.VanId === vanId);
+    const van = this.listVan.find((d) => d.VanId === vanId);
     return van ? van.registrationNo || 'Unknown' : 'Unknown';
   }
-  
+
   // ----------------------------------------Vans end----------------------------
+  // ----------------------------------------Staff- Start---------------------------
+  getStaff(): void {
+    const headers = new HttpHeaders({
+      'Token': this.authService.UserInfo?.Token || '',
+    });
+
+    this.httpClient.get<any>(`${this.authService.baseURL}/api/Staffs`, { headers })
+      .subscribe({
+        next: (response) => {
+          this.listOfStaff = response;
+          // console.log(this.listOfStaff)
+        //  this.rowCount = response.totalCount || 0;
+          this.applyPaging();
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to load parcel types');
+        },
+      });
+  }
+
+  // ----------------------------------------Staff end----------------------------
 
   getBranches(): void {
     const headers = new HttpHeaders({
@@ -294,10 +348,10 @@ export class ParcelComponent implements OnInit {
         },
       });
   }
-   // Get branch name by ID
-   getBranchName(branchId: number | null): string {
+  // Get branch name by ID
+  getBranchName(branchId: number | null): string {
     if (branchId === null) return 'N/A';
-    const branch = this.listBranchs.find(b => b.branchId === branchId);
+    const branch = this.listBranchs.find((b) => b.branchId === branchId);
     return branch ? branch.branchName : 'Unknown';
   }
   //Brnach dropdwon
@@ -305,7 +359,9 @@ export class ParcelComponent implements OnInit {
   filteredChildBranches: any[] = []; // ফিল্টার করা চাইল্ড ব্রাঞ্চ
   onParentBranchChange() {
     // প্যারেন্ট ব্রাঞ্চ পরিবর্তন হলে, চাইল্ড ব্রাঞ্চ ফিল্টার করুন
-    this.filteredChildBranches = this.listBranchs.filter(branch => branch.parentId === this.selectedParentBranch);
+    this.filteredChildBranches = this.listBranchs.filter(
+      (branch) => branch.parentId === this.selectedParentBranch
+    );
   }
   // onParentBranchChange(): void {
   //   if (this.selectedParentBranch) {
@@ -319,10 +375,13 @@ export class ParcelComponent implements OnInit {
   recevarSelectedParentBranch: any = null;
   recevarFilteredChildBranches: any[] = [];
   recevarParentBranchChange(): void {
-    this.recevarFilteredChildBranches = this.listBranchs.filter(branch => branch.parentId === this.recevarSelectedParentBranch);
+    this.recevarFilteredChildBranches = this.listBranchs.filter(
+      (branch) => branch.parentId === this.recevarSelectedParentBranch
+    );
   }
 
   edit(item: Parcel): void {
+    console.log(item);
     this.parcels = {
       parcelId: item.parcelId,
       trackingCode: item.trackingCode,
@@ -405,7 +464,7 @@ export class ParcelComponent implements OnInit {
     if (!this.validateForm()) {
       return;
     }
-this.parcels.trackingCode= this.generate8DigitCode().toString();
+    this.parcels.trackingCode = this.generate8DigitCode().toString();
     const token = this.authService.UserInfo?.Token || '';
     if (!token) {
       this.showMessage('error', 'Authentication token is missing');
@@ -416,11 +475,11 @@ this.parcels.trackingCode= this.generate8DigitCode().toString();
       Token: token,
       'Content-Type': 'application/json',
     });
-    this.parcels.price=this.price;
+    this.parcels.price = this.price;
     const payload = {
       ...this.parcels, // Include all necessary properties for a new parcel type
     };
-console.log();
+    console.log();
     this.httpClient
       .post(`${this.authService.baseURL}/api/Parcels`, payload, { headers })
       .subscribe({
@@ -446,10 +505,7 @@ console.log();
   //   return true;
   // }
 
-
-
-// -------------------------------------From Validation-----------------------
-
+  // -------------------------------------From Validation-----------------------
 
   // validateForm(): boolean {
   //   if (!this.parcels.trackingCode || !this.parcels.trackingCode.trim()) {
@@ -459,7 +515,7 @@ console.log();
   //   return true;
   // }
   validateForm(): boolean {
-        // Tracking Code Validation
+    // Tracking Code Validation
     // if (!this.parcels.trackingCode) {
     //   this.showMessage('warning', 'Parcel tracking code is required');
     //   return false;
@@ -473,7 +529,7 @@ console.log();
     //   this.showMessage('warning', 'Sender Phone is required');
     //   return false;
     // }
- 
+
     // if (!this.parcels.senderAddress || !this.parcels.senderAddress.trim()) {
     //   this.showMessage('warning', 'Sender Address is required');
     //   return false;
@@ -482,7 +538,7 @@ console.log();
     //   this.showMessage('warning', 'Sender Alternative Address is required');
     //   return false;
     // }
-  
+
     // Receiver Validation
     // if (!this.parcels.receiverName || !this.parcels.receiverName.trim()) {
     //   this.showMessage('warning', 'Receiver Name is required');
@@ -504,7 +560,7 @@ console.log();
     //   this.showMessage('warning', 'Receiver Alternative Address is required');
     //   return false;
     // }
-  
+
     return true;
   }
   // -------------------------------------From Validation-----------------------
@@ -513,12 +569,9 @@ console.log();
     if (!this.validateForm()) {
       return;
     }
-
     const headers = new HttpHeaders({
       Token: this.authService.UserInfo?.Token,
     });
-
-    console.log(this.parcels);
 
     // const payload = {
     //   parcelId: this.parcels.parcelId,
@@ -526,7 +579,7 @@ console.log();
     //   senderName:this.parcels.senderName,
     //   isActive: this.parcels.isActive,
     // };
-
+    this.updatePrice();
     const payload = {
       parcelId: this.parcels.parcelId, // Parcel ID
       trackingCode: this.parcels.trackingCode, // Tracking Code
@@ -581,10 +634,7 @@ console.log();
           this.showMessage('success', 'Parcel updated successfully');
         },
         error: (error) => {
-          this.showMessage(
-            'error',
-            error.error || 'Failed to update parcel '
-          );
+          this.showMessage('error', error.error || 'Failed to update parcel ');
         },
       });
   }
@@ -599,10 +649,9 @@ console.log();
     });
 
     this.httpClient
-      .delete(
-        `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
-        { headers }
-      )
+      .delete(`${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`, {
+        headers,
+      })
       .subscribe({
         next: () => {
           this.reset();
@@ -630,7 +679,6 @@ console.log();
 
   reset(): void {
     this.parcels = {
-     
       parcelId: 0,
       trackingCode: '',
       createdBy: '', // Corrected property name
@@ -695,49 +743,47 @@ console.log();
     this.applyPaging();
   }
 
-// -----------------------------------------Boolean--------------------------Status--------
+  // -----------------------------------------Boolean--------------------------Status--------
 
-// ---------------------------------active inActive --------------------------
-//  toggleParcel(parcel: Parcel): void {
-//     const headers = new HttpHeaders({
-//       'Token': this.authService.UserInfo?.Token || '',
-//     });
+  // ---------------------------------active inActive --------------------------
+  //  toggleParcel(parcel: Parcel): void {
+  //     const headers = new HttpHeaders({
+  //       'Token': this.authService.UserInfo?.Token || '',
+  //     });
 
-//     const updatedStatus = {
-//       ...parcel,
-//       SendingBranch: !parcel.sendingBranch, // বর্তমান isActive মানটি উল্টানো হবে
-//     };
+  //     const updatedStatus = {
+  //       ...parcel,
+  //       SendingBranch: !parcel.sendingBranch, // বর্তমান isActive মানটি উল্টানো হবে
+  //     };
 
-//     this.httpClient.put(
-//       `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
-//       updatedStatus,
-//       { headers }
-//     ).subscribe({
-//       next: () => {
-//         parcel.sendingBranch = !parcel.sendingBranch; // UI আপডেট করুন
-//         this.showMessage(
-//           'success',
-//           `Status changed to ${parcel.sendingBranch ? 'YES' : 'NO'}`
-//         );
-//       },
-//       error: () => {
-//         this.showMessage('error', 'Failed to change status');
-//       },
-//     });
-//   }
+  //     this.httpClient.put(
+  //       `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
+  //       updatedStatus,
+  //       { headers }
+  //     ).subscribe({
+  //       next: () => {
+  //         parcel.sendingBranch = !parcel.sendingBranch; // UI আপডেট করুন
+  //         this.showMessage(
+  //           'success',
+  //           `Status changed to ${parcel.sendingBranch ? 'YES' : 'NO'}`
+  //         );
+  //       },
+  //       error: () => {
+  //         this.showMessage('error', 'Failed to change status');
+  //       },
+  //     });
+  //   }
 
-
-//Model Data Uthano
+  //Model Data Uthano
   selectedParcel: any = null;
 
   selectParcel(parcel: any): void {
-    console.log(parcel)
+    console.log(parcel);
     this.selectedParcel = parcel;
   }
   //  // Method to generate PDF for a single row
   //  generatePDF(parcel: any) {
   //   const doc = new jsPDF();
-
 
   //   // Define the content of the PDF
   //   const content = `
@@ -764,7 +810,7 @@ console.log();
   generatePDF(parcel: any) {
     const doc = new jsPDF();
 
-  console.log('Selected Parcel:', parcel);
+    console.log('Selected Parcel:', parcel);
 
     // Set company details at the top
     const companyLogo = 'data:image/png;base64,...'; // Replace with your Base64 logo
@@ -774,23 +820,27 @@ console.log();
     doc.text('Parcel Invoice', 105, 20, { align: 'center' });
     doc.setFontSize(12);
     doc.text('SmartCourier', 105, 26, { align: 'center' });
-    doc.text('Address: Shawrapara, Mirpur-12, Dhaka, Bangladesh', 105, 32, { align: 'center' });
-    doc.text('Phone: 01949201049 | Email: info@smartcourier.com', 105, 38, { align: 'center' });
-  
+    doc.text('Address: Shawrapara, Mirpur-12, Dhaka, Bangladesh', 105, 32, {
+      align: 'center',
+    });
+    doc.text('Phone: 01949201049 | Email: info@smartcourier.com', 105, 38, {
+      align: 'center',
+    });
+
     // Draw a separator line
     doc.setDrawColor(0, 0, 0);
     doc.line(10, 45, 200, 45); // x1, y1, x2, y2
 
-  // // Add sender information
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.text('Sender Information', 10, 55); // Left side
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(12);
-      doc.text(`Name: ${parcel?.senderName}`, 10, 62);
-      doc.text(`Phone: ${parcel?.senderPhone}`, 10, 68);
-      doc.text(`Branch: ${this.getBranchName(parcel?.senderBranchId)}`, 10, 74);
-      doc.text(`Estimated: ${parcel?.estimatedReceiveTime}`, 10, 80);
+    // // Add sender information
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.text('Sender Information', 10, 55); // Left side
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    doc.text(`Name: ${parcel?.senderName}`, 10, 62);
+    doc.text(`Phone: ${parcel?.senderPhone}`, 10, 68);
+    doc.text(`Branch: ${this.getBranchName(parcel?.senderBranchId)}`, 10, 74);
+    doc.text(`Estimated: ${parcel?.estimatedReceiveTime}`, 10, 80);
 
     // Add receiver information
     doc.setFont('helvetica', 'bold');
@@ -819,13 +869,14 @@ console.log();
     // doc.text(`Status: ${selectParcel.isActive ? 'Active' : 'Inactive'}`, 10, 140);
     doc.text(`Delivery Charge: ${parcel.price}`, 10, 140);
 
-  
     // Footer with date
     const currentDate = new Date().toLocaleDateString();
     doc.setFontSize(10);
     doc.text(`Generated on: ${currentDate}`, 10, 285); // Bottom-left corner
-    doc.text('Thank you for choosing our service!', 105, 285, { align: 'center' });
-  
+    doc.text('Thank you for choosing our service!', 105, 285, {
+      align: 'center',
+    });
+
     // Save the PDF
     doc.save(`Parcel_${parcel.trackingCode}.pdf`);
   }
@@ -833,13 +884,15 @@ console.log();
   //   const url =  `${this.authService.baseURL}/api//Parcels/UpdateStatus/${id}`;
   //   return this.httpClient.put(url, status, { headers: { 'Content-Type': 'application/json' } });
   // }
-  
+
   updateParcelStatus(id: number, status: string): Observable<any> {
     const url = `${this.authService.baseURL}/api/Parcels/UpdateStatus/${id}`;
-    return this.httpClient.put(url, status, { headers: { 'Content-Type': 'application/json' } });
+    return this.httpClient.put(url, status, {
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
-  updateStatus(parcelId: number, newStatus: string| undefined): void {
+  updateStatus(parcelId: number, newStatus: string | undefined): void {
     if (!newStatus) {
       alert('Please select a valid status.');
       return;
@@ -857,22 +910,24 @@ console.log();
   }
 
   // ---------------------------------active inActive --------------------------
-    
-    toggleSendingBranch(parcel: Parcel): void {
-      const headers = new HttpHeaders({
-        'Token': this.authService.UserInfo?.Token || '',
-      });
-    
-      const updatedStatus = {
-        ...parcel,
-        sendingBranch: !parcel.sendingBranch, // বর্তমান isActive মানটি উল্টানো হবে
-      };
-    
-      this.httpClient.put(
+
+  toggleSendingBranch(parcel: Parcel): void {
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+    });
+
+    const updatedStatus = {
+      ...parcel,
+      sendingBranch: !parcel.sendingBranch, // বর্তমান isActive মানটি উল্টানো হবে
+    };
+
+    this.httpClient
+      .put(
         `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
         updatedStatus,
         { headers }
-      ).subscribe({
+      )
+      .subscribe({
         next: () => {
           parcel.sendingBranch = !parcel.sendingBranch; // UI আপডেট করুন
           window.location.reload();
@@ -885,87 +940,222 @@ console.log();
           this.showMessage('error', 'Failed to change status');
         },
       });
-    }
-     // ---------------------------------active inActive --------------------------
-    
-     togglePercelSendingDestribution(parcel: Parcel): void {
-      const headers = new HttpHeaders({
-        'Token': this.authService.UserInfo?.Token || '',
-      });
-    
-      const updatedStatus = {
-        ...parcel,
-        percelSendingDestribution: !parcel.percelSendingDestribution, // বর্তমান isActive মানটি উল্টানো হবে
-      };
-    
-      this.httpClient.put(
+  }
+  // ---------------------------------active inActive --------------------------
+
+  togglePercelSendingDestribution(parcel: Parcel): void {
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+    });
+
+    const updatedStatus = {
+      ...parcel,
+      percelSendingDestribution: !parcel.percelSendingDestribution, // বর্তমান isActive মানটি উল্টানো হবে
+    };
+
+    this.httpClient
+      .put(
         `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
         updatedStatus,
         { headers }
-      ).subscribe({
+      )
+      .subscribe({
         next: () => {
           parcel.percelSendingDestribution = !parcel.percelSendingDestribution; // UI আপডেট করুন
           window.location.reload();
           this.showMessage(
             'success',
-            `Status changed to ${parcel.percelSendingDestribution ? 'YES' : 'NO'}`
+            `Status changed to ${
+              parcel.percelSendingDestribution ? 'YES' : 'NO'
+            }`
           );
         },
         error: () => {
           this.showMessage('error', 'Failed to change status');
         },
       });
-    }
-      // ---------------------------------active inActive --------------------------
-    
-      toggleRecebingDistributin(parcel: Parcel): void {
-        const headers = new HttpHeaders({
-          'Token': this.authService.UserInfo?.Token || '',
-        });
-      
-        const updatedStatus = {
-          ...parcel,
-          recebingDistributin: !parcel.recebingDistributin, // বর্তমান isActive মানটি উল্টানো হবে
-        };
-      
-        this.httpClient.put(
-          `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
-          updatedStatus,
-          { headers }
-        ).subscribe({
-          next: () => {
-            parcel.recebingDistributin = !parcel.recebingDistributin; // UI আপডেট করুন
-            window.location.reload();
-            this.showMessage(
-              'success',
-              `Status changed to ${parcel.recebingDistributin ? 'YES' : 'NO'}`
-            );
-          },
-          error: () => {
-            this.showMessage('error', 'Failed to change status');
-          },
-        });
-      }
-        // ---------------------------------active inActive --------------------------
-    
-     toggleRecebingBranch(parcel: Parcel): void {
-      const headers = new HttpHeaders({
-        'Token': this.authService.UserInfo?.Token || '',
-      });
-    
-      const updatedStatus = {
-        ...parcel,
-        recebingBranch: !parcel.recebingBranch, // বর্তমান isActive মানটি উল্টানো হবে
-      };
-    
-      this.httpClient.put(
+  }
+  // ---------------------------------active inActive --------------------------
+
+  toggleRecebingDistributin(parcel: Parcel): void {
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+    });
+
+    const updatedStatus = {
+      ...parcel,
+      recebingDistributin: !parcel.recebingDistributin, // বর্তমান isActive মানটি উল্টানো হবে
+    };
+
+    this.httpClient
+      .put(
         `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
         updatedStatus,
         { headers }
-      ).subscribe({
+      )
+      .subscribe({
+        next: () => {
+          parcel.recebingDistributin = !parcel.recebingDistributin; // UI আপডেট করুন
+          window.location.reload();
+          this.showMessage(
+            'success',
+            `Status changed to ${parcel.recebingDistributin ? 'YES' : 'NO'}`
+          );
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to change status');
+        },
+      });
+  }
+  // ---------------------------------active inActive --------------------------
+
+  //  toggleRecebingBranch(parcel: Parcel): void {
+  //   const headers = new HttpHeaders({
+  //     'Token': this.authService.UserInfo?.Token || '',
+  //   });
+
+  //   const updatedStatus = {
+  //     ...parcel,
+  //     recebingBranch: !parcel.recebingBranch, // বর্তমান isActive মানটি উল্টানো হবে
+  //   };
+
+  //   this.httpClient.put(
+  //     `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
+  //     updatedStatus,
+  //     { headers }
+  //   ).subscribe({
+  //     next: () => {
+  //       parcel.recebingBranch = !parcel.recebingBranch; // UI আপডেট করুন
+  //       window.location.reload();
+  //       this.showMessage(
+  //         'success',
+  //         `Status changed to ${parcel.recebingBranch ? 'YES' : 'NO'}`
+  //       );
+  //     },
+  //     error: () => {
+  //       this.showMessage('error', 'Failed to change status');
+  //     },
+  //   });
+  // }
+
+  // sendParcelData():void {
+  //   const parcelData = {
+  //     parcelId: 101,
+  //     receiverEmail: 'test@example.com',
+  //     address: 'Dhaka, Bangladesh',
+  //   };
+
+  toggleRecebingBranch(parcel: Parcel): void {
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+    });
+console.log(parcel)
+    const updatedStatus = {
+      ...parcel,
+      recebingBranch: !parcel.recebingBranch, // বর্তমান মান উল্টানো হবে
+    };
+
+    // console.log(updatedStatus.recebingBranch)
+    if (updatedStatus.recebingBranch) {
+      // this.getStaff();
+     console.log(this.listOfStaff)
+     console.log(parcel.receiverBranchId)
+     const receverBranch= this.listBranchs.find(rB=>rB.branchId==parcel.receiverBranchId);
+     console.log(this.listOfStaff.find(sId=>sId.branchId==parcel.receiverBranchId))
+     const staffBranch = this.listOfStaff.find(sId=>sId.branchId==parcel.receiverBranchId)
+      // const parcelData = {
+      //   // toEmail: 'samaul.isdb@gmail.com',
+      //   toEmail:parcel.receiverEmail,
+      //   subject: `Collaced your Parcel from ${receverBranch?.branchName} Branch`,
+      //   body: '',
+      // };
+      // const parcelData = {
+      //   toEmail: parcel.receiverEmail,
+      //   subject: `Collect Your Parcel from ${receverBranch?.branchName} Branch`,
+      //   body: `
+      //     Dear ${parcel.receiverName},\n
+      
+      //     We are pleased to inform you that your parcel has arrived at the ${receverBranch?.branchName} branch. You can collect it at your earliest convenience.
+      
+      //     **Tracking Code:** ${parcel.trackingCode}
+      
+      //     Please bring a valid ID and your tracking code while collecting the parcel.
+      
+      //     **Branch Address:** ${receverBranch?.address}  
+      //     **Branch Contact:** ${staffBranch?.staffPhone}  
+      
+      //     If you have any questions, feel free to contact us.
+      
+      //     Best Regards,  
+      //     Comapany Name: Smart Courier
+      //     Customer Support: arafat.dev61@gmail.com | 01971201048
+      //   `,
+      // };
+      const parcelData = {
+        toEmail: parcel.receiverEmail,
+        subject: `Collect Your Parcel from ${receverBranch?.branchName} Branch`,
+        body: `
+        <p>Dear ${parcel.receiverName},</p>
+        
+        <p>We are pleased to inform you that your parcel has arrived at the <strong>${receverBranch?.branchName}</strong> branch.</p>
+        <p>You can collect it at your earliest convenience.</p>
+        
+        <p><strong>Tracking Code:</strong> ${parcel.trackingCode}</p>
+        <p><strong>Click Link :</strong> <a href="http://localhost:4200/tracking">http://localhost:4200/tracking</a>  </p>
+            
+        
+        
+        <p>Please bring a valid ID and your tracking code while collecting the parcel.</p>
+        
+        <p><strong>Branch Address:</strong> ${receverBranch?.address}</p>
+        <p><strong>Branch Contact:</strong> ${staffBranch?.staffPhone}</p>
+        
+        <p>If you have any questions, feel free to contact us.</p>
+        
+        <p>Best Regards,</p>
+        
+        <p><strong>Company Name:</strong> Smart Courier</p>
+        <p><strong>Customer Support:</strong> <a href="mailto:arafat.dev61@gmail.com">arafat.dev61@gmail.com</a> | 01971201048</p>
+        `,
+    };
+    
+      
+console.log(parcelData);
+
+console.log(this.listBranchs.find(recevarBranch=>recevarBranch.branchId==parcel.receiverBranchId));
+
+      this.EmailService.sendParcel(parcelData).subscribe(
+        (response) => {
+          console.log('Success:', response);
+          this.showMessage(
+            'success',
+            `email send successfully`
+          );
+          window.location.reload();
+        },
+        (error) => {
+          console.error('Error:', error);
+        }
+      );
+    }
+    this.httpClient
+      .put(
+        `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
+        updatedStatus,
+        { headers }
+      )
+      .subscribe({
         next: () => {
           parcel.recebingBranch = !parcel.recebingBranch; // UI আপডেট করুন
-          window.location.reload();
+
+          if (parcel.recebingBranch) {
+            // যদি recebingBranch = YES হয়, তাহলে Receiver Email নিয়ে আসবে
+            this.fetchReceiverEmail(parcel.parcelId);
+          } else {
+            // যদি recebingBranch = NO হয়, তাহলে Receiver Email ফাঁকা করে দিন
+            this.parcels.receiverEmail = '';
+          }
+
           this.showMessage(
             'success',
             `Status changed to ${parcel.recebingBranch ? 'YES' : 'NO'}`
@@ -975,37 +1165,38 @@ console.log();
           this.showMessage('error', 'Failed to change status');
         },
       });
-    }
-      // ---------------------------------active inActive --------------------------
-    
-      toggleRecebingReceber(parcel: Parcel): void {
-        const headers = new HttpHeaders({
-          'Token': this.authService.UserInfo?.Token || '',
-        });
-      
-        const updatedStatus = {
-          ...parcel,
-          recebingReceber: !parcel.recebingReceber, // বর্তমান isActive মানটি উল্টানো হবে
-        };
-      
-        this.httpClient.put(
-          `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
-          updatedStatus,
-          { headers }
-        ).subscribe({
-          next: () => {
-            parcel.recebingReceber = !parcel.recebingReceber; // UI আপডেট করুন
-            window.location.reload();
-            this.showMessage(
-              'success',
-              `Status changed to ${parcel.recebingReceber ? 'YES' : 'NO'}`
-            );
-          },
-          error: () => {
-            this.showMessage('error', 'Failed to change status');
-          },
-        });
-      }
-}
-  
+  }
 
+  // ---------------------------------active inActive --------------------------
+
+  toggleRecebingReceber(parcel: Parcel): void {
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+    });
+
+    const updatedStatus = {
+      ...parcel,
+      recebingReceber: !parcel.recebingReceber, // বর্তমান isActive মানটি উল্টানো হবে
+    };
+
+    this.httpClient
+      .put(
+        `${this.authService.baseURL}/api/Parcels/${parcel.parcelId}`,
+        updatedStatus,
+        { headers }
+      )
+      .subscribe({
+        next: () => {
+          parcel.recebingReceber = !parcel.recebingReceber; // UI আপডেট করুন
+          window.location.reload();
+          this.showMessage(
+            'success',
+            `Status changed to ${parcel.recebingReceber ? 'YES' : 'NO'}`
+          );
+        },
+        error: () => {
+          this.showMessage('error', 'Failed to change status');
+        },
+      });
+  }
+}
