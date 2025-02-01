@@ -102,7 +102,7 @@
 </head>
 <body>
     <section class="container py-5">
-        <h2 class="mb-4 text-center courier-title">Courier Delivery Management System</h2>
+        <h2 class="mb-4 text-center courier-title pt-3">Courier Delivery Management System</h2>
 
         <!-- Cards -->
         <div class="row">
@@ -240,16 +240,29 @@
        -->
         <!-- Charts Section -->
         <div class="row mt-4">
-          <div class="col-md-6 mb-4">
+          <!-- <div class="col-md-6 mb-4">
             <div class="card p-3">
               <h5 class="text-center">Delivery Time</h5>
-              <canvas id="rideChart"></canvas>
+              <div style="width: 300px; height: 300px; margin: auto;">
+                <canvas id="rideChart"></canvas>
+              </div>
+            </div>
+          </div> -->
+          <div class="col-md-6 mb-4">
+            <div class="card p-3">
+              <h5 class="text-center">Months Status</h5>
+              <div style="width: 450px; height: 300px;">
+                <canvas id="rideChart"></canvas>
+              </div>                          
             </div>
           </div>
           <div class="col-md-6 mb-4">
             <div class="card p-3">
               <h5 class="text-center">Months Status</h5>
-              <canvas id="driverChart"></canvas>
+              <div style="width: 300px; height: 300px; margin: auto;">
+                <canvas class="position-relative" id="driverChart"></canvas>
+               <div class="position-absolute text-center" style="top: 45%; left: 43%;">{{ (completeDelevery() / listOfParcel.length) * 100 | number: '1.2-2' }}% <br> <span>Completed</span></div>
+              </div>              
             </div>
           </div>
         </div>

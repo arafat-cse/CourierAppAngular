@@ -117,61 +117,61 @@
   <!-- <li class="nav-item">
     <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/dashboard"><i class="fa fa-home"></i> Dashboard</a>
   </li> -->
-  <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link " aria-current="page" routerLink="/dashboard"><i class="fa fa-home text-warning"></i> Dashboard</a>
+  <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link fs-6 " aria-current="page" routerLink="/dashboard"><i class="fa fa-home"></i> Dashboard</a>
   <div>
-    <div class="dropdown">
+    <div class="dropdown fs-6">
       <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa-solid fa-box text-warning"></i> Parcel
+        <i class="fa-solid fa-box"></i> Parcel
       </a>
       <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
         <li><a class="dropdown-item" routerLink="/parcel"><i class="fa fa-plus"></i> Add Parcel</a></li>
         <li><a class="dropdown-item" routerLink="/parcel"><i class="fa fa-list"></i> Parcel List</a></li>
       </ul>
   </div>
-   <div class="dropdown">
-     <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-      <i class="fa-solid fa-tape text-warning"></i> Parcel Type
-     </a>
-     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-       <li><a class="dropdown-item" routerLink="/parcel-type"><i class="fa fa-plus"></i> Parcel Type</a></li>
-       <li><a class="dropdown-item" routerLink="/parcel-type"><i class="fa fa-list"></i> Parcel Type List</a></li>
-
-       <!-- <li><a class="dropdown-item" routerLink="/Parcel"><i class="fa fa-plus"></i> Add Parcel</a></li>
-       <li><a class="dropdown-item" routerLink="/delivery-charge"><i class="fa fa-plus"></i> Add delivery-charge</a></li>
-       <li><a class="dropdown-item" routerLink="/parcel"><i class="fa fa-list"></i> Parcel List</a></li>
-       <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-briefcase"></i> Branch</a></li> -->
-     </ul>
-   </div>
-   <div class="dropdown">
+   <div class="dropdown fs-6">
     <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-      <i class="fa-solid fa-code-branch text-warning"></i> Branch
+      <i class="fa-solid fa-code-branch"></i> Branch
     </a>
     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
       <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-plus"></i> Branch</a></li>
       <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-list"></i> Branch List</a></li>
     </ul>
   </div>
-  <div class="dropdown">
+  <div class="dropdown fs-6">
     <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <i class="fa fa-users icon text-warning"></i> Staff
+    <i class="fa fa-users icon"></i> Staff
     </a>
     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
       <li><a class="dropdown-item" routerLink="/staff"><i class="fa fa-plus"></i> Staff</a></li>
       <li><a class="dropdown-item" routerLink="/staff"><i class="fa fa-list"></i> Staff List</a></li>
     </ul>
   </div>
-  <div class="dropdown">
+  <div class="dropdown fs-6">
     <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-      <i class="fa-solid fa-location-pin text-warning"></i> Designation
+      <i class="fa-solid fa-location-pin"></i> Designation
     </a>
     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
       <li><a class="dropdown-item" routerLink="/designation"><i class="fa fa-plus"></i> Designation</a></li>
       <li><a class="dropdown-item" routerLink="/designation"><i class="fa fa-list"></i> Designation List</a></li>
     </ul>
   </div>
-   <div class="dropdown">
+  <div class="dropdown fs-6">
+    <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+     <i class="fa-solid fa-tape"></i> Parcel Type
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <li><a class="dropdown-item" routerLink="/parcel-type"><i class="fa fa-plus"></i> Parcel Type</a></li>
+      <li><a class="dropdown-item" routerLink="/parcel-type"><i class="fa fa-list"></i> Parcel Type List</a></li>
+
+      <!-- <li><a class="dropdown-item" routerLink="/Parcel"><i class="fa fa-plus"></i> Add Parcel</a></li>
+      <li><a class="dropdown-item" routerLink="/delivery-charge"><i class="fa fa-plus"></i> Add delivery-charge</a></li>
+      <li><a class="dropdown-item" routerLink="/parcel"><i class="fa fa-list"></i> Parcel List</a></li>
+      <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-briefcase"></i> Branch</a></li> -->
+    </ul>
+  </div>
+   <div class="dropdown fs-6">
        <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa-brands fa-ethereum text-warning"></i> Other
+        <i class="fa-brands fa-ethereum"></i> Other
        </a>
        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
          <!-- <li><a class="dropdown-item" routerLink="/staff"><i class="fa fa-plus"></i> Staff</a></li> -->
@@ -180,11 +180,16 @@
          <li><a class="dropdown-item" routerLink="/branch"><i class="fa fa-plus"></i> Branch</a></li>         <!-- <li><a class="dropdown-item" routerLink="/vans"><i class="fa fa-plus"></i> Branch</a></li> -->
        </ul>
   </div>
- 
-   <a routerLink="/dashboard"><i class="fa fa-file-alt text-warning"></i> Report</a>
-   <!-- <a routerLink="#"><i class="fa fa-th"></i> Grid</a> -->
+ <div class="dropdown fs-6">
+  <a routerLink="/dashboard"><i class="fa fa-file-alt "></i> Report</a>
+  <!-- <a routerLink="#"><i class="fa fa-th"></i> Grid</a> -->
+ </div>
+  
   </div>
-  <a routerLink="#"><i class="fa fa-cogs text-warning"></i> Settings</a>
+  <div class="dropdown fs-6">
+    <a routerLink="#"><i class="fa fa-cogs "></i> Settings</a>
+  </div>
+
   
   <div class="fixed-bottom mb-2 d-flex justify-content-center" style="width: 220px;">
     <button title="Notification here" type="button" class="border rounded-circle position-relative  me-4" >

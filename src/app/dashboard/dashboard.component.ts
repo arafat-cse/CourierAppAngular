@@ -9,14 +9,13 @@
 //   styleUrls: ['./dashboard.component.css']
 // })
 // export class DashboardComponent {
-//   constructor() { 
-    
+//   constructor() {
+
 //   }
 
 //   ngOnInit() {
 //   }
 
-  
 // }
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -32,15 +31,14 @@ import { Parcels } from '../security/interface/parcel';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-
   //staff interface
-  listOfStaff:Staff[]=[];
-  listOfVan:Van[]=[];
-  listOfBranch:Branch[]=[];
-  listOfParcel:Parcels[]=[];
+  listOfStaff: Staff[] = [];
+  listOfVan: Van[] = [];
+  listOfBranch: Branch[] = [];
+  listOfParcel: Parcels[] = [];
 
   // stats = [
   //   { value: 40, label: 'Total Staff', bgClass: 'bg-warning text-white' },
@@ -68,192 +66,261 @@ export class DashboardComponent implements OnInit {
     },
   ];
 
-    constructor(
-      private cs: CommonService,
-      private httpClient: HttpClient,
-      public authService: AuthService,
-      
-    ) {}
-  
+  constructor(
+    private cs: CommonService,
+    private httpClient: HttpClient,
+    public authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     // Register Chart.js components
     Chart.register(...registerables);
-    this.loadCharts();
     this.getStaff();
     this.getVan();
-    this. getBranches();
-    this.getParcel()
+    this.getBranches();
+    this.getParcel();
+    const a = setInterval(() => {
+      this.loadCharts();
+      clearInterval(a);
+    }, 1000);
   }
 
-  loadCharts(): void {
-    const rideCtx = document.getElementById('rideChart') as HTMLCanvasElement;
-    const rideChart = new Chart(rideCtx, {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-        datasets: [{
-          label: 'delivery',
-          data: [800, 1500, 1200, 2000, 1800, 900, 1300, 1700, 1500],
-          borderColor: 'green',
-          tension: 0.4,
-          fill: false,
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: true,
-          }
-        }
-      }
-    });
+  // loadCharts(): void {
+  //   const rideCtx = document.getElementById('rideChart') as HTMLCanvasElement;
+  //   const rideChart = new Chart(rideCtx, {
+  //     type: 'line',
+  //     data: {
+  //       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+  //       datasets: [{
+  //         label: 'delivery',
+  //         data: [800, 1500, 1200, 2000, 1800, 900, 1300, 1700, 1500],
+  //         borderColor: 'green',
+  //         tension: 0.4,
+  //         fill: false,
+  //       }]
+  //     },
+  //     options: {
+  //       responsive: true,
+  //       plugins: {
+  //         legend: {
+  //           display: true,
+  //         }
+  //       }
+  //     }
+  //   });
 
-    const driverCtx = document.getElementById('driverChart') as HTMLCanvasElement;
-    const driverChart = new Chart(driverCtx, {
-      type: 'doughnut',
-      data: {
-        labels: ['On Delivery', 'Compelete'],
-        datasets: [{
-          data: [28, 4],
-          backgroundColor: ['#007bff', '#ffc107']
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-          }
-        }
-      }
-    });
-  }
-// --------------------------------------------------------- Staff Start--------------------------------------
-getStaff(): void {
-  const headers = new HttpHeaders({
-    'Token': this.authService.UserInfo?.Token || '',
-  });
+  //   const driverCtx = document.getElementById('driverChart') as HTMLCanvasElement;
+  //   const driverChart = new Chart(driverCtx, {
+  //     type: 'doughnut',
+  //     data: {
+  //       labels: ['Parcel','Pending Delivery', 'Compelete'],
+  //       datasets: [{
+  //         data: [this.completeDelevery(), 10,5],
+  //         backgroundColor: ['#22B363FF','#ffc107','#007bff']
+  //       }]
+  //     },
+  //     options: {
+  //       responsive: true,
+  //       plugins: {
+  //         legend: {
+  //           position: 'bottom',
+  //         }
+  //       }
+  //     }
+  //   });
 
-  this.httpClient.get<any>(`${this.authService.baseURL}/api/Staffs`, { headers })
-    .subscribe({
-      next: (response) => {
-        this.listOfStaff = response;
-        console.log(this.listOfStaff.length);
+  // }
 
-      //  this.rowCount = response.totalCount || 0;
-        // this.applyPaging();
-      },
-      // error: () => {
-      //   this.showMessage('error', 'Failed to load parcel types');
-      // },
-    });
-}
-// --------------------------------------------------------- Staff End--------------------------------------
-// --------------------------------------------------------- Van Start--------------------------------------
-getVan(): void {
-  const headers = new HttpHeaders({
-    'Token': this.authService.UserInfo?.Token || '',
-  });
-
-  this.httpClient.get<any>(`${this.authService.baseURL}/api/Vans`, { headers })
-    .subscribe({
-      next: (response) => {
-        this.listOfVan = response;
-        console.log(this.listOfVan.length);
-      //  this.rowCount = response.totalCount || 0;
-        // this.applyPaging();
-      },
-      // error: () => {
-      //   this.showMessage('error', 'Failed to load Vans');
-      // },
-    });
-}
-
-// --------------------------------------------------------- Van End--------------------------------------
-// --------------------------------------------------------- Branch Start--------------------------------------
- getBranches(): void {
+  // --------------------------------------------------------- Staff Start--------------------------------------
+  getStaff(): void {
     const headers = new HttpHeaders({
       Token: this.authService.UserInfo?.Token || '',
     });
 
-    this.httpClient.get<{ status: boolean; message: string; content: Branch[] }>(
-      `${this.authService.baseURL}/api/Branches`,
-      { headers }
-    ).subscribe({
-      next: (response) => {
-        if (response.status) {
-          this.listOfBranch = response.content;
-        console.log(this.listOfBranch.length);
+    this.httpClient
+      .get<any>(`${this.authService.baseURL}/api/Staffs`, { headers })
+      .subscribe({
+        next: (response) => {
+          this.listOfStaff = response;
+          console.log(this.listOfStaff.length);
 
-         // this.rowCount = response.content.length;
-        //   this.paginate();
-        //   this.prepareDropdownBranches(response.content);
-        // } else {
-         // this.showMessage('warning', response.message);
-        }
-      },
-      // error: () => {
-      //   this.showMessage('error', 'Failed to load branches');
-      // },
-    });
+          //  this.rowCount = response.totalCount || 0;
+          // this.applyPaging();
+        },
+        // error: () => {
+        //   this.showMessage('error', 'Failed to load parcel types');
+        // },
+      });
   }
-// --------------------------------------------------------- Brnach End--------------------------------------
-// --------------------------------------------------------- Parcel Start--------------------------------------
-getParcel(): void {
-  const headers = new HttpHeaders({
-    Token: this.authService.UserInfo?.Token || '',
-  });
-  this.httpClient
-    .get<any>(`${this.authService.baseURL}/api/Parcels`, { headers })
-    .subscribe({
-      next: (response) => {
-        console.log(response);
-        this.listOfParcel = response;
-        console.log(this.listOfParcel.length);
-
-        //  this.rowCount = response.totalCount || 0;
-        // this.applyPaging();
-      },
-      // error: () => {
-      //   this.showMessage('error', 'Failed to load parcel ');
-      // },
+  // --------------------------------------------------------- Staff End--------------------------------------
+  // --------------------------------------------------------- Van Start--------------------------------------
+  getVan(): void {
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
     });
-}
-// totalRevenue(): number {
-//   return this.listOfParcel.reduce((sum, parcel) => sum + parcel.parcelId, 0);
-// }
-totalRevenue(): number {
-  return this.listOfParcel.reduce((sum, parcel) => sum + (parcel.price || 0), 0);
-}
 
-// completeDelevery ():number{
-//   this.listOfParcel.forEach(res=>{
-//     console.log(res);
-//   })
-//   return 0;
-// }
-completeDelevery(): number {
-  return this.listOfParcel.filter(parcel => 
-    parcel.sendingBranch &&
-    parcel.percelSendingDestribution &&
-    parcel.recebingDistributin &&
-    parcel.recebingBranch &&
-    parcel.recebingReceber
-  ).length;
-}
+    this.httpClient
+      .get<any>(`${this.authService.baseURL}/api/Vans`, { headers })
+      .subscribe({
+        next: (response) => {
+          this.listOfVan = response;
+          console.log(this.listOfVan.length);
+          //  this.rowCount = response.totalCount || 0;
+          // this.applyPaging();
+        },
+        // error: () => {
+        //   this.showMessage('error', 'Failed to load Vans');
+        // },
+      });
+  }
 
-panddingDelevery(): number {
-  return this.listOfParcel.filter(parcel => 
-    parcel.sendingBranch ||
-    parcel.percelSendingDestribution ||
-    parcel.recebingDistributin ||
-    parcel.recebingBranch ||
-    parcel.recebingReceber
-  ).length;
-}
-// --------------------------------------------------------- Parcel End--------------------------------------
+  // --------------------------------------------------------- Van End--------------------------------------
+  // --------------------------------------------------------- Branch Start--------------------------------------
+  getBranches(): void {
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+    });
 
+    this.httpClient
+      .get<{ status: boolean; message: string; content: Branch[] }>(
+        `${this.authService.baseURL}/api/Branches`,
+        { headers }
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.status) {
+            this.listOfBranch = response.content;
+            console.log(this.listOfBranch.length);
 
+            // this.rowCount = response.content.length;
+            //   this.paginate();
+            //   this.prepareDropdownBranches(response.content);
+            // } else {
+            // this.showMessage('warning', response.message);
+          }
+        },
+        // error: () => {
+        //   this.showMessage('error', 'Failed to load branches');
+        // },
+      });
+  }
+  // --------------------------------------------------------- Brnach End--------------------------------------
+  // --------------------------------------------------------- Parcel Start--------------------------------------
+  getParcel(): void {
+    const headers = new HttpHeaders({
+      Token: this.authService.UserInfo?.Token || '',
+    });
+    this.httpClient
+      .get<any>(`${this.authService.baseURL}/api/Parcels`, { headers })
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+          this.listOfParcel = response;
+          console.log(this.listOfParcel.length);
+
+          //  this.rowCount = response.totalCount || 0;
+          // this.applyPaging();
+        },
+        // error: () => {
+        //   this.showMessage('error', 'Failed to load parcel ');
+        // },
+      });
+  }
+  // totalRevenue(): number {
+  //   return this.listOfParcel.reduce((sum, parcel) => sum + parcel.parcelId, 0);
+  // }
+  totalRevenue(): number {
+    return this.listOfParcel.reduce(
+      (sum, parcel) => sum + (parcel.price || 0),
+      0
+    );
+  }
+
+  // completeDelevery ():number{
+  //   this.listOfParcel.forEach(res=>{
+  //     console.log(res);
+  //   })
+  //   return 0;
+  // }
+
+  completeDelevery(): number {
+    return this.listOfParcel.filter(
+      (parcel) =>
+        parcel.sendingBranch &&
+        parcel.percelSendingDestribution &&
+        parcel.recebingDistributin &&
+        parcel.recebingBranch &&
+        parcel.recebingReceber
+    ).length;
+  }
+
+  panddingDelevery(): number {
+    return this.listOfParcel.filter(
+      (parcel) =>
+        parcel.sendingBranch ||
+        parcel.percelSendingDestribution ||
+        parcel.recebingDistributin ||
+        parcel.recebingBranch ||
+        parcel.recebingReceber
+    ).length;
+  }
+
+  loadCharts(): void {
+    const rideCtx = document.getElementById('rideChart') as HTMLCanvasElement;
+
+const rideChart = new Chart(rideCtx, {
+  type: 'line',
+  data: {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    datasets: [
+      {
+        label: 'Delivery',
+        data: [800, 1500, 1200, 2000, 1800, 900, 1300, 1700, 1500],
+        borderColor: 'green',
+        tension: 0.4,
+        fill: false,
+      },
+    ],
+  },
+  options: {
+    responsive: false, // চার্টের সাইজ পরিবর্তন হবে না
+    maintainAspectRatio: false, // Aspect ratio ফিক্সড থাকবে
+    plugins: {
+      legend: {
+        position: 'bottom',
+      },
+    },
+  },
+});
+
+    const driverCtx = document.getElementById('driverChart') as HTMLCanvasElement;
+
+    const driverChart = new Chart(driverCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Parcel', 'Pending Delivery', 'Complete'],
+        datasets: [
+          {
+            data: [
+              this.listOfParcel.length,
+              this.panddingDelevery(),
+              this.completeDelevery(),
+            ],
+            backgroundColor: ['#22B363FF', '#ffc107', '#007bff'],
+          },
+        ],
+      },
+      options: {
+        responsive: false, // চার্টের সাইজ পরিবর্তন হবে না
+        maintainAspectRatio: false, // Aspect ratio ফিক্সড থাকবে
+        plugins: {
+          legend: {
+            position: 'bottom',
+          },
+        },
+      },
+    });    
+  }
+
+  // --------------------------------------------------------- Parcel End--------------------------------------
 }
