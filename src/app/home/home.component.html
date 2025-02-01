@@ -16,9 +16,13 @@
               <div>            
               <h1 class="text-black">Smart Courier</h1>
             </div>
-              <div class="" style="border-radius: 50%; padding: 2px; border: 2px solid rgb(255, 255, 255);">            
+            <!-- <div class="" style="border-radius: 50%; padding: 2px; border: 2px solid rgb(255, 255, 255);">            
                 <button type="button" class="btn-close" (click)="isModalOpen = false"></button>
+            </div> -->
+            <div class="d-flex justify-content-center align-items-center" style="border-radius: 50%; border: 3px solid white;">
+                <button type="button" class="rounded-circle text-primary"  (click)="isModalOpen = false">X</button>
             </div>
+            
             </div>
             <div class="modal-body">
                 <app-tracking></app-tracking>
@@ -32,40 +36,117 @@
   <div class="container">
       <div class="row align-items-center">
           <div class="col-lg-6 mb-4 mb-lg-0">
-              <h1 class="display-4 fw-bold">Deliver Packages on Your Schedule</h1>
-              <p class="lead">Join our network and earn by delivering parcels at your convenience.</p>
-              <a href="apply.html" class="btn btn-primary btn-lg">Join as a Courier</a>
+              <h1 class="display-4 fw-bold">Our Locations</h1>
+              <p class="lead">Smart Courier All Branch list or Contact Number.</p>
+              <!-- <a href="apply.html" class="btn btn-primary btn-lg">Join as a Courier</a> -->
+               <!-- Button to Open Modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#branchModal">
+    View Branches
+  </button>
+  
+  <!-- Bootstrap Modal -->
+  <div class="modal fade" id="branchModal" tabindex="-1" aria-labelledby="branchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="branchModalLabel">Branch Information</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Branch Table -->
+          <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+              <tr>
+                <th>SL</th>
+                <th>Branch Name</th>
+                <th>Branch Address</th>
+                <th>Phone Number</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let branch of listbranches; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ branch.name }}</td>
+                <td>{{ branch.address }}</td>
+                <td>{{ branch.phone }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
           </div>
-          <div class="col-lg-6">
-              <img src="assets/img/delivery.png" class="img-fluid rounded shadow" alt="Courier Service">
+          <div class="col-lg-6 imagecaver">
+              <!-- <img src="../assets/images/courier.jpg"  alt="Courier Service"> -->
           </div>
       </div>
   </div>
 </section>
-
+<section class="bg-light py-5">
+    <div class="container text-center">
+      <h2 class="section-title">Our Working Process</h2>
+      <div class="row working-process">
+        <div class="col-md-3">
+          <div class="icon-round">
+            <img src="https://www.sundarbancourierltd.com/FontendStyle/img/1.png" alt="Booking">
+            <!-- <img src="https://i.ibb.co.com/BZ940T2/booked.png" alt="Booking"> -->
+            <h5>Booking</h5>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="icon-round">
+            <img src="https://i.ibb.co.com/QccFTKx/packing.png" alt="Packing">
+            <h5>Packing</h5>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="icon-round">
+            <img src="https://www.sundarbancourierltd.com/FontendStyle/img/3.png" alt="Transportation">
+            <!-- <img src="https://i.ibb.co.com/cwBNtQ6/trabsportation.png" alt="Transportation"> -->
+            <h5>Transportation</h5>
+          </div>
+        </div>
+        <div class="col-md-3 ">
+          <div class="icon-round">
+            <img src="https://i.ibb.co.com/2KzCTDD/delivery.png" alt="Delivery">
+            <h5>Delivery</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 <!-- Features Section -->
 <section class="py-5">
   <div class="container">
       <div class="row text-center">
           <div class="col-md-4">
               <div class="p-4 border rounded shadow-sm">
-                  <i class="fas fa-clock fa-3x text-primary"></i>
-                  <h4 class="mt-3">Flexible Hours</h4>
-                  <p>Work when you want and manage your time efficiently.</p>
+                  <i class="fas fa-bolt fa-3x text-primary"></i>
+                  <!-- <i class="fas fa-clock fa-3x text-primary"></i> -->
+                  <h4 class="mt-3">1. Speed</h4>
+                  <p>Why use a Courier Service if the item won’t 
+                    arrive quickly? Our streamlined network ensures the fastest possible movement of documents and packages.</p>
               </div>
           </div>
           <div class="col-md-4">
               <div class="p-4 border rounded shadow-sm">
-                  <i class="fas fa-dollar-sign fa-3x text-success"></i>
-                  <h4 class="mt-3">Reliable Earnings</h4>
-                  <p>Earn a steady income based on completed deliveries.</p>
+                  <i class="fas fa-handshake fa-3x text-success"></i>
+                  <h4 class="mt-3">2. Reliability</h4>
+                  <p>The SCS system of security checks and emergency back-ups is 
+                    absolutely complete. Thanks to computerized administration and a staff that is second to none.</p>
               </div>
           </div>
           <div class="col-md-4">
               <div class="p-4 border rounded shadow-sm">
-                  <i class="fas fa-box fa-3x text-warning"></i>
-                  <h4 class="mt-3">Seamless Deliveries</h4>
-                  <p>Use our app to manage and track deliveries with ease.</p>
+                  <i class="fas fa-chart-line fa-3x text-warning"></i>
+                  <h4 class="mt-3">3. Low Cost</h4>
+                  <p>All rates are quite reasonable, even for <br>heavy/lightweight <br>
+                    items, fragile items, articles or bulky printed materials.</p>
               </div>
           </div>
       </div>
@@ -73,13 +154,13 @@
 </section>
 
 <!-- Testimonials Section -->
-<section class="bg-light py-5">
+<!-- <section class="bg-light py-5">
   <div class="container text-center">
       <h2 class="mb-4">What Our Couriers Say</h2>
       <div class="row">
           <div class="col-md-4">
               <div class="p-4 border rounded shadow-sm">
-                  <img src="assets/img/testimonial_1.jpg" class="rounded-circle mb-3" width="80" alt="">
+                  <img src="../assets/images/22parcel.png" class="rounded-circle mb-3" width="80" alt="">
                   <h5>Emily R.</h5>
                   <p class="fst-italic">"Great flexibility and excellent support!"</p>
               </div>
@@ -100,12 +181,118 @@
           </div>
       </div>
   </div>
-</section>
+</section> -->
+ <!-- Why Choose Us Section -->
+ <section class="py-5">
+    <div class="container">
+      <h2 class="section-title text-primary">Why Smart Courier Service (Pvt.) Ltd</h2>
+      <div class="row">
+        <div class="col-md-6 d-flex justify-content-center">
+          <img style="height: 200px;width: 200px; justify-items: center;" src="https://i.ibb.co.com/ZNrryrF/why-removebg-preview.png"  alt="Why Sundarban" class="img-fluid">
+        </div>
+        <div class="col-md-6">
+          <p>Smart Courier is a household name in Bangladesh...</p>
+          <ul>
+            <li>Fast and reliable service.</li>
+            <li>Best logistics solutions for businesses and individuals.</li>
+            <li>Wide coverage of the entire country.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
+
+<section class="bg-light py-5">
+    <div class="container text-center">
+      <h2 class="section-title">Our Valued Services</h2>
+      <p class="lead">Thanks for staying at <strong class="text-primary">Smart Courier</strong> .We hope to have the pleasure of doing business with you in the future.</p>
+      <div class="row working-process">
+        <div class="col-md-3">
+          <div class="icon-box">
+            <i class="fa-regular fa-folder-open fs-1 text-white"></i>
+            <!-- <img src="https://i.ibb.co.com/CBdGjNh/booking.png" alt="Document Service"> -->
+            <h5>Document Service</h5>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="icon-box">
+            <i class="fa-brands fa-speakap fs-1 text-white"></i>
+            <!-- <img src="https://i.ibb.co.com/jRSGy55/value.png" alt="Value Declared Service">-->
+            <h5>Value Declared Service</h5> 
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="icon-box">
+            <i class="fa-solid fa-blender-phone fs-1 text-white"></i>
+            <!-- <img src="https://i.ibb.co.com/cXRRF4h/mobile.png" alt="Mobile & ICT Equipment Service"> -->
+            <!-- <img src="https://i.ibb.co.com/cwBNtQ6/trabsportation.png" alt="Transportation"> -->
+            <h5>Mobile & ICT Equipment Service</h5>
+          </div>
+        </div>
+        <div class="col-md-3 ">
+          <div class="icon-box">
+            <i class="fa-solid fa-earth-asia fs-1 text-white"></i>
+           <!-- <img src="https://i.ibb.co.com/W3Z13vc/images-removebg-preview.png" alt="E-Commerce Service"> -->
+            <!-- <img src="https://i.ibb.co.com/2KzCTDD/delivery.png" alt="Delivery"> -->
+            <h5>E-Commerce Service</h5>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 <!-- Footer -->
-<footer class="bg-dark text-white text-center py-3">
-  <p class="mb-0">&copy; 2024 CourierApp | All Rights Reserved.</p>
-</footer>
-
+<footer class="bg-dark text-white py-5 footer-container">
+    <div class="container">
+      <div class="row text-center text-md-start">
+        
+        <!-- Social Media Links -->
+        <div class="col-md-3 mb-4">
+          <h5 class="fw-bold">Follow Us</h5>
+          <ul class="list-unstyled d-flex justify-content-center justify-content-md-start gap-3">
+            <li><a href="#" class="text-white"><i class="fab fa-facebook fa-lg"></i></a></li>
+            <li><a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a></li>
+            <li><a href="#" class="text-white"><i class="fab fa-instagram fa-lg"></i></a></li>
+            <li><a href="#" class="text-white"><i class="fab fa-linkedin fa-lg"></i></a></li>
+          </ul>
+        </div>
+  
+        <!-- Company Details -->
+        <div class="col-md-3 mb-4">
+          <h5 class="fw-bold">Company</h5>
+          <p><strong class="text-primary">Smart Courier</strong>  provides fast, reliable, and affordable delivery services worldwide.</p>
+        </div>
+  
+        <!-- Our Services -->
+        <div class="col-md-3 mb-4">
+          <h5 class="fw-bold">Our Services</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Parcel Delivery</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Same Day Delivery</a></li>
+            <li><a href="#" class="text-white text-decoration-none">E-commerce Shipping</a></li>
+            <li><a href="#" class="text-white text-decoration-none">International Shipping</a></li>
+          </ul>
+        </div>
+  
+        <!-- Contact Info -->
+        <div class="col-md-3">
+          <h5 class="fw-bold">Contact Us</h5>
+          <p class="mb-1"><i class="fas fa-envelope"></i> support&#64;smartcourier.com</p>
+          <p class="mb-1"><i class="fas fa-phone"></i> +880 1971 201048</p>
+          <p><i class="fas fa-map-marker-alt"></i> 123, Courier Street, Dhaka, Bangladesh</p>
+        </div>
+  
+      </div>
+  
+      <hr class="bg-light my-4">
+  
+      <div class="text-center">
+        <p class="mb-0">&copy; 2025 SmartCourier | All Rights Reserved.</p>
+      </div>
+  
+    </div>
+  </footer>
+  
 
 </div>
