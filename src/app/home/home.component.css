@@ -87,10 +87,33 @@
     margin-bottom: 15px;
   } 
   
+.Download-app img {
+    width: 100%;
+    /* background-image: url('../assets/images/tracking.jpg') no-repeat center center; */
+    background-size:contain;
+}
 
+/* .Download-app {
+    height: 500px;
+    width: 500px;
+}
+ */
+ section-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
 
+ul {
+    font-size: 1.1rem;
+}
 
+ul li {
+    margin-bottom: 10px;
+}
 
+ul li i {
+    margin-right: 10px;
+}
 
 
 
