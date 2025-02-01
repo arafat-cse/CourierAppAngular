@@ -223,3 +223,14 @@
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 } */
+.chart-container {
+  width: 100%;
+  max-width: 500px; /* চার্টের আকার নিয়ন্ত্রণ করুন */
+  margin: auto;
+  text-align: center;
+}
+
+#rideChart {
+  width: 100% !important;
+  height: 100% !important;
+}
