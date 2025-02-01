@@ -87,6 +87,7 @@ export class StaffComponent implements OnInit{
               .subscribe({
                 next: (response) => {
                   this.listStaff = response;
+                  console.log(response)
                 //  this.rowCount = response.totalCount || 0;
                   this.applyPaging();
                 },
@@ -246,6 +247,7 @@ edit(item: Staff): void {
   // -------------------------------------Branch---------------------------------------
 
 
+  // -------------------------------------Branch---------------------------------------
   // -------------------------------------Branch---------------------------------------
 
   removeConfirm(staffs: Staff): void {
