@@ -254,7 +254,7 @@
                                               class="btn btn-sm"
                                               [ngClass]="{'btn-success': selectedParcel?.recebingDistributin, 'btn-danger': !selectedParcel?.recebingDistributin}"
                                               (click)="toggleRecebingDistributin(selectedParcel)">
-                                              {{ selectedParcel?.recebingDistributin ? 'Yes' : 'NO' }}
+                                              {{ selectedParcel?.recebingDistributin ? 'Recebing Distributin' : 'NO' }}
                                             </button>
                                           </td>
                                         </tr>
@@ -265,7 +265,7 @@
                                               class="btn btn-sm"
                                               [ngClass]="{'btn-success': selectedParcel?.recebingBranch, 'btn-danger': !selectedParcel?.recebingBranch}"
                                               (click)="toggleRecebingBranch(selectedParcel)">
-                                              {{ selectedParcel?.recebingBranch ? 'Yes' : 'NO' }}
+                                              {{ selectedParcel?.recebingBranch ? 'Recebing Branch' : 'NO' }}
                                             </button>
                                           </td>
                                         </tr>
@@ -276,7 +276,7 @@
                                               class="btn btn-sm"
                                               [ngClass]="{'btn-success': selectedParcel?.recebingReceber, 'btn-danger': !selectedParcel?.recebingReceber}"
                                               (click)="toggleRecebingReceber(selectedParcel)">
-                                              {{ selectedParcel?.recebingReceber ? 'Yes' : 'NO' }}
+                                              {{ selectedParcel?.recebingReceber ? 'Recebing Receber' : 'NO' }}
                                             </button>
                                           </td>
                                         </tr> 
@@ -332,10 +332,21 @@
                   </div> -->
                   </div>
             </div>
-            <button class="btn btn-sm btn-outline-success text-warning me-2 px-3" 
-                    (click)="generatePDF(parcels)">
+            
+            <!-- <button class="btn btn-sm btn-outline-success text-warning me-2 px-3" 
+                    (click)="generatePDF(selectedParcel)">
                     <i class="fas fa-file-pdf me-2"></i> Download Invoice
+            </button> -->
+            <button class="btn btn-sm btn-outline-success text-warning me-2 px-3" 
+                (click)="generatePDF(selectedParcel, 'download')">
+                <i class="fas fa-file-pdf me-2"></i> Download Invoice
             </button>
+
+            <button class="btn btn-sm btn-outline-success text-warning me-2 px-3" 
+                (click)="generatePDF(selectedParcel, 'print')">
+                <i class="fas fa-file-pdf me-2"></i> Print Invoice 
+            </button>
+
         </section>         
          
       </div>

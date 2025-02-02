@@ -807,7 +807,7 @@ export class ParcelComponent implements OnInit {
   //   // Save the PDF
   //   doc.save(`Parcel_${parcel.trackingCode}.pdf`);
   // }
-  generatePDF(parcel: any) {
+  generatePDF(parcel: any,action: string) {
     const doc = new jsPDF();
 
     console.log('Selected Parcel:', parcel);
@@ -831,6 +831,7 @@ export class ParcelComponent implements OnInit {
     doc.setDrawColor(0, 0, 0);
     doc.line(10, 45, 200, 45); // x1, y1, x2, y2
 
+    doc.text(`Tracking Code: ${parcel.trackingCode}`, 80, 50);
     // // Add sender information
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(14);
@@ -845,40 +846,138 @@ export class ParcelComponent implements OnInit {
     // Add receiver information
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(14);
-    doc.text('Receiver Information', 120, 55); // Right side
+    doc.text('Receiver Information', 125, 55); // Right side
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(12);
-    doc.text(`Name: ${parcel.receiverName}`, 120, 62);
-    doc.text(`Phone: ${parcel.receiverPhone}`, 120, 68);
-    doc.text(`E-mail: ${parcel.receiverEmail}`, 120, 74);
-    doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 120, 80);
+    doc.text(`Name: ${parcel.receiverName}`, 125, 62);
+    doc.text(`Phone: ${parcel.receiverPhone}`, 125, 68);
+    doc.text(`E-mail: ${parcel.receiverEmail}`, 125, 74);
+    doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 125, 80);
 
     // Draw a separator line
     doc.setDrawColor(0, 0, 0);
-    doc.line(10, 45, 200, 45); // x1, y1, x2, y2
-
-    // Add selectParcel details
+    doc.line(10, 90, 200, 90); // x1, y1, x2, y2
+ // Add selectParcel details
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(14);
-    doc.text('Parcel Details', 10, 115);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(12);
-    doc.text(`Tracking Code: ${parcel.trackingCode}`, 10, 122);
-    doc.text(`Type: ${this.getParcelTypeName(parcel.parcelTypeId)}`, 10, 128);
-    doc.text(`Paid: ${parcel.isPaid ? 'YES' : 'NO'}`, 10, 134);
-    // doc.text(`Status: ${selectParcel.isActive ? 'Active' : 'Inactive'}`, 10, 140);
-    doc.text(`Delivery Charge: ${parcel.price}`, 10, 140);
+    doc.text('Parcel Details', 10, 87);
+    // doc.text(`Tracking Code: ${parcel.trackingCode}`, 10, 95);
+    doc.text(`Type: ${this.getParcelTypeName(parcel.parcelTypeId)}`, 10, 95);
+    doc.text(`Delivery Charge: ${parcel.price}`, 80, 95);
+    doc.text(`Paid: ${parcel.isPaid ? 'YES' : 'NO'}`, 150, 95);
+       // Draw a separator line
+       doc.setDrawColor(0, 0, 0);
+       doc.line(10, 100, 200, 100); // x1, y1, x2, y2
+        // Add Description
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(14);
+        doc.text('Description:', 10, 110);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(12);
+        doc.text(`Description: ${parcel.status}`, 10, 115);
 
     // Footer with date
     const currentDate = new Date().toLocaleDateString();
     doc.setFontSize(10);
-    doc.text(`Generated on: ${currentDate}`, 10, 285); // Bottom-left corner
-    doc.text('Thank you for choosing our service!', 105, 285, {
+    doc.text('Bookig Officer signature:', 10, 125); // Bottom-left corner
+    doc.text('Thank you for choosing our service!', 100, 125, {
       align: 'center',
     });
+    doc.text(`Date: ${currentDate}`, 150, 125); // Bottom-left corner
 
+// ------------------------------------------------------------ 
+console.log('Selected Parcel:', parcel);
+
+// Set company details at the top
+const companyLog = 'data:image/png;base64,...'; // Replace with your Base64 logo
+//doc.addImage(companyLogo, 'PNG', 10, 10, 30, 15); // x, y, width, height
+doc.setFont('helvetica', 'bold');
+doc.setFontSize(18);
+doc.text('Parcel Invoice', 105, 172, { align: 'center' });
+doc.setFontSize(12);
+doc.text('Smart Courier', 105, 178, { align: 'center' });
+doc.text('Address: Shawrapara, Mirpur-12, Dhaka, Bangladesh', 105, 184, {
+  align: 'center',
+});
+doc.text('Phone: 01949201049 | Email: info@smartcourier.com', 105, 190, {
+  align: 'center',
+});
+
+// Draw a separator line
+doc.setDrawColor(0, 0, 0);
+doc.line(10, 194, 200, 194); // x1, y1, x2, y2
+
+doc.text(`Tracking Code: ${parcel.trackingCode}`, 80, 200);
+// // Add sender information
+doc.setFont('helvetica', 'bold');
+doc.setFontSize(14);
+doc.text('Sender Information', 10, 206); // Left side
+doc.setFont('helvetica', 'normal');
+doc.setFontSize(12);
+doc.text(`Name: ${parcel?.senderName}`, 10, 214);
+doc.text(`Phone: ${parcel?.senderPhone}`, 10, 220);
+doc.text(`Branch: ${this.getBranchName(parcel?.senderBranchId)}`, 10, 226);
+doc.text(`Estimated: ${parcel?.estimatedReceiveTime}`, 10, 232);
+
+// Add receiver information
+doc.setFont('helvetica', 'bold');
+doc.setFontSize(14);
+doc.text('Receiver Information', 125, 206); // Right side
+doc.setFont('helvetica', 'normal');
+doc.setFontSize(12);
+doc.text(`Name: ${parcel.receiverName}`, 125, 214);
+doc.text(`Phone: ${parcel.receiverPhone}`, 125, 220);
+doc.text(`E-mail: ${parcel.receiverEmail}`, 125, 226);
+doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 125, 232);
+
+// Draw a separator line
+doc.setDrawColor(0, 0, 0);
+doc.line(10, 246, 200, 246); // x1, y1, x2, y2
+
+// Add selectParcel details
+doc.setFont('helvetica', 'bold');
+doc.setFontSize(14);
+doc.text('Parcel Details', 10, 240);
+
+doc.text(`Type: ${this.getParcelTypeName(parcel.parcelTypeId)}`, 10, 252);
+doc.text(`Delivery Charge: ${parcel.price}`, 80, 252);
+doc.text(`Paid: ${parcel.isPaid ? 'YES' : 'NO'}`, 150, 252);
+   // Draw a separator line
+   doc.setDrawColor(0, 0, 0);
+   doc.line(10, 258, 200, 258); // x1, y1, x2, y2
+    // Add Description
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.text('Description:', 10, 264);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    doc.text(`Description: ${parcel.status}`, 10, 270);
+
+// Footer with date
+const lcurrentDate = new Date().toLocaleDateString();
+doc.setFontSize(10);
+doc.text('Bookig Officer signature:', 10, 280); // Bottom-left corner
+doc.text('Thank you for choosing our service!', 100, 280, {
+  align: 'center',
+});
+doc.text(`Date: ${lcurrentDate}`, 150, 280); // Bottom-left corner
+
+// ------------------------------------------------------------ 
+
+    
+    if (action === 'download') {
+      // Save the PDF if the action is download
+      doc.save(`Parcel_${parcel.trackingCode}.pdf`);
+    } else if (action === 'print') {
+      // Print the PDF if the action is print
+      doc.autoPrint();
+      window.open(doc.output('bloburl'), '_blank');
+    }
     // Save the PDF
-    doc.save(`Parcel_${parcel.trackingCode}.pdf`);
+    // doc.save(`Parcel_${parcel.trackingCode}.pdf`);
+    // Print the PDF
+  // doc.autoPrint();
+  // window.open(doc.output('bloburl'), '_blank');
   }
   // updateParcelStatus(id: number, status: string): Observable<any> {
   //   const url =  `${this.authService.baseURL}/api//Parcels/UpdateStatus/${id}`;
