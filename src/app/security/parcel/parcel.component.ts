@@ -879,11 +879,11 @@ export class ParcelComponent implements OnInit {
     // Footer with date
     const currentDate = new Date().toLocaleDateString();
     doc.setFontSize(10);
-    doc.text('Bookig Officer signature on:', 10, 120); // Bottom-left corner
-    doc.text('Thank you for choosing our service!', 100, 120, {
+    doc.text('Bookig Officer signature:', 10, 125); // Bottom-left corner
+    doc.text('Thank you for choosing our service!', 100, 125, {
       align: 'center',
     });
-    doc.text(`Generated on: ${currentDate}`, 150, 120); // Bottom-left corner
+    doc.text(`Date: ${currentDate}`, 150, 125); // Bottom-left corner
 
 // ------------------------------------------------------------ 
 console.log('Selected Parcel:', parcel);
@@ -893,74 +893,74 @@ const companyLog = 'data:image/png;base64,...'; // Replace with your Base64 logo
 //doc.addImage(companyLogo, 'PNG', 10, 10, 30, 15); // x, y, width, height
 doc.setFont('helvetica', 'bold');
 doc.setFontSize(18);
-doc.text('Parcel Invoice', 105, 130, { align: 'center' });
+doc.text('Parcel Invoice', 105, 172, { align: 'center' });
 doc.setFontSize(12);
-doc.text('SmartCourier', 105, 136, { align: 'center' });
-doc.text('Address: Shawrapara, Mirpur-12, Dhaka, Bangladesh', 105, 142, {
+doc.text('Smart Courier', 105, 178, { align: 'center' });
+doc.text('Address: Shawrapara, Mirpur-12, Dhaka, Bangladesh', 105, 184, {
   align: 'center',
 });
-doc.text('Phone: 01949201049 | Email: info@smartcourier.com', 105, 148, {
+doc.text('Phone: 01949201049 | Email: info@smartcourier.com', 105, 190, {
   align: 'center',
 });
 
 // Draw a separator line
 doc.setDrawColor(0, 0, 0);
-doc.line(10, 160, 200, 160); // x1, y1, x2, y2
+doc.line(10, 194, 200, 194); // x1, y1, x2, y2
 
-doc.text(`Tracking Code: ${parcel.trackingCode}`, 105, 60);
+doc.text(`Tracking Code: ${parcel.trackingCode}`, 80, 200);
 // // Add sender information
 doc.setFont('helvetica', 'bold');
 doc.setFontSize(14);
-doc.text('Sender Information', 10, 170); // Left side
-// doc.setFont('helvetica', 'normal');
-// doc.setFontSize(12);
-// doc.text(`Name: ${parcel?.senderName}`, 10, 62);
-// doc.text(`Phone: ${parcel?.senderPhone}`, 10, 68);
-// doc.text(`Branch: ${this.getBranchName(parcel?.senderBranchId)}`, 10, 74);
-// doc.text(`Estimated: ${parcel?.estimatedReceiveTime}`, 10, 80);
+doc.text('Sender Information', 10, 206); // Left side
+doc.setFont('helvetica', 'normal');
+doc.setFontSize(12);
+doc.text(`Name: ${parcel?.senderName}`, 10, 214);
+doc.text(`Phone: ${parcel?.senderPhone}`, 10, 220);
+doc.text(`Branch: ${this.getBranchName(parcel?.senderBranchId)}`, 10, 226);
+doc.text(`Estimated: ${parcel?.estimatedReceiveTime}`, 10, 232);
 
 // Add receiver information
-// doc.setFont('helvetica', 'bold');
-// doc.setFontSize(14);
-// doc.text('Receiver Information', 125, 55); // Right side
-// doc.setFont('helvetica', 'normal');
-// doc.setFontSize(12);
-// doc.text(`Name: ${parcel.receiverName}`, 125, 62);
-// doc.text(`Phone: ${parcel.receiverPhone}`, 125, 68);
-// doc.text(`E-mail: ${parcel.receiverEmail}`, 125, 74);
-// doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 125, 80);
+doc.setFont('helvetica', 'bold');
+doc.setFontSize(14);
+doc.text('Receiver Information', 125, 206); // Right side
+doc.setFont('helvetica', 'normal');
+doc.setFontSize(12);
+doc.text(`Name: ${parcel.receiverName}`, 125, 214);
+doc.text(`Phone: ${parcel.receiverPhone}`, 125, 220);
+doc.text(`E-mail: ${parcel.receiverEmail}`, 125, 226);
+doc.text(`Branch: ${this.getBranchName(parcel.receiverBranchId)}`, 125, 232);
 
 // Draw a separator line
-// doc.setDrawColor(0, 0, 0);
-// doc.line(10, 90, 200, 90); // x1, y1, x2, y2
+doc.setDrawColor(0, 0, 0);
+doc.line(10, 246, 200, 246); // x1, y1, x2, y2
 
 // Add selectParcel details
-// doc.setFont('helvetica', 'bold');
-// doc.setFontSize(14);
-// doc.text('Parcel Details', 10, 87);
+doc.setFont('helvetica', 'bold');
+doc.setFontSize(14);
+doc.text('Parcel Details', 10, 240);
 
-// doc.text(`Type: ${this.getParcelTypeName(parcel.parcelTypeId)}`, 10, 95);
-// doc.text(`Delivery Charge: ${parcel.price}`, 80, 95);
-// doc.text(`Paid: ${parcel.isPaid ? 'YES' : 'NO'}`, 150, 95);
+doc.text(`Type: ${this.getParcelTypeName(parcel.parcelTypeId)}`, 10, 252);
+doc.text(`Delivery Charge: ${parcel.price}`, 80, 252);
+doc.text(`Paid: ${parcel.isPaid ? 'YES' : 'NO'}`, 150, 252);
    // Draw a separator line
-  //  doc.setDrawColor(0, 0, 0);
-  //  doc.line(10, 100, 200, 100); // x1, y1, x2, y2
+   doc.setDrawColor(0, 0, 0);
+   doc.line(10, 258, 200, 258); // x1, y1, x2, y2
     // Add Description
-    // doc.setFont('helvetica', 'bold');
-    // doc.setFontSize(14);
-    // doc.text('Description:', 10, 110);
-    // doc.setFont('helvetica', 'normal');
-    // doc.setFontSize(12);
-    // doc.text(`Description: ${parcel.status}`, 10, 115);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.text('Description:', 10, 264);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    doc.text(`Description: ${parcel.status}`, 10, 270);
 
 // Footer with date
-// const lcurrentDate = new Date().toLocaleDateString();
-// doc.setFontSize(10);
-// doc.text('Bookig Officer signature on:', 10, 120); // Bottom-left corner
-// doc.text('Thank you for choosing our service!', 100, 120, {
-//   align: 'center',
-// });
-// doc.text(`Generated on: ${lcurrentDate}`, 150, 120); // Bottom-left corner
+const lcurrentDate = new Date().toLocaleDateString();
+doc.setFontSize(10);
+doc.text('Bookig Officer signature:', 10, 280); // Bottom-left corner
+doc.text('Thank you for choosing our service!', 100, 280, {
+  align: 'center',
+});
+doc.text(`Date: ${lcurrentDate}`, 150, 280); // Bottom-left corner
 
 // ------------------------------------------------------------ 
 
