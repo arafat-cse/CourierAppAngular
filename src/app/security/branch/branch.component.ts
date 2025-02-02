@@ -285,12 +285,22 @@ export class BranchComponent implements OnInit {
   // Dropdown branches
   dropdownBranches: { label: string; value: number; children?: { label: string; value: number }[] }[] = [];
 
-  // Pagination
-  pageIndex: number = 0;
-  pageSize: number = 5;
-  pagedItems: Branch[] = [];
-  rowCount: number = 0;
-
+    // Pagination
+    pageIndex: number = 0;
+    pageSize: number = 10;
+    rowCount: number = 0;
+    listPageSize: number[] = [5, 10, 20];
+    pageStart: number = 0;
+    pageEnd: number = 0;
+    totalRowsInList: number = 0;
+    pagedItems: any[] = [];
+    pager: {
+      pages: number[];
+      totalPages: number;
+    } = {
+      pages: [],
+      totalPages: 0
+    };
   constructor(
     private cs: CommonService,
     private httpClient: HttpClient,
@@ -326,7 +336,12 @@ export class BranchComponent implements OnInit {
       },
     });
   }
-
+  // Get branch name by ID
+  getBranchName(branchId: number | null): string {
+    if (branchId === null) return 'N/A';
+    const branch = this.listBranchs.find((b) => b.branchId === branchId);
+    return branch ? branch.branchName : 'Unknown';
+  }
   // Prepare branches for dropdown display
   prepareDropdownBranches(branches: Branch[]): void {
     this.dropdownBranches = branches.map(branch => ({
@@ -335,7 +350,7 @@ export class BranchComponent implements OnInit {
       children: branch.childBranches?.map(child => ({
         label: child.branchName,
         value: child.branchId,
-      })),
+      }))
     }));
   }
 
@@ -387,11 +402,65 @@ export class BranchComponent implements OnInit {
   }
 
   // Delete a branch
-  remove(branchId: Branch): void {
+  // remove(branchId: Branch): void {
+  //   const headers = new HttpHeaders({
+  //     Token: this.authService.UserInfo?.Token || '',
+  //   });
+
+  //   this.httpClient.delete(`${this.authService.baseURL}/api/Branches/${branchId}`, { headers })
+  //     .subscribe({
+  //       next: () => {
+  //         this.getBranches();
+  //         this.showMessage('success', 'Branch deleted successfully');
+  //       },
+  //       error: () => {
+  //         this.showMessage('error', 'Failed to delete branch');
+  //       },
+  //     });
+  // }
+ 
+  
+  // remove(branchId: Branch): void {
+  //   const headers = new HttpHeaders({
+  //     Token: this.authService.UserInfo?.Token || '',
+  //   });
+  
+  //   this.httpClient.delete(`${this.authService.baseURL}/api/Branches/${branchId.branchId}`, { headers })
+  //     .subscribe({
+  //       next: () => {
+  //         this.reset();
+  //         this.getBranches();
+  //         this.showMessage('success', 'Branch deleted successfully');
+  //       },
+  //       error: (error) => {
+  //         console.error('Delete Error:', error);
+  //         this.showMessage('error', 'Failed to delete branch');
+  //       },
+  //     });
+  // }
+  // remove(branch: Branch): void {
+  //   const headers = new HttpHeaders({
+  //     Token: this.authService.UserInfo?.Token || '',
+  //   });
+  
+  //   this.httpClient.delete(`${this.authService.baseURL}/api/Branches/${branch.branchId}`, { headers })
+  //     .subscribe({
+  //       next: () => {
+  //         this.getBranches();
+  //         this.showMessage('success', 'Branch deleted successfully'); // "updated" না, কারণ এটি delete
+  //         this.reset();
+  //       },
+  //       error: (error) => {
+  //         console.error('Delete Error:', error);
+  //         this.showMessage('error', 'Failed to delete branch');
+  //       },
+  //     });
+  // }
+  remove(branchId: number): void {
     const headers = new HttpHeaders({
       Token: this.authService.UserInfo?.Token || '',
     });
-
+  
     this.httpClient.delete(`${this.authService.baseURL}/api/Branches/${branchId}`, { headers })
       .subscribe({
         next: () => {
@@ -403,6 +472,8 @@ export class BranchComponent implements OnInit {
         },
       });
   }
+  
+  
 
   // Reset form
   reset(): void {

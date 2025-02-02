@@ -243,6 +243,27 @@ export class DashboardComponent implements OnInit {
   //   return 0;
   // }
 
+  // completeDelevery(): number {
+  //   return this.listOfParcel.filter(
+  //     (parcel) =>
+  //       parcel.sendingBranch &&
+  //       parcel.percelSendingDestribution &&
+  //       parcel.recebingDistributin &&
+  //       parcel.recebingBranch &&
+  //       parcel.recebingReceber
+  //   ).length;
+  // }
+
+  // panddingDelevery(): number {
+  //   return this.listOfParcel.filter(
+  //     (parcel) =>
+  //       parcel.sendingBranch ||
+  //       parcel.percelSendingDestribution ||
+  //       parcel.recebingDistributin ||
+  //       parcel.recebingBranch ||
+  //       parcel.recebingReceber
+  //   ).length;
+  // }
   completeDelevery(): number {
     return this.listOfParcel.filter(
       (parcel) =>
@@ -253,17 +274,46 @@ export class DashboardComponent implements OnInit {
         parcel.recebingReceber
     ).length;
   }
-
+  
   panddingDelevery(): number {
     return this.listOfParcel.filter(
       (parcel) =>
-        parcel.sendingBranch ||
-        parcel.percelSendingDestribution ||
-        parcel.recebingDistributin ||
-        parcel.recebingBranch ||
-        parcel.recebingReceber
+        // If any of the fields are missing or incomplete (not 'yes' or null)
+        (parcel.sendingBranch &&
+          parcel.percelSendingDestribution &&
+          parcel.recebingDistributin &&
+          parcel.recebingBranch &&
+          parcel.recebingReceber) === false
+        ||
+        // Or if any of the fields are 'yes' or have a value
+        !(
+          parcel.sendingBranch &&
+          parcel.percelSendingDestribution &&
+          parcel.recebingDistributin &&
+          parcel.recebingBranch &&
+          parcel.recebingReceber
+        )
     ).length;
   }
+
+
+  // panddingDelevery(): number {
+  //   return this.listOfParcel.filter(
+  //     (parcel) =>
+  //       // Ensure the parcel is not already counted as completed
+  //       !(parcel.sendingBranch &&
+  //         parcel.percelSendingDestribution &&
+  //         parcel.recebingDistributin &&
+  //         parcel.recebingBranch &&
+  //         parcel.recebingReceber) &&
+  //       (parcel.sendingBranch ||
+  //         parcel.percelSendingDestribution ||
+  //         parcel.recebingDistributin ||
+  //         parcel.recebingBranch ||
+  //         parcel.recebingReceber)
+  //   ).length;
+  // }
+  
 
   loadCharts(): void {
     const rideCtx = document.getElementById('rideChart') as HTMLCanvasElement;
