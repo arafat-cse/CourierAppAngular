@@ -348,7 +348,7 @@ const rideChart = new Chart(rideCtx, {
     const driverChart = new Chart(driverCtx, {
       type: 'doughnut',
       data: {
-        labels: ['Parcel', 'Pending Delivery', 'Complete'],
+        labels: ['Parcel', 'On Delivery', 'Complete'],
         datasets: [
           {
             data: [

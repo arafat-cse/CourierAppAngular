@@ -368,9 +368,12 @@ export class BranchComponent implements OnInit {
     this.httpClient.post(`${this.authService.baseURL}/api/Branches`, payload, { headers })
       .subscribe({
         next: () => {
+          console.log(payload);
+          this.isList = true;
+          this.reset();
           this.getBranches();
           this.showMessage('success', 'Branch added successfully');
-          this.reset();
+          
         },
         error: () => {
           this.showMessage('error', 'Failed to add branch');
