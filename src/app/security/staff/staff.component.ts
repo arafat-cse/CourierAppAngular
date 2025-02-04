@@ -308,31 +308,41 @@ edit(item: Staff): void {
         this.cs.showToast(this.toast);
       }
     
-      applyPaging(): void {
-        const start = this.pageIndex * this.pageSize;
-        const end = start + this.pageSize;
-        this.pagedItems = this.listStaff.slice(start, end);
-        this.calculatePages();
-      }
-    
-      calculatePages(): void {
-        this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
-        this.pager.pages = Array.from(Array(this.pager.totalPages).keys());
-      }
-    
-      changePageSize(): void {
-        this.pageIndex = 0;
-        this.applyPaging();
-      }
-    
-      changePageNumber(pageIndex: number): void {
-        this.pageIndex = pageIndex;
-        this.applyPaging();
-      }
-      search(): void {
-        this.applyPaging();
-      }
+       // Pagination logic
+  paginate(): void {
+    const start = this.pageIndex * this.pageSize;
+    this.pagedItems = this.listStaff.slice(start, start + this.pageSize);
+    console.log(this.pagedItems)
+    console.log(start)
+    console.log(this.listStaff)
+  }
 
+  nextPage(): void {
+    if ((this.pageIndex + 1) * this.pageSize < this.listStaff.length) {
+      this.pageIndex++;
+      this.paginate();
+    }
+  }
+  search(): void {
+    this.applyPaging();
+  }
+  applyPaging(): void {
+    const start = this.pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    this.pagedItems = this.listStaff.slice(start, end);
+    this.calculatePages();
+  }
+
+  calculatePages(): void {
+    this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+    this.pager.pages = Array.from(Array(this.pager.totalPages).keys());
+  }
+  prevPage(): void {
+    if (this.pageIndex > 0) {
+      this.pageIndex--;
+      this.paginate();
+    }
+  }
 // ---------------------------------active inActive --------------------------
  toggleStaff(staff: Staff): void {
     const headers = new HttpHeaders({

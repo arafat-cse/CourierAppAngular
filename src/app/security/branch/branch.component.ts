@@ -336,6 +336,22 @@ export class BranchComponent implements OnInit {
       },
     });
   }
+   //Brnach dropdwon
+   selectedParentBranch: any = null; // প্যারেন্ট ব্রাঞ্চের জন্য
+   filteredChildBranches: any[] = []; // ফিল্টার করা চাইল্ড ব্রাঞ্চ
+   onParentBranchChange() {
+     // প্যারেন্ট ব্রাঞ্চ পরিবর্তন হলে, চাইল্ড ব্রাঞ্চ ফিল্টার করুন
+     this.filteredChildBranches = this.listBranchs.filter(
+       (branch) => branch.parentId === this.selectedParentBranch
+     );
+   }
+
+
+
+
+
+
+
   // Get branch name by ID
   getBranchName(branchId: number | null): string {
     if (branchId === null) return 'N/A';
@@ -528,7 +544,20 @@ export class BranchComponent implements OnInit {
       this.paginate();
     }
   }
+  search(): void {
+    this.applyPaging();
+  }
+  applyPaging(): void {
+    const start = this.pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    this.pagedItems = this.listBranchs.slice(start, end);
+    this.calculatePages();
+  }
 
+  calculatePages(): void {
+    this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+    this.pager.pages = Array.from(Array(this.pager.totalPages).keys());
+  }
   prevPage(): void {
     if (this.pageIndex > 0) {
       this.pageIndex--;

@@ -105,23 +105,22 @@ export class ParcelComponent implements OnInit {
     parcelTypeId: null, // Parcel Type ID (number | null)
     status: null, // Parcel Type ID (number | null)
   };
-
-  // Pagination
-  pageIndex: number = 0;
-  pageSize: number = 10;
-  rowCount: number = 0;
-  listPageSize: number[] = [5, 10, 20];
-  pageStart: number = 0;
-  pageEnd: number = 0;
-  totalRowsInList: number = 0;
-  pagedItems: any[] = [];
-  pager: {
-    pages: number[];
-    totalPages: number;
-  } = {
-    pages: [],
-    totalPages: 0,
-  };
+ // Pagination
+ pageIndex: number = 0;
+ pageSize: number = 10;
+ rowCount: number = 0;
+ listPageSize: number[] = [5, 10, 20];
+ pageStart: number = 0;
+ pageEnd: number = 0;
+ totalRowsInList: number = 0;
+ pagedItems: any[] = [];
+ pager: {
+   pages: number[];
+   totalPages: number;
+ } = {
+   pages: [],
+   totalPages: 0
+ };
   price: number = 100;
   receiverEmail: string = '';
   constructor(
@@ -179,10 +178,11 @@ export class ParcelComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log(response);
-          this.reset();
+          // this.reset();
 
           this.Listparcels = response;
           //  this.rowCount = response.totalCount || 0;
+          this.paginate();
           this.applyPaging();
         },
         error: () => {
@@ -336,6 +336,7 @@ export class ParcelComponent implements OnInit {
           if (response.status) {
             if (response.content) this.listBranchs = response.content;
             console.log(response.content);
+         
             // this.rowCount = response.content.length;
             // this.paginate();
             // this.prepareDropdownBranches(response.content);
@@ -718,31 +719,7 @@ export class ParcelComponent implements OnInit {
     };
   }
 
-  applyPaging(): void {
-    const start = this.pageIndex * this.pageSize;
-    const end = start + this.pageSize;
-    this.pagedItems = this.Listparcels.slice(start, end);
-    this.calculatePages();
-  }
-
-  calculatePages(): void {
-    this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
-    this.pager.pages = Array.from(Array(this.pager.totalPages).keys());
-  }
-
-  changePageSize(): void {
-    this.pageIndex = 0;
-    this.applyPaging();
-  }
-
-  changePageNumber(pageIndex: number): void {
-    this.pageIndex = pageIndex;
-    this.applyPaging();
-  }
-  search(): void {
-    this.applyPaging();
-  }
-
+  
   // -----------------------------------------Boolean--------------------------Status--------
 
   // ---------------------------------active inActive --------------------------
@@ -1298,4 +1275,40 @@ console.log(this.listBranchs.find(recevarBranch=>recevarBranch.branchId==parcel.
         },
       });
   }
+  // Pagination logic
+  paginate(): void {
+    const start = this.pageIndex * this.pageSize;
+    this.pagedItems = this.Listparcels.slice(start, start + this.pageSize);
+    console.log(this.pagedItems)
+    console.log(start)
+    console.log(this.Listparcels)
+  }
+
+  nextPage(): void {
+    if ((this.pageIndex + 1) * this.pageSize < this.Listparcels.length) {
+      this.pageIndex++;
+      this.paginate();
+    }
+  }
+  search(): void {
+    this.applyPaging();
+  }
+  applyPaging(): void {
+    const start = this.pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    this.pagedItems = this.Listparcels.slice(start, end);
+    this.calculatePages();
+  }
+
+  calculatePages(): void {
+    this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+    this.pager.pages = Array.from(Array(this.pager.totalPages).keys());
+  }
+  prevPage(): void {
+    if (this.pageIndex > 0) {
+      this.pageIndex--;
+      this.paginate();
+    }
+  }
+
 }

@@ -21,6 +21,7 @@ export class AppComponent {
     UserName:'',
     isLoggedIn:false
   };*/
+  
   constructor(public authService: AuthService, 
     private router: Router
     //,private cs:CommonService
